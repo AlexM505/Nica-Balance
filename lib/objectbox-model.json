@@ -1,0 +1,170 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:8227614500184432177",
+      "lastPropertyId": "9:2653738939167739630",
+      "name": "Expense",
+      "properties": [
+        {
+          "id": "1:8015626204576400402",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:7017813908622501221",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:4805299823323995966",
+          "name": "amount",
+          "type": 8
+        },
+        {
+          "id": "4:8142812335250277598",
+          "name": "isPaid",
+          "type": 1
+        },
+        {
+          "id": "5:430998323156520673",
+          "name": "date",
+          "type": 10
+        },
+        {
+          "id": "6:20779302750942761",
+          "name": "notes",
+          "type": 9
+        },
+        {
+          "id": "7:6704499808924743924",
+          "name": "dbCategory",
+          "type": 9
+        },
+        {
+          "id": "8:2609850132850262329",
+          "name": "dbCurrency",
+          "type": 9
+        },
+        {
+          "id": "9:2653738939167739630",
+          "name": "colorHex",
+          "type": 6
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:8936614305943007624",
+      "lastPropertyId": "9:3465681778592085081",
+      "name": "Income",
+      "properties": [
+        {
+          "id": "1:75975641029195876",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4421862611846571110",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:3893024187284622433",
+          "name": "amount",
+          "type": 8
+        },
+        {
+          "id": "4:8745196722495636425",
+          "name": "date",
+          "type": 10
+        },
+        {
+          "id": "5:122837625025693736",
+          "name": "notes",
+          "type": 9
+        },
+        {
+          "id": "6:4061348752870051198",
+          "name": "colorHex",
+          "type": 6
+        },
+        {
+          "id": "7:3946931914171757653",
+          "name": "dbCategory",
+          "type": 9
+        },
+        {
+          "id": "8:8867492958513053605",
+          "name": "dbCurrency",
+          "type": 9
+        },
+        {
+          "id": "9:3465681778592085081",
+          "name": "dbRecurrence",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:8398376945150350058",
+      "lastPropertyId": "7:7546841991390953769",
+      "name": "Goal",
+      "properties": [
+        {
+          "id": "1:2007294672207836982",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3762366000080070559",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:4984594604991342198",
+          "name": "targetAmount",
+          "type": 8
+        },
+        {
+          "id": "4:6927531384279737354",
+          "name": "currentAmount",
+          "type": 8
+        },
+        {
+          "id": "5:2539819045219799441",
+          "name": "startDateMilli",
+          "type": 6
+        },
+        {
+          "id": "6:5005623492141411832",
+          "name": "deadlineMilli",
+          "type": 6
+        },
+        {
+          "id": "7:7546841991390953769",
+          "name": "categoryIndex",
+          "type": 6
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "3:8398376945150350058",
+  "lastIndexId": "0:0",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
+  "version": 1
+}

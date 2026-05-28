@@ -1,0 +1,63 @@
+name: nica_balance
+description: "Toma el control de tu dinero. Registra gastos, ingesos y alcanza tus metas de ahorro fácilmente con nuestra app. Tus finanzas siempre organizadas, en un solo lugar y al alcance de tu mano."
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.12.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  provider: ^6.1.5+1
+  objectbox: ^5.3.1
+  objectbox_flutter_libs: ^5.3.1
+  path: ^1.9.1
+  path_provider: ^2.1.5
+  flutter_native_splash: ^2.4.7
+  shared_preferences: ^2.5.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  build_runner: ^2.15.0
+  objectbox_generator: ^5.3.1
+  flutter_launcher_icons: ^0.14.4
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+
+  fonts:
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat-Regular.ttf
+        - asset: assets/fonts/Montserrat-Black.ttf
+        - asset: assets/fonts/Montserrat-Bold.ttf
+        - asset: assets/fonts/Montserrat-Light.ttf
+        - asset: assets/fonts/Montserrat-Medium.ttf
+        - asset: assets/fonts/Montserrat-SemiBold.ttf
+
+flutter_native_splash:
+  color: "#1E293B"
+  image: assets/images/nbicon.png
+  android: true
+  ios: true
+
+  android_12:
+      image: assets/images/nbicon.png
+      icon_background_color: "#1E293B"
+      image_dark: assets/images/nbicon.png
+      icon_background_color_dark: "#1E293B"
+      fullscreen: true
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/nbicon.png"
+  min_sdk_android: 21 
+  adaptive_icon_background: "#1E293B"
+  adaptive_icon_foreground: "assets/images/nbicon.png"
+  adaptive_icon_foreground_inset: 16
