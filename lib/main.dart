@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:nica_balance/core/theme/app_theme.dart';
+import 'package:nica_balance/data/repositories/debt_repository.dart';
 import 'package:nica_balance/data/repositories/goal_repository.dart';
 import 'package:nica_balance/data/repositories/income_repository.dart';
 import 'package:nica_balance/presentation/analytics/viewmodels/analytics_viewmodel.dart';
 import 'package:nica_balance/presentation/calendar/viewmodels/calendar_viewmodel.dart';
+import 'package:nica_balance/presentation/debts/viewmodels/debt_viewmodel.dart';
 import 'package:nica_balance/presentation/goals/viewmodels/goals_viewmodel.dart';
 import 'package:nica_balance/presentation/home/viewmodels/dashboard_viewmodel.dart';
 import 'package:nica_balance/presentation/home/views/main_navigation_screen.dart';
@@ -32,6 +34,7 @@ void main() async {
   final expenseRepository = ExpenseRepository(database);
   final incomeRepository = IncomeRepository(database);
   final goalRepository = GoalRepository(database);
+  final debtRepository = DebtRepository(database);
 
   runApp(
     MultiProvider(
@@ -64,6 +67,10 @@ void main() async {
         ChangeNotifierProxyProvider<DashboardViewModel, AnalyticsViewModel>(
           create: (context) => AnalyticsViewModel(dashboardViewModel: context.read<DashboardViewModel>()),
           update: (context, dashboardVM, previous) => AnalyticsViewModel(dashboardViewModel: dashboardVM),
+        ),
+
+        ChangeNotifierProvider(
+          create: (_) => DebtViewModel(debtRepository: debtRepository),
         ),
       ],
       child: MaterialApp(

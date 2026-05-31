@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nica_balance/core/theme/app_theme.dart';
 import 'package:nica_balance/presentation/analytics/views/analytics_screen.dart';
+import 'package:nica_balance/presentation/debts/viewmodels/debt_viewmodel.dart';
+import 'package:nica_balance/presentation/debts/views/debt_form_screen.dart';
+import 'package:nica_balance/presentation/debts/views/debts_list_screen.dart';
 import 'package:nica_balance/presentation/expenses/views/expense_detail_screen.dart';
 import 'package:nica_balance/presentation/expenses/views/expense_list_screen.dart';
 import 'package:nica_balance/presentation/home/viewmodels/dashboard_viewmodel.dart';
@@ -49,7 +52,7 @@ class HomeDashboardView extends StatelessWidget {
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [AppTheme.primaryColor, const Color(0xFF1E40AF), AppTheme.accentColor],
+                colors: [AppTheme.primaryColor, const Color(0xFF234ACC), const Color(0xFF032287)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -92,7 +95,7 @@ class HomeDashboardView extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 12),
 
           // FILA: Tarjetas Bifurcadas en USD
           Row(
@@ -116,7 +119,76 @@ class HomeDashboardView extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 28),
+
+          const SizedBox(height: 16),
+
+          // Colocar debajo del contenedor de Ingresos/Gastos en el ListView principal:
+          Consumer<DebtViewModel>(
+            builder: (context, debtVM, child) {
+              final totalRemaining = debtVM.totalDebtAmount;
+
+              return Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                decoration: BoxDecoration(
+                  color: AppTheme.surfaceColor,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: totalRemaining > 0 
+                        ? const Color(0xFFEF4444).withOpacity(0.4) // Borde rojo sutil si debe dinero
+                        : AppTheme.borderColor,
+                  ),
+                ),
+                child: InkWell(
+                borderRadius: BorderRadius.circular(20),
+                onTap: () {
+                  // Redirige al listado completo de deudas al pulsar la tarjeta
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const DebtsListScreen()),
+                  );
+                },
+                child:  Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: const Color(0xFFEF4444).withOpacity(0.12),
+                      radius: 20,
+                      child: const Icon(Icons.gavel_rounded, color: Color(0xFFEF4444), size: 20),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Pasivos / Deudas Totales',
+                            style: TextStyle(color: AppTheme.textSecondary, fontSize: 12, fontWeight: FontWeight.w500),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            '\$ ${totalRemaining.toStringAsFixed(2)}',
+                            style: const TextStyle(color: AppTheme.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Botón de acción directo para agregar deuda
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const DebtFormScreen()),
+                        );
+                      },
+                      icon: const Icon(Icons.add_circle_outline_rounded, color: AppTheme.primaryColor, size: 26),
+                    ),
+                  ],
+                ),
+                ),
+              );
+            },
+          ),
+
+          const SizedBox(height: 24),
 
           // SECCIÓN: Últimos Gastos
           _buildSectionHeader(
@@ -134,7 +206,7 @@ class HomeDashboardView extends StatelessWidget {
           else
             ...dashboardVM.recentExpenses.map((expense) => _buildRecentExpenseRow(context, dashboardVM, expense)),
 
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
 
           // SECCIÓN: Últimos Ingresos
           _buildSectionHeader(

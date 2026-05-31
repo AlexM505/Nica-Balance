@@ -154,9 +154,58 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "4:7502451798277903778",
+      "lastPropertyId": "8:7581570750914452252",
+      "name": "Debt",
+      "properties": [
+        {
+          "id": "1:5970035092619372742",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4601289411960708624",
+          "name": "title",
+          "type": 9
+        },
+        {
+          "id": "3:2187728559232038313",
+          "name": "creditor",
+          "type": 9
+        },
+        {
+          "id": "4:6091375292116588284",
+          "name": "totalAmount",
+          "type": 8
+        },
+        {
+          "id": "5:6191293605324194103",
+          "name": "remainingAmount",
+          "type": 8
+        },
+        {
+          "id": "6:113487511494024140",
+          "name": "interestRate",
+          "type": 8
+        },
+        {
+          "id": "7:8700492353083817079",
+          "name": "dueDateMilli",
+          "type": 6
+        },
+        {
+          "id": "8:7581570750914452252",
+          "name": "typeIndex",
+          "type": 6
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "3:8398376945150350058",
+  "lastEntityId": "4:7502451798277903778",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",

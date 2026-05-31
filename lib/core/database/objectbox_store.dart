@@ -9,7 +9,7 @@ class ObjectBoxStore {
 
   static Future<ObjectBoxStore> create() async {
     final docsDir = await getApplicationDocumentsDirectory();
-    final storePath = p.join(docsDir.path, "simple-expensesbox");
+    final storePath = p.join(docsDir.path, "nica_balance_box");
     
     final store = await openStore(directory: storePath);
     return ObjectBoxStore._create(store);

@@ -14,6 +14,7 @@ import 'package:objectbox/internal.dart'
 import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
+import 'data/models/debt.dart';
 import 'data/models/expense.dart';
 import 'data/models/goal.dart';
 import 'data/models/income.dart';
@@ -201,6 +202,64 @@ final _entities = <obx_int.ModelEntity>[
     relations: <obx_int.ModelRelation>[],
     backlinks: <obx_int.ModelBacklink>[],
   ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(4, 7502451798277903778),
+    name: 'Debt',
+    lastPropertyId: const obx_int.IdUid(8, 7581570750914452252),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 5970035092619372742),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 4601289411960708624),
+        name: 'title',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 2187728559232038313),
+        name: 'creditor',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 6091375292116588284),
+        name: 'totalAmount',
+        type: 8,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 6191293605324194103),
+        name: 'remainingAmount',
+        type: 8,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(6, 113487511494024140),
+        name: 'interestRate',
+        type: 8,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(7, 8700492353083817079),
+        name: 'dueDateMilli',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(8, 7581570750914452252),
+        name: 'typeIndex',
+        type: 6,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
 ];
 
 /// Shortcut for [obx.Store.new] that passes [getObjectBoxModel] and for Flutter
@@ -246,7 +305,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
     // Typically, this is done with `dart run build_runner build`.
     generatorVersion: obx_int.GeneratorVersion.v2025_12_16,
     entities: _entities,
-    lastEntityId: const obx_int.IdUid(3, 8398376945150350058),
+    lastEntityId: const obx_int.IdUid(4, 7502451798277903778),
     lastIndexId: const obx_int.IdUid(0, 0),
     lastRelationId: const obx_int.IdUid(0, 0),
     lastSequenceId: const obx_int.IdUid(0, 0),
@@ -504,6 +563,88 @@ obx_int.ModelDefinition getObjectBoxModel() {
         return object;
       },
     ),
+    Debt: obx_int.EntityDefinition<Debt>(
+      model: _entities[3],
+      toOneRelations: (Debt object) => [],
+      toManyRelations: (Debt object) => {},
+      getId: (Debt object) => object.id,
+      setId: (Debt object, int id) {
+        object.id = id;
+      },
+      objectToFB: (Debt object, fb.Builder fbb) {
+        final titleOffset = fbb.writeString(object.title);
+        final creditorOffset = fbb.writeString(object.creditor);
+        fbb.startTable(9);
+        fbb.addInt64(0, object.id);
+        fbb.addOffset(1, titleOffset);
+        fbb.addOffset(2, creditorOffset);
+        fbb.addFloat64(3, object.totalAmount);
+        fbb.addFloat64(4, object.remainingAmount);
+        fbb.addFloat64(5, object.interestRate);
+        fbb.addInt64(6, object.dueDateMilli);
+        fbb.addInt64(7, object.typeIndex);
+        fbb.finish(fbb.endTable());
+        return object.id;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final idParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          4,
+          0,
+        );
+        final titleParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 6, '');
+        final creditorParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 8, '');
+        final totalAmountParam = const fb.Float64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          10,
+          0,
+        );
+        final remainingAmountParam = const fb.Float64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          12,
+          0,
+        );
+        final interestRateParam = const fb.Float64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          14,
+          0,
+        );
+        final dueDateMilliParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          16,
+          0,
+        );
+        final typeIndexParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          18,
+          0,
+        );
+        final object = Debt(
+          id: idParam,
+          title: titleParam,
+          creditor: creditorParam,
+          totalAmount: totalAmountParam,
+          remainingAmount: remainingAmountParam,
+          interestRate: interestRateParam,
+          dueDateMilli: dueDateMilliParam,
+          typeIndex: typeIndexParam,
+        );
+
+        return object;
+      },
+    ),
   };
 
   return obx_int.ModelDefinition(model, bindings);
@@ -634,5 +775,46 @@ class Goal_ {
   /// See [Goal.categoryIndex].
   static final categoryIndex = obx.QueryIntegerProperty<Goal>(
     _entities[2].properties[6],
+  );
+}
+
+/// [Debt] entity fields to define ObjectBox queries.
+class Debt_ {
+  /// See [Debt.id].
+  static final id = obx.QueryIntegerProperty<Debt>(_entities[3].properties[0]);
+
+  /// See [Debt.title].
+  static final title = obx.QueryStringProperty<Debt>(
+    _entities[3].properties[1],
+  );
+
+  /// See [Debt.creditor].
+  static final creditor = obx.QueryStringProperty<Debt>(
+    _entities[3].properties[2],
+  );
+
+  /// See [Debt.totalAmount].
+  static final totalAmount = obx.QueryDoubleProperty<Debt>(
+    _entities[3].properties[3],
+  );
+
+  /// See [Debt.remainingAmount].
+  static final remainingAmount = obx.QueryDoubleProperty<Debt>(
+    _entities[3].properties[4],
+  );
+
+  /// See [Debt.interestRate].
+  static final interestRate = obx.QueryDoubleProperty<Debt>(
+    _entities[3].properties[5],
+  );
+
+  /// See [Debt.dueDateMilli].
+  static final dueDateMilli = obx.QueryIntegerProperty<Debt>(
+    _entities[3].properties[6],
+  );
+
+  /// See [Debt.typeIndex].
+  static final typeIndex = obx.QueryIntegerProperty<Debt>(
+    _entities[3].properties[7],
   );
 }
