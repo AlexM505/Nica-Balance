@@ -275,7 +275,7 @@ class _DebtFormScreenState extends State<DebtFormScreen> {
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: AppTheme.primaryColor.withOpacity(0.25),
+                      color: AppTheme.primaryColor.withValues(alpha: 0.25),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     )

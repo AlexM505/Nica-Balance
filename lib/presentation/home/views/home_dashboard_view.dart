@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:nica_balance/core/theme/app_theme.dart';
-import 'package:nica_balance/presentation/analytics/views/analytics_screen.dart';
 import 'package:nica_balance/presentation/debts/viewmodels/debt_viewmodel.dart';
 import 'package:nica_balance/presentation/debts/views/debt_form_screen.dart';
 import 'package:nica_balance/presentation/debts/views/debts_list_screen.dart';
 import 'package:nica_balance/presentation/expenses/views/expense_detail_screen.dart';
 import 'package:nica_balance/presentation/expenses/views/expense_list_screen.dart';
 import 'package:nica_balance/presentation/home/viewmodels/dashboard_viewmodel.dart';
+import 'package:nica_balance/presentation/home/widgets/balance_hero_card.dart';
+import 'package:nica_balance/presentation/home/widgets/dashboard_header.dart';
+import 'package:nica_balance/presentation/home/widgets/quick_actions_section.dart';
 import 'package:nica_balance/presentation/income/views/income_detail_screen.dart';
 import 'package:nica_balance/presentation/income/views/income_list_screen.dart';
 import 'package:provider/provider.dart';
@@ -18,111 +20,31 @@ class HomeDashboardView extends StatelessWidget {
   const HomeDashboardView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // Escuchamos únicamente al DashboardViewModel
-    final dashboardVM = context.watch<DashboardViewModel>();
+Widget build(BuildContext context) {
+  final dashboardVM = context.watch<DashboardViewModel>();
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.only(top: 0, bottom: 6, left: 8, right: 0),
-          child: Image.asset('assets/images/nbicon.png', fit: BoxFit.cover,),
-        ),
-        title: const Text('Nica Balance',
-          style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: false,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.analytics_rounded, color: AppTheme.textSecondary),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const AnalyticsScreen()),
-              );
-            },
-          ),
-        ],
-      ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(18, 16, 18, 120),
+  return Scaffold(
+    body: SafeArea(
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(18, 12, 18, 80),
         children: [
-          // CONTENEDOR HERO: Saldo Neto Global
-          Container(
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [AppTheme.primaryColor, const Color(0xFF234ACC), const Color(0xFF032287)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(28),
-              boxShadow: [
-                BoxShadow(
-                  color: AppTheme.primaryColor.withOpacity(0.25),
-                  blurRadius: 20,
-                  offset: const Offset(0, 10),
-                )
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Balance Total Disponible (USD)',
-                      style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500),
-                    ),
-                    Icon(Icons.insights_rounded, color: Colors.white.withOpacity(0.8), size: 22),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  '\$ ${dashboardVM.netBalanceUsd.toStringAsFixed(2)}',
-                  style: const TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.w900, letterSpacing: -0.5),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  dashboardVM.netBalanceUsd >= 0 ? 'Cuenta en estado saludable' : 'Balance neto negativo',
-                  style: TextStyle(
-                    color: dashboardVM.netBalanceUsd >= 0 ? const Color(0xFF34D399) : const Color(0xFFF87171),
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 12),
 
-          // FILA: Tarjetas Bifurcadas en USD
-          Row(
-            children: [
-              Expanded(
-                child: _buildMiniBalanceCard(
-                  title: 'Ingresos Totales',
-                  amount: dashboardVM.totalIncomesUsd,
-                  color: AppTheme.accentColor,
-                  icon: Icons.arrow_downward_rounded,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: _buildMiniBalanceCard(
-                  title: 'Gastos Totales',
-                  amount: dashboardVM.totalExpensesUsd,
-                  color: const Color(0xFFEF4444),
-                  icon: Icons.arrow_upward_rounded,
-                ),
-              ),
-            ],
+          DashboardHeader(),
+
+          const SizedBox(height: 20),
+
+          BalanceHeroCard(
+            balance: dashboardVM.netBalanceUsd,
+            incomes: dashboardVM.totalIncomesUsd,
+            expenses: dashboardVM.totalExpensesUsd,
           ),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
 
-          // Colocar debajo del contenedor de Ingresos/Gastos en el ListView principal:
+          QuickActionsSection(),
+
+          const SizedBox(height: 8),
+
           Consumer<DebtViewModel>(
             builder: (context, debtVM, child) {
               final totalRemaining = debtVM.totalDebtAmount;
@@ -130,59 +52,59 @@ class HomeDashboardView extends StatelessWidget {
               return Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 decoration: BoxDecoration(
-                  color: AppTheme.surfaceColor,
-                  borderRadius: BorderRadius.circular(20),
+                  color: AppTheme.surfaceColor.withValues(alpha: 0.6), //withOpacity(0.6),
+                  borderRadius: BorderRadius.circular(16),
                   border: Border.all(
                     color: totalRemaining > 0 
-                        ? const Color(0xFFEF4444).withOpacity(0.4) // Borde rojo sutil si debe dinero
-                        : AppTheme.borderColor,
+                        ? const Color(0xFFEF4444).withValues(alpha: 0.6) // Borde rojo sutil si debe dinero
+                        : AppTheme.borderColor.withValues(alpha: 0.6),
                   ),
                 ),
                 child: InkWell(
-                borderRadius: BorderRadius.circular(20),
-                onTap: () {
-                  // Redirige al listado completo de deudas al pulsar la tarjeta
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const DebtsListScreen()),
-                  );
-                },
-                child:  Row(
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: const Color(0xFFEF4444).withOpacity(0.12),
-                      radius: 20,
-                      child: const Icon(Icons.gavel_rounded, color: Color(0xFFEF4444), size: 20),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Pasivos / Deudas Totales',
-                            style: TextStyle(color: AppTheme.textSecondary, fontSize: 12, fontWeight: FontWeight.w500),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            '\$ ${totalRemaining.toStringAsFixed(2)}',
-                            style: const TextStyle(color: AppTheme.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                        ],
+                  borderRadius: BorderRadius.circular(16),
+                  onTap: () {
+                    // Redirige al listado completo de deudas al pulsar la tarjeta
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const DebtsListScreen()),
+                    );
+                  },
+                  child:  Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: const Color(0xFFEF4444).withValues(alpha: 0.12),
+                        radius: 20,
+                        child: const Icon(Icons.gavel_rounded, color: Color(0xFFEF4444), size: 20),
                       ),
-                    ),
-                    // Botón de acción directo para agregar deuda
-                    IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => const DebtFormScreen()),
-                        );
-                      },
-                      icon: const Icon(Icons.add_circle_outline_rounded, color: AppTheme.primaryColor, size: 26),
-                    ),
-                  ],
-                ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Pasivos / Deudas Totales',
+                              style: TextStyle(color: AppTheme.textSecondary, fontSize: 12, fontWeight: FontWeight.w500),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              '\$ ${totalRemaining.toStringAsFixed(2)}',
+                              style: const TextStyle(color: AppTheme.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Botón de acción directo para agregar deuda
+                      IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const DebtFormScreen()),
+                          );
+                        },
+                        icon: const Icon(Icons.add_circle_outline_rounded, color: AppTheme.primaryColor, size: 26),
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
@@ -190,7 +112,7 @@ class HomeDashboardView extends StatelessWidget {
 
           const SizedBox(height: 24),
 
-          // SECCIÓN: Últimos Gastos
+          //         // SECCIÓN: Últimos Gastos
           _buildSectionHeader(
             title: 'Gastos Recientes', 
             icon: Icons.shopping_bag_rounded,
@@ -223,50 +145,12 @@ class HomeDashboardView extends StatelessWidget {
             _buildEmptyPlaceholder(message: 'No hay ingresos registrados todavía.', icon: Icons.payments_rounded)
           else
             ...dashboardVM.recentIncomes.map((income) => _buildRecentIncomeRow(context, dashboardVM, income)),
+        
         ],
       ),
-    );
-  }
-
-  Widget _buildMiniBalanceCard({
-    required String title,
-    required double amount,
-    required Color color,
-    required IconData icon,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppTheme.surfaceColor,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppTheme.borderColor, width: 1.5),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              CircleAvatar(
-                backgroundColor: color.withOpacity(0.2),
-                radius: 14,
-                child: Icon(icon, color: color, size: 15),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                title,
-                style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12, fontWeight: FontWeight.w500),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Text(
-            '\$ ${amount.toStringAsFixed(2)}',
-            style: const TextStyle(color: AppTheme.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildSectionHeader({
   required String title,
@@ -329,14 +213,14 @@ class HomeDashboardView extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: AppTheme.surfaceColor.withOpacity(0.6),
+          color: AppTheme.surfaceColor.withValues(alpha: 0.6),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppTheme.borderColor.withOpacity(0.8)),
+          border: Border.all(color: AppTheme.borderColor.withValues(alpha: 0.8)),
         ),
         child: Row(
           children: [
             CircleAvatar(
-              backgroundColor: Color(expense.colorHex).withOpacity(0.15),
+              backgroundColor: Color(expense.colorHex).withValues(alpha: 0.15),
               radius: 18,
               child: Icon(cat.icon, color: Color(expense.colorHex), size: 18),
             ),
@@ -387,14 +271,14 @@ class HomeDashboardView extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: AppTheme.surfaceColor.withOpacity(0.6),
+          color: AppTheme.surfaceColor.withValues(alpha: 0.6),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppTheme.borderColor.withOpacity(0.8)),
+          border: Border.all(color: AppTheme.borderColor.withValues(alpha: 0.8)),
         ),
         child: Row(
           children: [
             CircleAvatar(
-              backgroundColor: Color(income.colorHex).withOpacity(0.15),
+              backgroundColor: Color(income.colorHex).withValues(alpha: 0.15),
               radius: 18,
               child: Icon(cat.icon, color: Color(income.colorHex), size: 18),
             ),
@@ -431,15 +315,15 @@ class HomeDashboardView extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
       decoration: BoxDecoration(
-        color: AppTheme.surfaceColor.withOpacity(0.5),
+        color: AppTheme.surfaceColor.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.borderColor.withOpacity(0.3)),
+        border: Border.all(color: AppTheme.borderColor.withValues(alpha: 0.4)),
       ),
       child: Center(
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 32, color: AppTheme.textSecondary.withOpacity(0.6)),
+              Icon(icon, size: 32, color: AppTheme.textSecondary.withValues(alpha: 0.6)),
               const SizedBox(height: 8),
               Text(
                 message,

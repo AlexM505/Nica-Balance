@@ -160,14 +160,14 @@ class _IncomeFormScreenState extends State<IncomeFormScreen> {
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Color(_customColorHex), Color(_customColorHex).withOpacity(0.7)],
+                  colors: [Color(_customColorHex), Color(_customColorHex).withValues(alpha: 0.7)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
                 borderRadius: BorderRadius.circular(24),
                 boxShadow: [
                   BoxShadow(
-                    color: Color(_customColorHex).withOpacity(0.25),
+                    color: Color(_customColorHex).withValues(alpha: 0.25),
                     blurRadius: 16,
                     offset: const Offset(0, 8),
                   )
@@ -176,7 +176,7 @@ class _IncomeFormScreenState extends State<IncomeFormScreen> {
               child: Row(
                 children: [
                   CircleAvatar(
-                    backgroundColor: Colors.white.withOpacity(0.25),
+                    backgroundColor: Colors.white.withValues(alpha: 0.25),
                     radius: 26,
                     child: Icon(_customIcon, color: Colors.white, size: 28),
                   ),
@@ -192,7 +192,7 @@ class _IncomeFormScreenState extends State<IncomeFormScreen> {
                         const SizedBox(height: 4),
                         Text(
                           _selectedCategory.displayName,
-                          style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 14),
+                          style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 14),
                         ),
                       ],
                     ),
@@ -245,7 +245,7 @@ class _IncomeFormScreenState extends State<IncomeFormScreen> {
                 Expanded(
                   flex: 2,
                   child: DropdownButtonFormField<Currency>(
-                    value: _selectedCurrency,
+                    initialValue: _selectedCurrency,
                     dropdownColor: AppTheme.surfaceColor,
                     style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold),
                     decoration: _buildCustomInputDecoration(label: 'Moneda', prefixIcon: Icons.currency_exchange_rounded),
@@ -261,7 +261,7 @@ class _IncomeFormScreenState extends State<IncomeFormScreen> {
 
             // SELECTOR: Categoría Base
             DropdownButtonFormField<IncomeCategory>(
-              value: _selectedCategory,
+              initialValue: _selectedCategory,
               dropdownColor: AppTheme.surfaceColor,
               style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.w600),
               decoration: _buildCustomInputDecoration(label: 'Categoría de Ingreso', prefixIcon: Icons.dashboard_customize_rounded),
@@ -278,7 +278,7 @@ class _IncomeFormScreenState extends State<IncomeFormScreen> {
 
             // SELECTOR: Frecuencia de Repetición (Nuevo Atributo)
             DropdownButtonFormField<RecurrenceFrequency>(
-              value: _selectedRecurrence,
+              initialValue: _selectedRecurrence,
               dropdownColor: AppTheme.surfaceColor,
               style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.w600),
               decoration: _buildCustomInputDecoration(label: '¿Este ingreso es recurrente?', prefixIcon: Icons.autorenew_rounded),
@@ -381,7 +381,7 @@ class _IncomeFormScreenState extends State<IncomeFormScreen> {
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: AppTheme.accentColor.withOpacity(0.25),
+                      color: AppTheme.accentColor.withValues(alpha: 0.25),
                       blurRadius: 12,
                       offset: const Offset(0, 6),
                     )

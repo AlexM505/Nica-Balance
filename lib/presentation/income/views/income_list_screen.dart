@@ -26,9 +26,19 @@ class IncomeListScreen extends StatelessWidget {
       ),
       body: incomes.isEmpty
           ? Center(
-              child: Text(
-                'Aún no has registrado ningún ingreso.',
-                style: TextStyle(color: AppTheme.textSecondary, fontSize: 14, fontStyle: FontStyle.italic),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.payments_rounded, size: 64, color: AppTheme.textSecondary.withValues(alpha: 0.3)),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Aún no has registrado ningún ingreso',
+                      style: TextStyle(color: AppTheme.textPrimary, fontSize: 15, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
               ),
             )
           : Column(
@@ -78,14 +88,14 @@ class IncomeListScreen extends StatelessWidget {
                         child: Container(
                           margin: const EdgeInsets.only(bottom: 12),
                           decoration: BoxDecoration(
-                            color: AppTheme.surfaceColor.withOpacity(0.5),
+                            color: AppTheme.surfaceColor.withValues(alpha: 0.5),
                             borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: AppTheme.borderColor.withOpacity(0.7)),
+                            border: Border.all(color: AppTheme.borderColor.withValues(alpha: 0.7)),
                           ),
                           child: ListTile(
                             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                             leading: CircleAvatar(
-                              backgroundColor: Color(income.colorHex).withOpacity(0.15),
+                              backgroundColor: Color(income.colorHex).withValues(alpha: 0.15),
                               radius: 20,
                               child: Icon(cat.icon, color: Color(income.colorHex), size: 20),
                             ),

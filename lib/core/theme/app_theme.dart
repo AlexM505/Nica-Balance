@@ -10,7 +10,8 @@ class AppTheme {
   static const textPrimary = Color(0xFFF8FAFC);        // Blanco Hueso Alta Claridad
   static const textSecondary = Color(0xFF94A3B8);      // Gris Atramado (Subtítulos)
   static const borderColor = Color(0xFF334155);        // Borde Sutil Oscuro
-  static const backgroundColor = Color(0xFF061313); 
+  // static const backgroundColor = Color(0xFF061313); 
+  static const backgroundColor = Color(0xFF0C1324); 
 
   static ThemeData get premiumDarkTheme {
     return ThemeData(
@@ -22,9 +23,7 @@ class AppTheme {
       colorScheme: const ColorScheme.dark(
         primary: primaryColor,
         secondary: accentColor,
-        background: backgroundColor,
         surface: surfaceColor,
-        onBackground: textPrimary,
         onSurface: textPrimary,
       ),
       appBarTheme: const AppBarTheme(

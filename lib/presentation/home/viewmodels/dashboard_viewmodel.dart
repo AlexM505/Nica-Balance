@@ -12,10 +12,9 @@ class DashboardViewModel extends ChangeNotifier {
   static const double _exchangeRate = 36.0;
 
   DashboardViewModel({
-    required ExpenseViewModel expenseViewModel,
-    required IncomeViewModel incomeViewModel,
-  })  : _expenseViewModel = expenseViewModel,
-        _incomeViewModel = incomeViewModel {
+    required this._expenseViewModel,
+    required this._incomeViewModel,
+  }) {
     // Escuchamos los cambios de ambos ViewModels subyacentes para replicar reactividad
     _expenseViewModel.addListener(notifyListeners);
     _incomeViewModel.addListener(notifyListeners);

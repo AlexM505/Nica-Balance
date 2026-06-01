@@ -40,7 +40,7 @@ class GoalsListView extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.emoji_events_rounded, size: 64, color: AppTheme.textSecondary.withOpacity(0.3)),
+                    Icon(Icons.emoji_events_rounded, size: 64, color: AppTheme.textSecondary.withValues(alpha: 0.3)),
                     const SizedBox(height: 16),
                     const Text(
                       'No hay metas activas',
@@ -85,7 +85,7 @@ class GoalsListView extends StatelessWidget {
                           Row(
                             children: [
                               CircleAvatar(
-                                backgroundColor: Color(cat.colorHex).withOpacity(0.12),
+                                backgroundColor: Color(cat.colorHex).withValues(alpha: 0.12),
                                 radius: 18,
                                 child: Icon(cat.icon, color: Color(cat.colorHex), size: 18),
                               ),
@@ -101,7 +101,7 @@ class GoalsListView extends StatelessWidget {
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                   decoration: BoxDecoration(
-                                    color: const Color(0xFF10B981).withOpacity(0.2), 
+                                    color: const Color(0xFF10B981).withValues(alpha: 0.2), 
                                     borderRadius: BorderRadius.circular(8)
                                   ),
                                   child: const Text('¡Cumplida!', style: TextStyle(color: Color(0xFF34D399), fontSize: 11, fontWeight: FontWeight.bold)),
@@ -153,97 +153,6 @@ class GoalsListView extends StatelessWidget {
                 );
               },
             )
-
-
-          // ListView.builder(
-          //     padding: const EdgeInsets.fromLTRB(24, 16, 24, 160),
-          //     itemCount: goals.length,
-          //     itemBuilder: (context, index) {
-          //       final goal = goals[index];
-          //       final cat = goal.category;
-          //       final progress = goal.progressPercentage;
-
-          //       return Container(
-          //         margin: const EdgeInsets.only(bottom: 16),
-          //         padding: const EdgeInsets.all(20),
-          //         decoration: BoxDecoration(
-          //           color: AppTheme.surfaceColor,
-          //           borderRadius: BorderRadius.circular(20),
-          //           border: Border.all(color: AppTheme.borderColor),
-          //         ),
-          //         child: Column(
-          //           crossAxisAlignment: CrossAxisAlignment.start,
-          //           children: [
-          //             Row(
-          //               children: [
-          //                 CircleAvatar(
-          //                   backgroundColor: Color(cat.colorHex).withOpacity(0.12),
-          //                   radius: 18,
-          //                   child: Icon(cat.icon, color: Color(cat.colorHex), size: 18),
-          //                 ),
-          //                 const SizedBox(width: 12),
-          //                 Expanded(
-          //                   child: Text(
-          //                     goal.name,
-          //                     style: const TextStyle(color: AppTheme.textPrimary, fontSize: 15, fontWeight: FontWeight.bold),
-          //                     overflow: TextOverflow.ellipsis,
-          //                   ),
-          //                 ),
-          //                 if (goal.isCompleted)
-          //                   Container(
-          //                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          //                     decoration: BoxDecoration(color: const Color(0xFF10B981).withOpacity(0.2), borderRadius: BorderRadius.circular(8)),
-          //                     child: const Text('¡Cumplida!', style: TextStyle(color: Color(0xFF34D399), fontSize: 11, fontWeight: FontWeight.bold)),
-          //                   ),
-          //               ],
-          //             ),
-          //             const SizedBox(height: 16),
-          //             // Fila de montos financieros
-          //             Row(
-          //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //               children: [
-          //                 Text(
-          //                   '\$ ${goal.currentAmount.toStringAsFixed(2)} recolectados',
-          //                   style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13),
-          //                 ),
-          //                 Text(
-          //                   'Objetivo: \$ ${goal.targetAmount.toStringAsFixed(2)}',
-          //                   style: const TextStyle(color: AppTheme.textPrimary, fontSize: 13, fontWeight: FontWeight.w600),
-          //                 ),
-          //               ],
-          //             ),
-          //             const SizedBox(height: 10),
-          //             // Barra de Progreso Líquida Estilizada
-          //             ClipRRect(
-          //               borderRadius: BorderRadius.circular(8),
-          //               child: LinearProgressIndicator(
-          //                 value: progress,
-          //                 minHeight: 8,
-          //                 backgroundColor: AppTheme.borderColor,
-          //                 color: Color(cat.colorHex),
-          //               ),
-          //             ),
-          //             const SizedBox(height: 12),
-          //             // Indicador de tiempo meta
-          //             Row(
-          //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //               children: [
-          //                 Text(
-          //                   '${(progress * 100).toStringAsFixed(0)}% completado',
-          //                   style: TextStyle(color: Color(cat.colorHex), fontSize: 12, fontWeight: FontWeight.bold),
-          //                 ),
-          //                 Text(
-          //                   'Límite: ${goal.deadline.day}/${goal.deadline.month}/${goal.deadline.year}',
-          //                   style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12),
-          //                 ),
-          //               ],
-          //             ),
-          //           ],
-          //         ),
-          //       );
-          //     },
-          //   ),
-    
 
     );
   }
@@ -297,7 +206,7 @@ class GoalsListView extends StatelessWidget {
                     labelStyle: const TextStyle(color: AppTheme.textSecondary),
                     prefixIcon: const Icon(Icons.add_card_rounded, color: AppTheme.textSecondary),
                     filled: true,
-                    fillColor: Colors.black.withOpacity(0.2),
+                    fillColor: Colors.black.withValues(alpha: 0.2),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(14),
                       borderSide: const BorderSide(color: AppTheme.borderColor),
@@ -383,7 +292,7 @@ class GoalsListView extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF10B981).withOpacity(0.15),
+                    color: const Color(0xFF10B981).withValues(alpha: 0.15),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
@@ -415,7 +324,7 @@ class GoalsListView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFF10B981).withOpacity(0.3),
+                          color: const Color(0xFF10B981).withValues(alpha: 0.3),
                           blurRadius: 8,
                           offset: const Offset(0, 4),
                         )

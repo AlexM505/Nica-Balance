@@ -79,7 +79,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                     onTap: _toggleMenu,
                     child: BackdropFilter(
                       filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
-                      child: Container(color: Colors.black.withOpacity(0.5)),
+                      child: Container(color: Colors.black.withValues(alpha: 0.5)),
                     ),
                   )
                 : const SizedBox.shrink(),
@@ -99,12 +99,12 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       margin: const EdgeInsets.fromLTRB(24, 0, 24, 24),
       height: 72,
       decoration: BoxDecoration(
-        color: AppTheme.surfaceColor.withOpacity(0.85),
+        color: AppTheme.surfaceColor.withValues(alpha: 0.85),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppTheme.borderColor.withOpacity(0.6), width: 1.5),
+        border: Border.all(color: AppTheme.borderColor.withValues(alpha: 0.6), width: 1.5),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
+            color: Colors.black.withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -134,7 +134,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 Container(
                   height: 32,
                   width: 1.5,
-                  color: AppTheme.borderColor.withOpacity(0.5),
+                  color: AppTheme.borderColor.withValues(alpha: 0.5),
                 ),
                 const SizedBox(width: 12),
 
@@ -170,7 +170,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: AppTheme.accentColor.withOpacity(0.15),
+                color: AppTheme.accentColor.withValues(alpha: 0.15),
                 shape: BoxShape.circle,
               ),
             ),
@@ -207,7 +207,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: (_isMenuOpen ? const Color(0xFFEF4444) : AppTheme.primaryColor).withOpacity(0.3),
+                color: (_isMenuOpen ? const Color(0xFFEF4444) : AppTheme.primaryColor).withValues(alpha: 0.3),
                 blurRadius: 8,
                 offset: const Offset(0, 4),
               )
@@ -304,10 +304,10 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             decoration: BoxDecoration(
               color: AppTheme.surfaceColor,
               shape: BoxShape.circle,
-              border: Border.all(color: color.withOpacity(0.6), width: 1.5),
+              border: Border.all(color: color.withValues(alpha: 0.6), width: 1.5),
               boxShadow: [
                 BoxShadow(
-                  color: color.withOpacity(0.15),
+                  color: color.withValues(alpha: 0.15),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 )

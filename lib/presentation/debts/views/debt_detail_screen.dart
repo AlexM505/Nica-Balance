@@ -220,7 +220,7 @@ class _DebtDetailScreenState extends State<DebtDetailScreen> {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: AppTheme.accentColor.withOpacity(0.15),
+              color: AppTheme.accentColor.withValues(alpha: 0.15),
               shape: BoxShape.circle,
             ),
             child: const Icon(
@@ -275,7 +275,7 @@ class _DebtDetailScreenState extends State<DebtDetailScreen> {
           Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [color, color.withOpacity(0.6)]),
+              gradient: LinearGradient(colors: [color, color.withValues(alpha: 0.6)]),
               borderRadius: BorderRadius.circular(24),
             ),
             child: Column(
@@ -283,7 +283,7 @@ class _DebtDetailScreenState extends State<DebtDetailScreen> {
                 Icon(type.icon, color: Colors.white, size: 36),
                 const SizedBox(height: 12),
                 Text(widget.debt.title, style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-                Text('Acreedor: ${widget.debt.creditor}', style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 13)),
+                Text('Acreedor: ${widget.debt.creditor}', style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 13)),
                 const SizedBox(height: 24),
                 const Text('SALDO PENDIENTE', style: TextStyle(color: Colors.white60, fontSize: 11, fontWeight: FontWeight.bold)),
                 Text('\$ ${widget.debt.remainingAmount.toStringAsFixed(2)}', style: const TextStyle(color: Colors.white, fontSize: 34, fontWeight: FontWeight.w700)),
@@ -322,9 +322,9 @@ class _DebtDetailScreenState extends State<DebtDetailScreen> {
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppTheme.surfaceColor.withOpacity(0.5),
+        color: AppTheme.surfaceColor.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.borderColor.withOpacity(0.5)),
+        border: Border.all(color: AppTheme.borderColor.withValues(alpha: 0.5)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -8,7 +8,7 @@ class DebtViewModel extends ChangeNotifier {
   List<Debt> _debts = [];
   StreamSubscription? _subscription;
 
-  DebtViewModel({required DebtRepository debtRepository}) : _debtRepository = debtRepository {
+  DebtViewModel({required this._debtRepository}) {
     _listenToDebts();
   }
 

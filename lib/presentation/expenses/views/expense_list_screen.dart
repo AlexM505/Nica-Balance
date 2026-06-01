@@ -24,7 +24,22 @@ class ExpenseListScreen extends StatelessWidget {
       body: viewModel.isLoading
           ? const Center(child: CircularProgressIndicator())
           : viewModel.expenses.isEmpty
-              ? const Center(child: Text('Sin gastos registrados.'))
+              ? Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.shopping_bag_rounded, size: 64, color: AppTheme.textSecondary.withValues(alpha: 0.3)),
+                        const SizedBox(height: 16),
+                        const Text(
+                          'Aún no has registrado ningún gasto',
+                          style: TextStyle(color: AppTheme.textPrimary, fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
               : Column(
                   children: [
                     Container(
@@ -102,7 +117,7 @@ class _ExpenseCard extends StatelessWidget {
         ),
         child: ListTile(
           leading: CircleAvatar(
-            backgroundColor: Color(category.colorHex).withOpacity(0.15),
+            backgroundColor: Color(category.colorHex).withValues(alpha: 0.15),
             child: Icon(
               category.icon,
               color: Color(category.colorHex),

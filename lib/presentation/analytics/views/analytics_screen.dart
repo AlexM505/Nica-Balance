@@ -89,9 +89,9 @@ class AnalyticsScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: healthColor.withOpacity(0.1),
+              color: healthColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: healthColor.withOpacity(0.4), width: 1.5),
+              border: Border.all(color: healthColor.withValues(alpha: 0.4), width: 1.5),
             ),
             child: Row(
               children: [
@@ -153,9 +153,9 @@ class AnalyticsScreen extends StatelessWidget {
                 margin: const EdgeInsets.only(bottom: 12),
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppTheme.surfaceColor.withOpacity(0.4),
+                  color: AppTheme.surfaceColor.withValues(alpha: 0.4),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppTheme.borderColor.withOpacity(0.5)),
+                  border: Border.all(color: AppTheme.borderColor.withValues(alpha: 0.5)),
                 ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,

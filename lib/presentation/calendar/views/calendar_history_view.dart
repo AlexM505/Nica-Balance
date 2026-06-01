@@ -92,7 +92,7 @@ class CalendarHistoryView extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.calendar_month_rounded, size: 64, color: AppTheme.textSecondary.withOpacity(0.3)),
+                        Icon(Icons.calendar_month_rounded, size: 64, color: AppTheme.textSecondary.withValues(alpha: 0.3)),
                         const SizedBox(height: 16),
                         const Text(
                           'No hay actividades registradas en este mes.',
@@ -171,14 +171,14 @@ class CalendarHistoryView extends StatelessWidget {
                                     margin: const EdgeInsets.only(bottom: 8),
                                     padding: const EdgeInsets.all(14),
                                     decoration: BoxDecoration(
-                                      color: AppTheme.surfaceColor.withOpacity(0.5),
+                                      color: AppTheme.surfaceColor.withValues(alpha: 0.5),
                                       borderRadius: BorderRadius.circular(16),
-                                      border: Border.all(color: AppTheme.borderColor.withOpacity(0.6)),
+                                      border: Border.all(color: AppTheme.borderColor.withValues(alpha: 0.6)),
                                     ),
                                     child: Row(
                                       children: [
                                         CircleAvatar(
-                                          backgroundColor: Color(tx.colorHex).withOpacity(0.12),
+                                          backgroundColor: Color(tx.colorHex).withValues(alpha: 0.12),
                                           radius: 16,
                                           child: Icon(
                                             tx.category != null ? (tx.category.icon as IconData) : fallbackIcon, 

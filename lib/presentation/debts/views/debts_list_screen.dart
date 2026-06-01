@@ -34,7 +34,7 @@ class DebtsListScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.gavel_rounded, size: 64, color: AppTheme.textSecondary.withOpacity(0.3)),
+                  Icon(Icons.gavel_rounded, size: 64, color: AppTheme.textSecondary.withValues(alpha: 0.3)),
                   const SizedBox(height: 16),
                   const Text('¡Felicidades, estás libre de deudas!', style: TextStyle(color: AppTheme.textSecondary, fontSize: 14)),
                 ],
@@ -70,7 +70,7 @@ class DebtsListScreen extends StatelessWidget {
                           Row(
                             children: [
                               CircleAvatar(
-                                backgroundColor: color.withOpacity(0.1),
+                                backgroundColor: color.withValues(alpha: 0.1),
                                 radius: 18,
                                 child: Icon(type.icon, color: color, size: 18),
                               ),
@@ -93,7 +93,7 @@ class DebtsListScreen extends StatelessWidget {
                               if (debt.isPaidOff)
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                                  decoration: BoxDecoration(color: AppTheme.accentColor.withOpacity(0.12), borderRadius: BorderRadius.circular(8)),
+                                  decoration: BoxDecoration(color: AppTheme.accentColor.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(8)),
                                   child: const Text('PAGADO', style: TextStyle(color: AppTheme.accentColor, fontSize: 10, fontWeight: FontWeight.bold)),
                                 )
                             ],

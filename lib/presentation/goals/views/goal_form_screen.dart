@@ -123,14 +123,14 @@ class _GoalFormScreenState extends State<GoalFormScreen> {
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Color(_selectedCategory.colorHex), Color(_selectedCategory.colorHex).withOpacity(0.65)],
+                  colors: [Color(_selectedCategory.colorHex), Color(_selectedCategory.colorHex).withValues(alpha: 0.65)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
                 borderRadius: BorderRadius.circular(24),
                 boxShadow: [
                   BoxShadow(
-                    color: Color(_selectedCategory.colorHex).withOpacity(0.3),
+                    color: Color(_selectedCategory.colorHex).withValues(alpha: 0.3),
                     blurRadius: 16,
                     offset: const Offset(0, 8),
                   )
@@ -143,7 +143,7 @@ class _GoalFormScreenState extends State<GoalFormScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CircleAvatar(
-                        backgroundColor: Colors.white.withOpacity(0.25),
+                        backgroundColor: Colors.white.withValues(alpha: 0.25),
                         radius: 22,
                         child: Icon(_selectedCategory.icon, color: Colors.white, size: 24),
                       ),
@@ -168,7 +168,7 @@ class _GoalFormScreenState extends State<GoalFormScreen> {
                       ),
                       Text(
                         'Plazo: ${_deadline.day}/${_deadline.month}/${_deadline.year}',
-                        style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 13, fontWeight: FontWeight.w500),
+                        style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 13, fontWeight: FontWeight.w500),
                       ),
                     ],
                   ),
@@ -215,7 +215,7 @@ class _GoalFormScreenState extends State<GoalFormScreen> {
 
             // DROP DRAW: Categorías de metas
             DropdownButtonFormField<GoalCategory>(
-              value: _selectedCategory,
+              initialValue: _selectedCategory,
               dropdownColor: AppTheme.surfaceColor,
               style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.w600),
               decoration: _buildInputDecoration('Categoría de Meta', Icons.folder_special_rounded),
@@ -292,7 +292,7 @@ class _GoalFormScreenState extends State<GoalFormScreen> {
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: AppTheme.primaryColor.withOpacity(0.3),
+                      color: AppTheme.primaryColor.withValues(alpha: 0.3),
                       blurRadius: 12,
                       offset: const Offset(0, 6),
                     )

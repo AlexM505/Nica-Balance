@@ -64,14 +64,14 @@ class IncomeDetailScreen extends StatelessWidget {
             padding: const EdgeInsets.all(28),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [categoryColor, categoryColor.withOpacity(0.6)],
+                colors: [categoryColor, categoryColor.withValues(alpha: 0.6)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               borderRadius: BorderRadius.circular(24),
               boxShadow: [
                 BoxShadow(
-                  color: categoryColor.withOpacity(0.25),
+                  color: categoryColor.withValues(alpha: 0.25),
                   blurRadius: 16,
                   offset: const Offset(0, 8),
                 )
@@ -80,7 +80,7 @@ class IncomeDetailScreen extends StatelessWidget {
             child: Column(
               children: [
                 CircleAvatar(
-                  backgroundColor: Colors.white.withOpacity(0.2),
+                  backgroundColor: Colors.white.withValues(alpha: 0.2),
                   radius: 28,
                   child: Icon(cat.icon, color: Colors.white, size: 32),
                 ),
@@ -93,7 +93,7 @@ class IncomeDetailScreen extends StatelessWidget {
                 const SizedBox(height: 6),
                 Text(
                   cat.displayName,
-                  style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 13, fontWeight: FontWeight.w500),
+                  style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 13, fontWeight: FontWeight.w500),
                 ),
                 const SizedBox(height: 20),
                 Text(
@@ -104,7 +104,7 @@ class IncomeDetailScreen extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     '≈ \$ ${(income.amount / 36.0).toStringAsFixed(2)} USD',
-                    style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 13, fontWeight: FontWeight.w600),
+                    style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 13, fontWeight: FontWeight.w600),
                   ),
                 ]
               ],
@@ -161,9 +161,9 @@ class IncomeDetailScreen extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppTheme.surfaceColor.withOpacity(0.4),
+        color: AppTheme.surfaceColor.withValues(alpha: 0.4),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.borderColor.withOpacity(0.5)),
+        border: Border.all(color: AppTheme.borderColor.withValues(alpha: 0.5)),
       ),
       child: Row(
         children: [

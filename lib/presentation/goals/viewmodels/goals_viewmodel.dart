@@ -6,8 +6,7 @@ class GoalsViewModel extends ChangeNotifier {
   final GoalRepository _goalRepository;
   List<Goal> _goals = [];
 
-  GoalsViewModel({required GoalRepository goalRepository}) 
-      : _goalRepository = goalRepository {
+  GoalsViewModel({required this._goalRepository}) {
     _loadGoals(); // Carga inicial reactiva al instanciar el módulo
   }
 
