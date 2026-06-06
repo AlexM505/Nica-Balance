@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
 
@@ -19,7 +20,34 @@ class AppTheme {
       brightness: Brightness.dark,
       primaryColor: primaryColor,
       scaffoldBackgroundColor: backgroundColor,
-      fontFamily: 'Montserrat',
+      // fontFamily: 'Montserrat',
+
+      // Typography
+      textTheme: GoogleFonts.outfitTextTheme(
+        ThemeData.dark().textTheme.copyWith(
+          displayLarge: const TextStyle(
+            color: textPrimary,
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+          ),
+          titleLarge: const TextStyle(
+            color: textPrimary,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+          bodyLarge: const TextStyle(
+            color: textPrimary,
+            fontSize: 16,
+            fontWeight: FontWeight.normal,
+          ),
+          bodyMedium: const TextStyle(
+            color: textSecondary,
+            fontSize: 14,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+      ),
+
       colorScheme: const ColorScheme.dark(
         primary: primaryColor,
         secondary: accentColor,
@@ -32,11 +60,9 @@ class AppTheme {
         centerTitle: true,
         iconTheme: IconThemeData(color: textPrimary, size: 22),
         titleTextStyle: TextStyle(
-          fontFamily: 'Montserrat',
           color: textPrimary,
           fontSize: 20,
-          fontWeight: FontWeight.w700,
-          letterSpacing: -0.5,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );

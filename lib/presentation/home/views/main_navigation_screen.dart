@@ -170,7 +170,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: AppTheme.accentColor.withValues(alpha: 0.15),
+                color: AppTheme.primaryColor.withValues(alpha: 0.15),
                 shape: BoxShape.circle,
               ),
             ),
@@ -181,7 +181,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             padding: const EdgeInsets.all(12),
             child: Icon(
               icon,
-              color: isSelected ? AppTheme.accentColor : AppTheme.textSecondary,
+              color: isSelected ? AppTheme.primaryColor : AppTheme.textSecondary,
               size: 24,
             ),
           ),

@@ -21,18 +21,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       color: AppTheme.primaryColor,
       title: 'Toma el Control',
       description: 'Registra tus ingresos y gastos diarios de forma rápida en Córdobas o Dólares con persistencia local instantánea.',
+      gradientColors: [Colors.indigoAccent, Colors.purpleAccent],
     ),
     OnboardingData(
       icon: Icons.analytics_rounded,
       color: const Color(0xFFF59E0B), // Ámbar
       title: 'Diagnóstico Inteligente',
       description: 'Analiza tu salud financiera en tiempo real. Obtén pautas y planes de acción basados en tu tasa de ahorro mensual.',
+      gradientColors: [Colors.deepOrange, Colors.orangeAccent],
     ),
     OnboardingData(
       icon: Icons.emoji_events_rounded,
       color: AppTheme.accentColor, // Esmeralda
       title: 'Cumple tus Metas',
       description: 'Crea objetivos de ahorro y realiza abonos controlados con algoritmos que evitan que sobrepases tus presupuestos.',
+      gradientColors: [Colors.tealAccent.shade700, Colors.teal],
     ),
   ];
 
@@ -59,143 +62,181 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Botón de Saltar (Skip) superior
-            Align(
-              alignment: Alignment.topRight,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: TextButton(
-                  onPressed: _completeOnboarding,
-                  child: const Text(
-                    'Saltar',
-                    style: TextStyle(color: AppTheme.textSecondary, fontWeight: FontWeight.bold),
+      body: Stack(
+        children: [
+          
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 500),
+            top: _currentPage == 0 ? -100 : (_currentPage == 1 ? -50 : -120),
+            left: _currentPage == 0 ? -50 : (_currentPage == 1 ? -100 : 50),
+            child: Container(
+              width: 350,
+              height: 350,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: _slides[_currentPage].gradientColors[0].withOpacity(0.18),
+              ),
+            ),
+          ),
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 500),
+            bottom: _currentPage == 0 ? -50 : (_currentPage == 1 ? 20 : -90),
+            right: _currentPage == 0 ? -50 : (_currentPage == 1 ? -80 : -100),
+            child: Container(
+              width: 300,
+              height: 300,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: _slides[_currentPage].gradientColors[1].withOpacity(0.12),
+              ),
+            ),
+          ),
+          
+          SafeArea(
+            child: Column(
+              children: [
+                // Botón de Saltar (Skip) superior
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: TextButton(
+                      onPressed: _completeOnboarding,
+                      child: const Text(
+                        'Saltar',
+                        style: TextStyle(color: AppTheme.textSecondary, fontWeight: FontWeight.bold),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-            
-            // Contenido deslizable
-            Expanded(
-              child: PageView.builder(
-                controller: _pageController,
-                itemCount: _slides.length,
-                onPageChanged: (index) {
-                  setState(() {
-                    _currentPage = index;
-                  });
-                },
-                itemBuilder: (context, index) {
-                  final slide = _slides[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(32),
-                          decoration: BoxDecoration(
-                            color: slide.color.withValues(alpha: 0.1),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(slide.icon, color: slide.color, size: 72),
-                        ),
-                        const SizedBox(height: 48),
-                        Text(
-                          slide.title,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: AppTheme.textPrimary,
-                            fontSize: 26,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: -0.5,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          slide.description,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: AppTheme.textSecondary,
-                            fontSize: 14,
-                            height: 1.5,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            // Sección Inferior: Indicadores de punto + Botón de acción
-            Padding(
-              padding: const EdgeInsets.fromLTRB(40, 0, 40, 48),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Indicadores de posición (Dots)
-                  Row(
-                    children: List.generate(
-                      _slides.length,
-                      (index) => AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        margin: const EdgeInsets.only(right: 8),
-                        height: 8,
-                        width: _currentPage == index ? 24 : 8,
-                        decoration: BoxDecoration(
-                          color: _currentPage == index ? AppTheme.primaryColor : AppTheme.borderColor,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  // Botón Dinámico (Siguiente / Empezar)
-                  GestureDetector(
-                    onTap: () {
-                      if (_currentPage == _slides.length - 1) {
-                        _completeOnboarding();
-                      } else {
-                        _pageController.nextPage(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                        );
-                      }
+                
+                // Contenido deslizable
+                Expanded(
+                  child: PageView.builder(
+                    controller: _pageController,
+                    itemCount: _slides.length,
+                    onPageChanged: (index) {
+                      setState(() {
+                        _currentPage = index;
+                      });
                     },
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: _currentPage == _slides.length - 1 ? 24 : 16,
-                        vertical: 16,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppTheme.primaryColor,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Row(
-                        children: [
-                          Text(
-                            _currentPage == _slides.length - 1 ? 'Comenzar' : 'Siguiente',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
+                    itemBuilder: (context, index) {
+                      final slide = _slides[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 40),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(32),
+                              decoration: BoxDecoration(
+                                color: slide.color.withValues(alpha: 0.1),
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(slide.icon, color: slide.color, size: 72),
+                            ),
+                            const SizedBox(height: 48),
+                            Text(
+                              slide.title,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: AppTheme.textPrimary,
+                                fontSize: 26,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: -0.5,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              slide.description,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: AppTheme.textSecondary,
+                                fontSize: 14,
+                                height: 1.5,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+
+                // Sección Inferior: Indicadores de punto + Botón de acción
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(40, 0, 40, 48),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Indicadores de posición (Dots)
+                      Row(
+                        children: List.generate(
+                          _slides.length,
+                          (index) => AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            margin: const EdgeInsets.only(right: 8),
+                            height: 8,
+                            width: _currentPage == index ? 24 : 8,
+                            decoration: BoxDecoration(
+                              color: _currentPage == index ? _slides[_currentPage].gradientColors[0] : AppTheme.borderColor,
+                              borderRadius: BorderRadius.circular(4),
                             ),
                           ),
-                          const SizedBox(width: 4),
-                          const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white, size: 14),
-                        ],
+                        ),
                       ),
-                    ),
+
+                      // Botón Dinámico (Siguiente / Empezar)
+                      GestureDetector(
+                        onTap: () {
+                          if (_currentPage == _slides.length - 1) {
+                            _completeOnboarding();
+                          } else {
+                            _pageController.nextPage(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            );
+                          }
+                        },
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: _currentPage == _slides.length - 1 ? 24 : 16,
+                            vertical: 16,
+                          ),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: _slides[_currentPage].gradientColors,
+                            ),
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                          // BoxDecoration(
+                          //   color: AppTheme.primaryColor,
+                          //   borderRadius: BorderRadius.circular(16),
+                          // ),
+                          child: Row(
+                            children: [
+                              Text(
+                                _currentPage == _slides.length - 1 ? 'Comenzar' : 'Siguiente',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(width: 4),
+                              const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white, size: 14),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -207,11 +248,13 @@ class OnboardingData {
   final Color color;
   final String title;
   final String description;
+  final List<Color> gradientColors;
 
   OnboardingData({
     required this.icon,
     required this.color,
     required this.title,
     required this.description,
+    required this.gradientColors,
   });
 }

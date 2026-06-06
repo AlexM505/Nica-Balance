@@ -24,130 +24,148 @@ Widget build(BuildContext context) {
   final dashboardVM = context.watch<DashboardViewModel>();
 
   return Scaffold(
-    body: SafeArea(
-      child: ListView(
-        padding: const EdgeInsets.fromLTRB(18, 12, 18, 80),
+    body: Stack(
         children: [
-
-          DashboardHeader(),
-
-          const SizedBox(height: 20),
-
-          BalanceHeroCard(
-            balance: dashboardVM.netBalanceUsd,
-            incomes: dashboardVM.totalIncomesUsd,
-            expenses: dashboardVM.totalExpensesUsd,
-          ),
-
-          const SizedBox(height: 8),
-
-          QuickActionsSection(),
-
-          const SizedBox(height: 8),
-
-          Consumer<DebtViewModel>(
-            builder: (context, debtVM, child) {
-              final totalRemaining = debtVM.totalDebtAmount;
-
-              return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                decoration: BoxDecoration(
-                  color: AppTheme.surfaceColor.withValues(alpha: 0.6), //withOpacity(0.6),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: totalRemaining > 0 
-                        ? const Color(0xFFEF4444).withValues(alpha: 0.6) // Borde rojo sutil si debe dinero
-                        : AppTheme.borderColor.withValues(alpha: 0.6),
-                  ),
-                ),
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(16),
-                  onTap: () {
-                    // Redirige al listado completo de deudas al pulsar la tarjeta
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => const DebtsListScreen()),
-                    );
-                  },
-                  child:  Row(
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: const Color(0xFFEF4444).withValues(alpha: 0.12),
-                        radius: 20,
-                        child: const Icon(Icons.gavel_rounded, color: Color(0xFFEF4444), size: 20),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Pasivos / Deudas Totales',
-                              style: TextStyle(color: AppTheme.textSecondary, fontSize: 12, fontWeight: FontWeight.w500),
-                            ),
-                            const SizedBox(height: 2),
-                            Text(
-                              '\$ ${totalRemaining.toStringAsFixed(2)}',
-                              style: const TextStyle(color: AppTheme.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                      ),
-                      // Botón de acción directo para agregar deuda
-                      IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => const DebtFormScreen()),
-                          );
-                        },
-                        icon: const Icon(Icons.add_circle_outline_rounded, color: AppTheme.primaryColor, size: 26),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-
-          const SizedBox(height: 24),
-
-          //         // SECCIÓN: Últimos Gastos
-          _buildSectionHeader(
-            title: 'Gastos Recientes', 
-            icon: Icons.shopping_bag_rounded,
-            showButton: dashboardVM.recentExpenses.length >= 3, // Validamos el total real de la lista completa
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const ExpenseListScreen()),
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 500),
+            top: -100,
+            left: -70,
+            child: Container(
+              width: 300,
+              height: 300,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppTheme.primaryColor.withValues(alpha: 0.18),
+              ),
             ),
           ),
-          const SizedBox(height: 12),
-          if (dashboardVM.recentExpenses.isEmpty)
-            _buildEmptyPlaceholder(message: 'No hay gastos registrados todavía.', icon: Icons.shopping_bag_rounded,)
-          else
-            ...dashboardVM.recentExpenses.map((expense) => _buildRecentExpenseRow(context, dashboardVM, expense)),
+    
+        SafeArea(
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(18, 12, 18, 80),
+            children: [
 
-          const SizedBox(height: 16),
+              DashboardHeader(),
 
-          // SECCIÓN: Últimos Ingresos
-          _buildSectionHeader(
-            title: 'Ingresos Recientes', 
-            icon: Icons.payments_rounded,
-            showButton: dashboardVM.recentIncomes.length >= 3, // Validamos el total real de la lista completa
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const IncomeListScreen()),
-            ),
+              const SizedBox(height: 20),
+
+              BalanceHeroCard(
+                balance: dashboardVM.netBalanceUsd,
+                incomes: dashboardVM.totalIncomesUsd,
+                expenses: dashboardVM.totalExpensesUsd,
+              ),
+
+              const SizedBox(height: 8),
+
+              QuickActionsSection(),
+
+              const SizedBox(height: 8),
+
+              Consumer<DebtViewModel>(
+                builder: (context, debtVM, child) {
+                  final totalRemaining = debtVM.totalDebtAmount;
+
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: AppTheme.surfaceColor.withValues(alpha: 0.6), //withOpacity(0.6),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: totalRemaining > 0 
+                            ? const Color(0xFFEF4444).withValues(alpha: 0.6) // Borde rojo sutil si debe dinero
+                            : AppTheme.borderColor.withValues(alpha: 0.6),
+                      ),
+                    ),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(16),
+                      onTap: () {
+                        // Redirige al listado completo de deudas al pulsar la tarjeta
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const DebtsListScreen()),
+                        );
+                      },
+                      child:  Row(
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: const Color(0xFFEF4444).withValues(alpha: 0.12),
+                            radius: 20,
+                            child: const Icon(Icons.gavel_rounded, color: Color(0xFFEF4444), size: 20),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Pasivos / Deudas Totales',
+                                  style: TextStyle(color: AppTheme.textSecondary, fontSize: 12, fontWeight: FontWeight.w500),
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  '\$ ${totalRemaining.toStringAsFixed(2)}',
+                                  style: const TextStyle(color: AppTheme.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ),
+                          // Botón de acción directo para agregar deuda
+                          IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => const DebtFormScreen()),
+                              );
+                            },
+                            icon: const Icon(Icons.add_circle_outline_rounded, color: AppTheme.primaryColor, size: 26),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+
+              const SizedBox(height: 24),
+
+              //         // SECCIÓN: Últimos Gastos
+              _buildSectionHeader(
+                title: 'Gastos Recientes', 
+                icon: Icons.shopping_bag_rounded,
+                showButton: dashboardVM.recentExpenses.length >= 3, // Validamos el total real de la lista completa
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ExpenseListScreen()),
+                ),
+              ),
+              const SizedBox(height: 12),
+              if (dashboardVM.recentExpenses.isEmpty)
+                _buildEmptyPlaceholder(message: 'No hay gastos registrados todavía.', icon: Icons.shopping_bag_rounded,)
+              else
+                ...dashboardVM.recentExpenses.map((expense) => _buildRecentExpenseRow(context, dashboardVM, expense)),
+
+              const SizedBox(height: 16),
+
+              // SECCIÓN: Últimos Ingresos
+              _buildSectionHeader(
+                title: 'Ingresos Recientes', 
+                icon: Icons.payments_rounded,
+                showButton: dashboardVM.recentIncomes.length >= 3, // Validamos el total real de la lista completa
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const IncomeListScreen()),
+                ),
+              ),
+              const SizedBox(height: 12),
+              if (dashboardVM.recentIncomes.isEmpty)
+                _buildEmptyPlaceholder(message: 'No hay ingresos registrados todavía.', icon: Icons.payments_rounded)
+              else
+                ...dashboardVM.recentIncomes.map((income) => _buildRecentIncomeRow(context, dashboardVM, income)),
+            
+            ],
           ),
-          const SizedBox(height: 12),
-          if (dashboardVM.recentIncomes.isEmpty)
-            _buildEmptyPlaceholder(message: 'No hay ingresos registrados todavía.', icon: Icons.payments_rounded)
-          else
-            ...dashboardVM.recentIncomes.map((income) => _buildRecentIncomeRow(context, dashboardVM, income)),
-        
-        ],
-      ),
+        ),
+      ],
     ),
   );
 }

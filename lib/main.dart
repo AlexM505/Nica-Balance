@@ -76,6 +76,7 @@ void main() async {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: AppTheme.premiumDarkTheme,
+        themeMode: ThemeMode.dark,
         home: showOnboarding ? const OnboardingScreen() :const MainNavigationScreen(),
       ),
     ),

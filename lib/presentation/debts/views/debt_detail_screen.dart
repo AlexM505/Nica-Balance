@@ -162,7 +162,10 @@ class _DebtDetailScreenState extends State<DebtDetailScreen> {
                       child: Container(
                         height: 50,
                         decoration: BoxDecoration(
-                          color: AppTheme.primaryColor,
+                          gradient: LinearGradient(
+                            colors: [Colors.tealAccent.shade700, const Color(0xFF059669)]
+                          ),
+                          // color: AppTheme.primaryColor,
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: const Center(
@@ -306,7 +309,13 @@ class _DebtDetailScreenState extends State<DebtDetailScreen> {
               onTap: () => _showPaymentBottomSheet(context),
               child: Container(
                 height: 54,
-                decoration: BoxDecoration(color: AppTheme.primaryColor, borderRadius: BorderRadius.circular(16)),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [AppTheme.primaryColor, Colors.indigoAccent.shade700]
+                  ),
+                  // color: AppTheme.primaryColor, 
+                  borderRadius: BorderRadius.circular(16)
+                ),
                 child: const Center(
                   child: Text('Registrar Abono / Pago', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
                 ),
