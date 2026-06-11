@@ -157,7 +157,7 @@
     },
     {
       "id": "4:7502451798277903778",
-      "lastPropertyId": "8:7581570750914452252",
+      "lastPropertyId": "9:4084936473241046134",
       "name": "Debt",
       "properties": [
         {
@@ -200,6 +200,11 @@
           "id": "8:7581570750914452252",
           "name": "typeIndex",
           "type": 6
+        },
+        {
+          "id": "9:4084936473241046134",
+          "name": "dbCurrency",
+          "type": 9
         }
       ],
       "relations": []

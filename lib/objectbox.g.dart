@@ -205,7 +205,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(4, 7502451798277903778),
     name: 'Debt',
-    lastPropertyId: const obx_int.IdUid(8, 7581570750914452252),
+    lastPropertyId: const obx_int.IdUid(9, 4084936473241046134),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -254,6 +254,12 @@ final _entities = <obx_int.ModelEntity>[
         id: const obx_int.IdUid(8, 7581570750914452252),
         name: 'typeIndex',
         type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(9, 4084936473241046134),
+        name: 'dbCurrency',
+        type: 9,
         flags: 0,
       ),
     ],
@@ -574,7 +580,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
       objectToFB: (Debt object, fb.Builder fbb) {
         final titleOffset = fbb.writeString(object.title);
         final creditorOffset = fbb.writeString(object.creditor);
-        fbb.startTable(9);
+        final dbCurrencyOffset = fbb.writeString(object.dbCurrency);
+        fbb.startTable(10);
         fbb.addInt64(0, object.id);
         fbb.addOffset(1, titleOffset);
         fbb.addOffset(2, creditorOffset);
@@ -583,6 +590,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         fbb.addFloat64(5, object.interestRate);
         fbb.addInt64(6, object.dueDateMilli);
         fbb.addInt64(7, object.typeIndex);
+        fbb.addOffset(8, dbCurrencyOffset);
         fbb.finish(fbb.endTable());
         return object.id;
       },
@@ -631,6 +639,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
           18,
           0,
         );
+        final dbCurrencyParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 20, '');
         final object = Debt(
           id: idParam,
           title: titleParam,
@@ -640,6 +651,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           interestRate: interestRateParam,
           dueDateMilli: dueDateMilliParam,
           typeIndex: typeIndexParam,
+          dbCurrency: dbCurrencyParam,
         );
 
         return object;
@@ -816,5 +828,10 @@ class Debt_ {
   /// See [Debt.typeIndex].
   static final typeIndex = obx.QueryIntegerProperty<Debt>(
     _entities[3].properties[7],
+  );
+
+  /// See [Debt.dbCurrency].
+  static final dbCurrency = obx.QueryStringProperty<Debt>(
+    _entities[3].properties[8],
   );
 }

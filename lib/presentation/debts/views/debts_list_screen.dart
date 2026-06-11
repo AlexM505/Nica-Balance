@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nica_balance/core/theme/app_theme.dart';
+import 'package:nica_balance/data/models/expense_enums.dart';
 import 'package:nica_balance/presentation/debts/views/debt_detail_screen.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/debt_viewmodel.dart';
@@ -108,7 +109,19 @@ class DebtsListScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const Text('Saldo Restante', style: TextStyle(color: AppTheme.textSecondary, fontSize: 11)),
-                                  Text('\$ ${debt.remainingAmount.toStringAsFixed(2)}', style: const TextStyle(color: AppTheme.textPrimary, fontSize: 16, fontWeight: FontWeight.w700)),
+
+                                  Text(
+                                    '${debt.currency == Currency.usd ? '\$' : 'C\$'}${debt.remainingAmount.toStringAsFixed(2)}',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppTheme.textPrimary, fontSize: 16
+                                    ),
+                                  ),
+                                  if (debt.currency == Currency.nio)
+                                    Text(
+                                      '≈ \$ ${debtVM.convertToUsd(debt.remainingAmount, debt.currency).toStringAsFixed(2)}',
+                                      style: const TextStyle(color: AppTheme.textSecondary, fontSize: 11, fontWeight: FontWeight.w500),
+                                    ),
                                 ],
                               ),
                               Column(
@@ -128,7 +141,7 @@ class DebtsListScreen extends StatelessWidget {
                             child: LinearProgressIndicator(
                               value: debt.paidPercentage,
                               backgroundColor: AppTheme.borderColor,
-                              valueColor: AlwaysStoppedAnimation<Color>(debt.isPaidOff ? AppTheme.accentColor : AppTheme.primaryColor),
+                              valueColor: AlwaysStoppedAnimation<Color>(debt.isPaidOff ? AppTheme.accentColor : color),
                               minHeight: 6,
                             ),
                           ),

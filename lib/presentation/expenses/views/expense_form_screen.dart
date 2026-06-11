@@ -394,7 +394,11 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                 child: Container(
                   height: 56,
                   decoration: BoxDecoration(
-                    color: AppTheme.primaryColor,
+                    gradient: const LinearGradient(
+                      colors: [AppTheme.primaryColor, Colors.indigo], // Gradiente de esmeralda a verde oscuro profundo
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ),
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
@@ -410,7 +414,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.bold,
                         letterSpacing: 0.2,
                       ),
                     ),

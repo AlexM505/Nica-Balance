@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nica_balance/core/theme/app_theme.dart';
+import 'package:nica_balance/data/models/expense_enums.dart';
 import 'package:provider/provider.dart';
 import '../../../data/models/debt.dart';
 import '../viewmodels/debt_viewmodel.dart';
@@ -257,6 +258,7 @@ class _DebtDetailScreenState extends State<DebtDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final debtVM = context.watch<DebtViewModel>();
     final type = widget.debt.type;
     final color = Color(type.colorHex);
     final daysLeft = widget.debt.dueDate.difference(DateTime.now()).inDays;
@@ -289,15 +291,22 @@ class _DebtDetailScreenState extends State<DebtDetailScreen> {
                 Text('Acreedor: ${widget.debt.creditor}', style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 13)),
                 const SizedBox(height: 24),
                 const Text('SALDO PENDIENTE', style: TextStyle(color: Colors.white60, fontSize: 11, fontWeight: FontWeight.bold)),
-                Text('\$ ${widget.debt.remainingAmount.toStringAsFixed(2)}', style: const TextStyle(color: Colors.white, fontSize: 34, fontWeight: FontWeight.w700)),
+                Text( '${widget.debt.currency == Currency.usd ? '\$' : 'C\$'}${widget.debt.remainingAmount.toStringAsFixed(2)}',
+                  style: const TextStyle(color: Colors.white, fontSize: 34, fontWeight: FontWeight.w700)
+                ),
+                if (widget.debt.currency == Currency.nio)
+                  Text(
+                    '≈ \$ ${debtVM.convertToUsd(widget.debt.remainingAmount, widget.debt.currency).toStringAsFixed(2)}',
+                    style: const TextStyle(color: AppTheme.textPrimary, fontSize: 18, fontWeight: FontWeight.w500),
+                  ),
               ],
             ),
           ),
           const SizedBox(height: 24),
 
           // Metadatos de Amortización
-          _buildDetailRow('Monto Inicial Registrado', '\$ ${widget.debt.totalAmount.toStringAsFixed(2)}'),
-          _buildDetailRow('Total Abonado a la Fecha', '\$ ${widget.debt.totalPaid.toStringAsFixed(2)}'),
+          _buildDetailRow('Monto Inicial Registrado', '${widget.debt.currency == Currency.usd ? '\$' : 'C\$'}${widget.debt.totalAmount.toStringAsFixed(2)}'),
+          _buildDetailRow('Total Abonado a la Fecha', '${widget.debt.currency == Currency.usd ? '\$' : 'C\$'}${widget.debt.totalPaid.toStringAsFixed(2)}'),
           _buildDetailRow('Tasa de Interés Ajustada', '${widget.debt.interestRate}% Anual'),
           _buildDetailRow('Próximo Vencimiento', '${widget.debt.dueDate.day}/${widget.debt.dueDate.month}/${widget.debt.dueDate.year} (${daysLeft < 0 ? 'Vencida' : 'en $daysLeft días'})'),
           

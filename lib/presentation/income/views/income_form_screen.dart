@@ -381,7 +381,7 @@ class _IncomeFormScreenState extends State<IncomeFormScreen> {
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: AppTheme.accentColor.withValues(alpha: 0.25),
+                      color: AppTheme.accentColor.withValues(alpha: 0.3),
                       blurRadius: 12,
                       offset: const Offset(0, 6),
                     )

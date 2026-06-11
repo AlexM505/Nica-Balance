@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nica_balance/data/models/expense_enums.dart';
 import 'package:objectbox/objectbox.dart';
 
 enum DebtType {
@@ -31,6 +32,8 @@ class Debt {
   
   int dueDateMilli;      // Próxima fecha límite de pago
 
+  String dbCurrency;
+
   // Almacenamos el índice del enum para la persistencia
   int typeIndex;
 
@@ -43,6 +46,7 @@ class Debt {
     required this.interestRate,
     required this.dueDateMilli,
     required this.typeIndex,
+    required this.dbCurrency,
   });
 
   // --- Getters de Utilidad ---
@@ -62,4 +66,9 @@ class Debt {
     final pct = totalPaid / totalAmount;
     return pct > 1.0 ? 1.0 : pct;
   }
+
+  Currency get currency => Currency.values.firstWhere(
+        (c) => c.name == dbCurrency,
+        orElse: () => Currency.nio,
+      );
 }

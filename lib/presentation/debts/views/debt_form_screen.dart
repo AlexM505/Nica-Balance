@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nica_balance/core/theme/app_theme.dart';
+import 'package:nica_balance/data/models/expense_enums.dart';
 import 'package:provider/provider.dart';
 import '../../../data/models/debt.dart';
 import '../viewmodels/debt_viewmodel.dart';
@@ -22,6 +23,7 @@ class _DebtFormScreenState extends State<DebtFormScreen> {
   
   DebtType _selectedType = DebtType.loan;
   DateTime _selectedDate = DateTime.now().add(const Duration(days: 30));
+  Currency _selectedCurrency = Currency.nio;
 
   @override
   void initState() {
@@ -78,6 +80,7 @@ class _DebtFormScreenState extends State<DebtFormScreen> {
       interestRate: double.tryParse(_interestController.text) ?? 0.0,
       dueDateMilli: _selectedDate.millisecondsSinceEpoch,
       typeIndex: _selectedType.index,
+      dbCurrency: _selectedCurrency.name,
     );
 
     final viewModel = context.read<DebtViewModel>();
@@ -148,7 +151,7 @@ class _DebtFormScreenState extends State<DebtFormScreen> {
               decoration: _buildInputDecoration(hintText: 'Ej. Visa Clásica, Préstamo vehicular', prefixIcon: Icons.bookmark_outline_rounded),
               validator: (v) => v!.isEmpty ? 'Por favor escribe el concepto' : null,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
             
             // Campo: Acreedor
             const Text('Acreedor / Prestamista', style: TextStyle(color: AppTheme.textPrimary, fontSize: 14, fontWeight: FontWeight.bold)),
@@ -159,7 +162,24 @@ class _DebtFormScreenState extends State<DebtFormScreen> {
               decoration: _buildInputDecoration(hintText: '¿A quién le debes? Ej. Banco BAC, Juan', prefixIcon: Icons.business_rounded),
               validator: (v) => v!.isEmpty ? 'Por favor ingresa el acreedor' : null,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
+
+            const Text('Tipo de Moneda', style: TextStyle(color: AppTheme.textPrimary, fontSize: 14, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
+
+            DropdownButtonFormField<Currency>(
+              initialValue: _selectedCurrency,
+              style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold),
+              decoration: _buildInputDecoration(hintText: 'Moneda', prefixIcon: Icons.shutter_speed_rounded),
+              items: Currency.values.map((c) {
+                return DropdownMenuItem(value: c, child: Text(c.name.toUpperCase()));
+              }).toList(),
+              onChanged: (val) => setState(() {
+                _selectedCurrency = val!;
+              }),
+            ),
+
+            const SizedBox(height: 16),
 
             // Campos en paralelo: Monto e Interés
             Row(
@@ -200,7 +220,7 @@ class _DebtFormScreenState extends State<DebtFormScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
 
             // Selector Horizontal Tipo de Deuda (ChoiceChips Premium)
             const Text('Clasificación del Pasivo', style: TextStyle(color: AppTheme.textPrimary, fontSize: 14, fontWeight: FontWeight.bold)),
@@ -234,7 +254,7 @@ class _DebtFormScreenState extends State<DebtFormScreen> {
                 }).toList(),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
 
             // Disparador de Fecha de Próximo Pago estilo ListTile Premium
             const Text('Próxima Fecha de Pago', style: TextStyle(color: AppTheme.textPrimary, fontSize: 14, fontWeight: FontWeight.bold)),
@@ -263,7 +283,7 @@ class _DebtFormScreenState extends State<DebtFormScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 24),
 
             // Botón de Confirmación Principal
             GestureDetector(
@@ -271,20 +291,24 @@ class _DebtFormScreenState extends State<DebtFormScreen> {
               child: Container(
                 height: 54,
                 decoration: BoxDecoration(
-                  color: AppTheme.primaryColor,
+                  gradient: const LinearGradient(
+                    colors: [Colors.orange, Colors.deepOrange], // Gradiente de esmeralda a verde oscuro profundo
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: AppTheme.primaryColor.withValues(alpha: 0.25),
+                      color: Colors.orange.withValues(alpha: 0.3),
                       blurRadius: 12,
-                      offset: const Offset(0, 4),
+                      offset: const Offset(0, 6),
                     )
                   ],
                 ),
                 child: Center(
                   child: Text(
                     isEdit ? 'Guardar Cambios' : 'Registrar Pasivo',
-                    style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+                    style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),

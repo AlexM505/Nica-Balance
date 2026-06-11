@@ -70,7 +70,7 @@ Widget build(BuildContext context) {
 
               Consumer<DebtViewModel>(
                 builder: (context, debtVM, child) {
-                  final totalRemaining = debtVM.totalDebtAmount;
+                  final totalRemaining = debtVM.totalDebtsRemainingUsd;
 
                   return Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
