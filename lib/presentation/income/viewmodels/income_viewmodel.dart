@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nica_balance/data/models/expense_enums.dart';
 import '../../../data/models/income.dart';
 import '../../../data/repositories/income_repository.dart';
 
@@ -11,6 +12,8 @@ class IncomeViewModel extends ChangeNotifier {
   // Getters públicos para exponer el estado de forma segura (Inmutable desde fuera)
   List<Income> get incomes => _incomes;
   bool get isLoading => _isLoading;
+
+  static const double _exchangeRate = 36.0;
 
   IncomeViewModel(this._incomeRepository) {
     // Cargamos los datos automáticamente al inicializar el ViewModel
@@ -59,5 +62,18 @@ class IncomeViewModel extends ChangeNotifier {
   // Editar/Actualizar un ingreso existente
   void updateIncome(Income updatedIncome) {
     _incomeRepository.insertIncome(updatedIncome); // Sobrescribe si el ID coincide
+  }
+
+  double convertToUsd(double amount, Currency currency) {
+    if (currency == Currency.nio) {
+      return amount / _exchangeRate;
+    }
+    return amount;
+  }
+
+  double get totalIncomesUsd {
+    return _incomes.fold(0.0, (sum, item) {
+      return sum + convertToUsd(item.amount, item.currency);
+    });
   }
 }

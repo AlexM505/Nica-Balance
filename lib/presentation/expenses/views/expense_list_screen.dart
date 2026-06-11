@@ -16,7 +16,7 @@ class ExpenseListScreen extends StatelessWidget {
 
     final expenses = viewModel.expenses;
     // Calcular el total histórico directo de la fuente para el encabezado de esta vista
-    final double totalExpense = expenses.fold(0.0, (sum, item) => sum + item.amount);
+    // final double totalExpense = expenses.fold(0.0, (sum, item) => sum + item.amount);
 
 
     return Scaffold(
@@ -58,7 +58,7 @@ class ExpenseListScreen extends StatelessWidget {
                             style: TextStyle(color: AppTheme.textSecondary, fontSize: 14, fontWeight: FontWeight.w500),
                           ),
                           Text(
-                            'C\$ ${totalExpense.toStringAsFixed(2)}',
+                            '\$ ${viewModel.totalExpensesUsd.toStringAsFixed(2)}',
                             style: const TextStyle(color: AppTheme.accentColor, fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                         ],
@@ -130,13 +130,25 @@ class _ExpenseCard extends StatelessWidget {
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                '${expense.currency == Currency.usd ? '\$' : 'C\$'}${expense.amount.toStringAsFixed(2)}',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: expense.isPaid ? const Color(0xFF34D399) : const Color(0xFFF87171),
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '${expense.currency == Currency.usd ? '\$' : 'C\$'}${expense.amount.toStringAsFixed(2)}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: expense.isPaid ? const Color(0xFF34D399) : const Color(0xFFF87171),
+                    ),
+                  ),
+                  if (expense.currency == Currency.nio)
+                    Text(
+                      '≈ \$ ${viewModel.convertToUsd(expense.amount, expense.currency).toStringAsFixed(2)}',
+                      style: const TextStyle(color: AppTheme.textSecondary, fontSize: 11, fontWeight: FontWeight.w500),
+                    ),
+                ],
               ),
+
               IconButton(
                 icon: Icon(
                   expense.isPaid ? Icons.check_circle : Icons.radio_button_unchecked,

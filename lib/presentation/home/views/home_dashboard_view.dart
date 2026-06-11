@@ -36,6 +36,13 @@ Widget build(BuildContext context) {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: AppTheme.primaryColor.withValues(alpha: 0.18),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppTheme.primaryColor.withValues(alpha: 0.18),
+                    blurRadius: 30,
+                    offset: const Offset(0, 10),
+                  )
+                ],
               ),
             ),
           ),

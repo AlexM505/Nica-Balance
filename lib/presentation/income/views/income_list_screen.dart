@@ -60,7 +60,7 @@ class IncomeListScreen extends StatelessWidget {
                         style: TextStyle(color: AppTheme.textSecondary, fontSize: 14, fontWeight: FontWeight.w500),
                       ),
                       Text(
-                        'C\$ ${totalIncomes.toStringAsFixed(2)}',
+                        '\$ ${incomeViewModel.totalIncomesUsd.toStringAsFixed(2)}',
                         style: const TextStyle(color: AppTheme.accentColor, fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     ],
@@ -107,10 +107,26 @@ class IncomeListScreen extends StatelessWidget {
                               cat.displayName,
                               style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12),
                             ),
-                            trailing: Text(
-                              '${income.currency == Currency.usd ? '\$' : 'C\$'} ${income.amount.toStringAsFixed(2)}',
-                              style: const TextStyle(color: AppTheme.accentColor, fontSize: 15, fontWeight: FontWeight.w700),
-                            ),
+                            trailing: 
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    '${income.currency == Currency.usd ? '\$' : 'C\$'}${income.amount.toStringAsFixed(2)}',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: AppTheme.accentColor,
+                                      fontSize: 15
+                                    ),
+                                  ),
+                                  if (income.currency == Currency.nio)
+                                    Text(
+                                      '≈ \$ ${incomeViewModel.convertToUsd(income.amount, income.currency).toStringAsFixed(2)}',
+                                      style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12, fontWeight: FontWeight.w500),
+                                    ),
+                                ],
+                              ),
                           ),
                         ),
                       );

@@ -42,16 +42,18 @@ flutter:
         - asset: assets/fonts/Montserrat-SemiBold.ttf
 
 flutter_native_splash:
-  color: "#1E293B"
-  image: assets/images/nbicon.png
+  color: "#0C1324"
+  image: assets/images/1024.png
   android: true
   ios: true
+  image_dark: assets/images/1024.png
+  color_dark: "#0C1324"
 
   android_12:
-      image: assets/images/nbicon.png
-      icon_background_color: "#1E293B"
-      image_dark: assets/images/nbicon.png
-      icon_background_color_dark: "#1E293B"
+      image: assets/images/1024.png
+      icon_background_color: "#0C1324"
+      image_dark: assets/images/1024.png
+      icon_background_color_dark: "#0C1324"
       fullscreen: true
 
 flutter_launcher_icons:

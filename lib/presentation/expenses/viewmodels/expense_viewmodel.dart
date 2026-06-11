@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:nica_balance/data/models/expense_enums.dart';
 import '../../../data/models/expense.dart';
 import '../../../data/repositories/expense_repository.dart';
 
@@ -10,6 +11,8 @@ class ExpenseViewModel extends ChangeNotifier {
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
+
+  static const double _exchangeRate = 36.0;
 
   ExpenseViewModel(this._repository) {
     _listenToExpenses();
@@ -46,5 +49,18 @@ class ExpenseViewModel extends ChangeNotifier {
   // Editar/Actualizar un gasto existente
   void updateExpense(Expense updatedExpense) {
     _repository.saveExpense(updatedExpense); 
+  }
+
+  double convertToUsd(double amount, Currency currency) {
+    if (currency == Currency.nio) {
+      return amount / _exchangeRate;
+    }
+    return amount;
+  }
+
+  double get totalExpensesUsd {
+    return _expenses.fold(0.0, (sum, item) {
+      return sum + convertToUsd(item.amount, item.currency);
+    });
   }
 }

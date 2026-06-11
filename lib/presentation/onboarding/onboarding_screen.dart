@@ -28,14 +28,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       color: const Color(0xFFF59E0B), // Ámbar
       title: 'Diagnóstico Inteligente',
       description: 'Analiza tu salud financiera en tiempo real. Obtén pautas y planes de acción basados en tu tasa de ahorro mensual.',
-      gradientColors: [Colors.deepOrange, Colors.orangeAccent],
+      gradientColors: [Colors.deepOrange, Colors.orange],
     ),
     OnboardingData(
       icon: Icons.emoji_events_rounded,
       color: AppTheme.accentColor, // Esmeralda
       title: 'Cumple tus Metas',
       description: 'Crea objetivos de ahorro y realiza abonos controlados con algoritmos que evitan que sobrepases tus presupuestos.',
-      gradientColors: [Colors.tealAccent.shade700, Colors.teal],
+      gradientColors: [AppTheme.accentColor, Colors.teal],
     ),
   ];
 
@@ -74,7 +74,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               height: 350,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: _slides[_currentPage].gradientColors[0].withOpacity(0.18),
+                color: _slides[_currentPage].gradientColors[0].withValues(alpha: 0.18),
               ),
             ),
           ),
@@ -87,7 +87,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: _slides[_currentPage].gradientColors[1].withOpacity(0.12),
+                color: _slides[_currentPage].gradientColors[1].withValues(alpha: 0.12),
               ),
             ),
           ),
