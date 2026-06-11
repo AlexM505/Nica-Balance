@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nica_balance/data/models/expense_enums.dart';
 import 'package:objectbox/objectbox.dart';
 
 enum GoalCategory {
@@ -36,6 +37,7 @@ class Goal {
   
   // Almacenamos el índice del enum para la persistencia NoSQL
   int categoryIndex;
+  String dbCurrency;
 
   Goal({
     this.id = 0,
@@ -45,6 +47,7 @@ class Goal {
     required this.startDateMilli,
     required this.deadlineMilli,
     required this.categoryIndex,
+    required this.dbCurrency,
   });
 
   // --- Getters de Utilidad para las Vistas ---
@@ -62,4 +65,9 @@ class Goal {
   }
 
   bool get isCompleted => currentAmount >= targetAmount;
+
+  Currency get currency => Currency.values.firstWhere(
+        (c) => c.name == dbCurrency,
+        orElse: () => Currency.nio,
+      );
 }

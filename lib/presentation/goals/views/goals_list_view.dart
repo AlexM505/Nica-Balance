@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nica_balance/core/theme/app_theme.dart';
+import 'package:nica_balance/data/models/expense_enums.dart';
 import 'package:nica_balance/data/models/goal.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/goals_viewmodel.dart';
@@ -113,11 +114,11 @@ class GoalsListView extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                '\$ ${goal.currentAmount.toStringAsFixed(2)} recolectados',
+                                '${goal.currency == Currency.usd ? '\$' : 'C\$'} ${goal.currentAmount.toStringAsFixed(2)} recolectados',
                                 style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13),
                               ),
                               Text(
-                                'Objetivo: \$ ${goal.targetAmount.toStringAsFixed(2)}',
+                                'Objetivo: ${goal.currency == Currency.usd ? '\$' : 'C\$'}${goal.targetAmount.toStringAsFixed(2)}',
                                 style: const TextStyle(color: AppTheme.textPrimary, fontSize: 13, fontWeight: FontWeight.w600),
                               ),
                             ],
@@ -192,7 +193,7 @@ class GoalsListView extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'Monto pendiente necesario: \$ ${remaining.toStringAsFixed(2)}',
+                  'Monto pendiente necesario: ${goal.currency == Currency.usd ? '\$' : 'C\$'} ${remaining.toStringAsFixed(2)}',
                   style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13),
                 ),
                 const SizedBox(height: 20),
@@ -202,7 +203,7 @@ class GoalsListView extends StatelessWidget {
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   autofocus: true,
                   decoration: InputDecoration(
-                    labelText: 'Monto a agregar (\$)',
+                    labelText: 'Monto a agregar (${goal.currency == Currency.usd ? '\$' : 'C\$'} )',
                     labelStyle: const TextStyle(color: AppTheme.textSecondary),
                     prefixIcon: const Icon(Icons.add_card_rounded, color: AppTheme.textSecondary),
                     filled: true,

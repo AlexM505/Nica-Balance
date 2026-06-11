@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nica_balance/core/theme/app_theme.dart';
+import 'package:nica_balance/data/models/expense_enums.dart';
 import 'package:provider/provider.dart';
 import '../../../data/models/goal.dart';
 import '../viewmodels/goals_viewmodel.dart';
@@ -17,6 +18,7 @@ class _GoalFormScreenState extends State<GoalFormScreen> {
   final _targetAmountController = TextEditingController();
   final _currentAmountController = TextEditingController();
 
+  Currency _selectedCurrency = Currency.nio;
   GoalCategory _selectedCategory = GoalCategory.travel;
   DateTime _startDate = DateTime.now();
   DateTime _deadline = DateTime.now().add(const Duration(days: 90)); // Por defecto 3 meses plazo
@@ -96,6 +98,7 @@ class _GoalFormScreenState extends State<GoalFormScreen> {
       startDateMilli: _startDate.millisecondsSinceEpoch,
       deadlineMilli: _deadline.millisecondsSinceEpoch,
       categoryIndex: _selectedCategory.index, // Guardamos la posición del enum
+      dbCurrency: _selectedCurrency.name,
     );
 
     context.read<GoalsViewModel>().addGoal(newGoal);
@@ -163,7 +166,7 @@ class _GoalFormScreenState extends State<GoalFormScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Meta: \$ ${_targetAmountController.text.isEmpty ? '0.00' : _targetAmountController.text}',
+                        'Meta: ${_selectedCurrency == Currency.usd ? '\$' : 'C\$'}${_targetAmountController.text.isEmpty ? '0.00' : _targetAmountController.text}',
                         style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),
                       ),
                       Text(
@@ -195,22 +198,44 @@ class _GoalFormScreenState extends State<GoalFormScreen> {
                     controller: _targetAmountController,
                     onChanged: (_) => setState(() {}),
                     style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold),
-                    decoration: _buildInputDecoration('Monto Requerido (\$)', Icons.track_changes_rounded),
+                    decoration: _buildInputDecoration('Monto Requerido', Icons.track_changes_rounded),
                     keyboardType: TextInputType.number,
                     validator: (v) => v == null || double.tryParse(v) == null || double.parse(v) <= 0 ? 'Monto requerido' : null,
                   ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: TextFormField(
-                    controller: _currentAmountController,
+                  child: DropdownButtonFormField<Currency>(
+                    initialValue: _selectedCurrency,
                     style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold),
-                    decoration: _buildInputDecoration('Ahorro Inicial (\$)', Icons.savings_rounded),
-                    keyboardType: TextInputType.number,
+                    decoration: _buildInputDecoration('Moneda', Icons.shutter_speed_rounded),
+                    items: Currency.values.map((c) {
+                      return DropdownMenuItem(value: c, child: Text(c.name.toUpperCase()));
+                    }).toList(),
+                    onChanged: (val) => setState(() {
+                      _selectedCurrency = val!;
+                    }),
                   ),
                 ),
+                // Expanded(
+                //   child: TextFormField(
+                //     controller: _currentAmountController,
+                //     style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold),
+                //     decoration: _buildInputDecoration('Ahorro Inicial (\$)', Icons.savings_rounded),
+                //     keyboardType: TextInputType.number,
+                //   ),
+                // ),
               ],
             ),
+            const SizedBox(height: 20),
+
+            TextFormField(
+              controller: _currentAmountController,
+              style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold),
+              decoration: _buildInputDecoration('Ahorro Inicial', Icons.savings_rounded),
+              keyboardType: TextInputType.number,
+            ),
+
             const SizedBox(height: 20),
 
             // DROP DRAW: Categorías de metas
@@ -288,7 +313,11 @@ class _GoalFormScreenState extends State<GoalFormScreen> {
               child: Container(
                 height: 56,
                 decoration: BoxDecoration(
-                  color: AppTheme.primaryColor,
+                  gradient: const LinearGradient(
+                    colors: [AppTheme.primaryColor, Colors.indigo], // Gradiente de esmeralda a verde oscuro profundo
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(

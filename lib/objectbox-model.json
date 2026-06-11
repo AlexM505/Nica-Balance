@@ -113,7 +113,7 @@
     },
     {
       "id": "3:8398376945150350058",
-      "lastPropertyId": "7:7546841991390953769",
+      "lastPropertyId": "8:8215597851823042866",
       "name": "Goal",
       "properties": [
         {
@@ -151,6 +151,11 @@
           "id": "7:7546841991390953769",
           "name": "categoryIndex",
           "type": 6
+        },
+        {
+          "id": "8:8215597851823042866",
+          "name": "dbCurrency",
+          "type": 9
         }
       ],
       "relations": []

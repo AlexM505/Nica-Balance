@@ -60,7 +60,7 @@ class CalendarViewModel extends ChangeNotifier {
         date: goal.startDate,
         type: TransactionType.goal,
         category: goal.category,
-        dbCurrency: 'usd',
+        dbCurrency: goal.dbCurrency,
         colorHex: goal.category.colorHex
       ));
     }

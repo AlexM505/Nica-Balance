@@ -153,7 +153,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(3, 8398376945150350058),
     name: 'Goal',
-    lastPropertyId: const obx_int.IdUid(7, 7546841991390953769),
+    lastPropertyId: const obx_int.IdUid(8, 8215597851823042866),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -196,6 +196,12 @@ final _entities = <obx_int.ModelEntity>[
         id: const obx_int.IdUid(7, 7546841991390953769),
         name: 'categoryIndex',
         type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(8, 8215597851823042866),
+        name: 'dbCurrency',
+        type: 9,
         flags: 0,
       ),
     ],
@@ -503,7 +509,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
       },
       objectToFB: (Goal object, fb.Builder fbb) {
         final nameOffset = fbb.writeString(object.name);
-        fbb.startTable(8);
+        final dbCurrencyOffset = fbb.writeString(object.dbCurrency);
+        fbb.startTable(9);
         fbb.addInt64(0, object.id);
         fbb.addOffset(1, nameOffset);
         fbb.addFloat64(2, object.targetAmount);
@@ -511,6 +518,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         fbb.addInt64(4, object.startDateMilli);
         fbb.addInt64(5, object.deadlineMilli);
         fbb.addInt64(6, object.categoryIndex);
+        fbb.addOffset(7, dbCurrencyOffset);
         fbb.finish(fbb.endTable());
         return object.id;
       },
@@ -556,6 +564,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
           16,
           0,
         );
+        final dbCurrencyParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 18, '');
         final object = Goal(
           id: idParam,
           name: nameParam,
@@ -564,6 +575,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           startDateMilli: startDateMilliParam,
           deadlineMilli: deadlineMilliParam,
           categoryIndex: categoryIndexParam,
+          dbCurrency: dbCurrencyParam,
         );
 
         return object;
@@ -787,6 +799,11 @@ class Goal_ {
   /// See [Goal.categoryIndex].
   static final categoryIndex = obx.QueryIntegerProperty<Goal>(
     _entities[2].properties[6],
+  );
+
+  /// See [Goal.dbCurrency].
+  static final dbCurrency = obx.QueryStringProperty<Goal>(
+    _entities[2].properties[7],
   );
 }
 
