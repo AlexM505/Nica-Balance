@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nica_balance/core/theme/app_theme.dart';
 import 'package:nica_balance/presentation/debts/views/debts_list_screen.dart';
 import 'package:nica_balance/presentation/expenses/views/expense_list_screen.dart';
 import 'package:nica_balance/presentation/goals/views/goal_form_screen.dart';
@@ -12,11 +13,16 @@ class QuickActionsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(
-        vertical: 16,
+        vertical: 14,
         horizontal: 12,
       ),
+      // decoration: BoxDecoration(
+      //   borderRadius: BorderRadius.circular(24),
+      // ),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
+        color: AppTheme.surfaceColor.withValues(alpha: 0.5),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppTheme.borderColor.withValues(alpha: 0.4)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,

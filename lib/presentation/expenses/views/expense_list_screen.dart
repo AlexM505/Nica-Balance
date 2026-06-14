@@ -14,7 +14,7 @@ class ExpenseListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final viewModel = context.watch<ExpenseViewModel>();
 
-    final expenses = viewModel.expenses;
+    // final expenses = viewModel.expenses;
     // Calcular el total histórico directo de la fuente para el encabezado de esta vista
     // final double totalExpense = expenses.fold(0.0, (sum, item) => sum + item.amount);
 

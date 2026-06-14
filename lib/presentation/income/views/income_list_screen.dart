@@ -14,7 +14,7 @@ class IncomeListScreen extends StatelessWidget {
     final incomes = incomeViewModel.incomes;
 
     // Calcular el total histórico directo de la fuente para el encabezado de esta vista
-    final double totalIncomes = incomes.fold(0.0, (sum, item) => sum + item.amount);
+    // final double totalIncomes = incomes.fold(0.0, (sum, item) => sum + item.amount);
 
     return Scaffold(
       appBar: AppBar(

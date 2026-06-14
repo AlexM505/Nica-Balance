@@ -17,8 +17,8 @@ class Metric extends StatelessWidget {
       children: [
         Icon(
           icon,
-          color: Colors.white70,
-          size: 18,
+          color: Colors.white,
+          size: 20,
         ),
         const SizedBox(width: 8),
         Column(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nica_balance/core/theme/app_theme.dart';
 
 class ActionButton extends StatelessWidget {
   final IconData icon;
@@ -33,7 +34,8 @@ class ActionButton extends StatelessWidget {
             label,
             style: const TextStyle(
               fontSize: 12,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w500,
+              color: AppTheme.textPrimary,
             ),
           ),
         ],

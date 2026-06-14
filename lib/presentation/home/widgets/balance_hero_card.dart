@@ -19,19 +19,19 @@ class BalanceHeroCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(20),
         gradient: const LinearGradient(
           colors: [
-            Color(0xFF0A4FB3),
-            Color(0xFF1D7BE8),
-            Color(0xFF45B649),
+            Color(0xFF08284D),
+            Colors.blue,
+            Colors.indigo,
           ],
         ),
         boxShadow: [
           BoxShadow(
             color: AppTheme.primaryColor.withValues(alpha: 0.25),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+            blurRadius: 16,
+            offset: const Offset(0, 6),
           )
         ],
       ),

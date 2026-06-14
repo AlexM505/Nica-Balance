@@ -62,11 +62,11 @@ Widget build(BuildContext context) {
                 expenses: dashboardVM.totalExpensesUsd,
               ),
 
-              const SizedBox(height: 8),
+              const SizedBox(height: 16),
 
               QuickActionsSection(),
 
-              const SizedBox(height: 8),
+              const SizedBox(height: 16),
 
               Consumer<DebtViewModel>(
                 builder: (context, debtVM, child) {
@@ -133,7 +133,7 @@ Widget build(BuildContext context) {
                 },
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
 
               //         // SECCIÓN: Últimos Gastos
               _buildSectionHeader(
@@ -348,7 +348,11 @@ Widget build(BuildContext context) {
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 32, color: AppTheme.textSecondary.withValues(alpha: 0.6)),
+              CircleAvatar(
+                radius: 28,
+                backgroundColor: AppTheme.textSecondary.withValues(alpha: 0.12),
+                child: Icon(icon, size: 32, color: AppTheme.textSecondary.withValues(alpha: 0.5)),
+              ),
               const SizedBox(height: 8),
               Text(
                 message,
