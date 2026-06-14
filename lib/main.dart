@@ -12,6 +12,7 @@ import 'package:nica_balance/presentation/home/viewmodels/dashboard_viewmodel.da
 import 'package:nica_balance/presentation/home/views/main_navigation_screen.dart';
 import 'package:nica_balance/presentation/income/viewmodels/income_viewmodel.dart';
 import 'package:nica_balance/presentation/onboarding/onboarding_screen.dart';
+import 'package:nica_balance/presentation/settings/viewmodels/preferences_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/database/objectbox_store.dart';
@@ -72,13 +73,43 @@ void main() async {
         ChangeNotifierProvider(
           create: (_) => DebtViewModel(debtRepository: debtRepository),
         ),
+
+        ChangeNotifierProvider(
+          create: (_) => PreferencesViewModel()
+        ),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.premiumDarkTheme,
-        themeMode: ThemeMode.dark,
-        home: showOnboarding ? const OnboardingScreen() :const MainNavigationScreen(),
-      ),
+      child: MyApp(showOnboarding: showOnboarding),
+      // MaterialApp(
+      //   debugShowCheckedModeBanner: false,
+      //   theme: AppTheme.premiumDarkTheme,
+      //   themeMode: ThemeMode.dark,
+      //   home: showOnboarding ? const OnboardingScreen() :const MainNavigationScreen(),
+      // ),
     ),
   );
+}
+
+class MyApp extends StatelessWidget {
+  final bool showOnboarding;
+
+  const MyApp({super.key, required this.showOnboarding});
+
+  @override
+  Widget build(BuildContext context) {
+    // Escuchamos activamente los cambios en las preferencias del usuario
+    final prefsVM = context.watch<PreferencesViewModel>();
+
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      
+      // Enlazamos dinámicamente el tema actual (ThemeMode.dark o ThemeMode.light)
+      themeMode: prefsVM.themeMode,
+      
+      // Asignamos las dos variantes de tu AppTheme
+      theme: AppTheme.lightTheme, 
+      darkTheme: AppTheme.premiumDarkTheme, // Tu tema oscuro existente
+      
+      home: showOnboarding ? const OnboardingScreen() : const MainNavigationScreen(),
+    );
+  }
 }

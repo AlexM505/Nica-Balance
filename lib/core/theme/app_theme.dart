@@ -71,4 +71,79 @@ class AppTheme {
       ),
     );
   }
+
+
+  // --- TEMA CLARO ---
+  static const Color backgroundLight = Color(0xFFF8FAFC);
+  static const Color surfaceLight = Colors.white;
+  static const Color borderLight = Color(0xFFE2E8F0);
+  static const Color textPrimaryLight = Color(0xFF0F172A);
+  static const Color textSecondaryLight = Color(0xFF64748B);
+
+  static ThemeData get lightTheme {
+    return ThemeData(
+      brightness: Brightness.light,
+      scaffoldBackgroundColor: backgroundLight,
+      primaryColor: primaryColor,
+      fontFamily: 'Poppins',
+
+      // Typography
+      textTheme: GoogleFonts.outfitTextTheme(
+        ThemeData.light().textTheme.copyWith(
+          displayLarge: const TextStyle(
+            color: textPrimaryLight,
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
+          ),
+          titleLarge: const TextStyle(
+            color: textPrimaryLight,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+          bodyLarge: const TextStyle(
+            color: textPrimaryLight,
+            fontSize: 16,
+            fontWeight: FontWeight.normal,
+          ),
+          bodyMedium: const TextStyle(
+            color: textSecondaryLight,
+            fontSize: 14,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+      ),
+
+      appBarTheme: const AppBarTheme(
+        backgroundColor: backgroundLight,
+        elevation: 0,
+        centerTitle: false,
+        iconTheme: IconThemeData(color: textPrimaryLight),
+        titleTextStyle: TextStyle(color: textPrimaryLight, fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'Poppins'),
+      ),
+      colorScheme: const ColorScheme.light(
+        primary: primaryColor,
+        secondary: accentColor,
+        surface: surfaceLight,
+        background: backgroundLight,
+      ),
+    );
+  }
+
+  // Helpers estáticos dinámicos para mantener limpio tu código antiguo independiente
+  // Nota: Si usabas AppTheme.surfaceColor de forma estática en tus contenedores,
+  // puedes hacer que lean el contexto de esta forma o usar Theme.of(context).colorScheme.surface
+  static Color getBackgroundColor(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark ? backgroundColor : backgroundLight;
+
+  static Color getSurfaceColor(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark ? surfaceColor : surfaceLight;
+
+  static Color getBorderColor(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark ? borderColor : borderLight;
+
+  static Color getTextPrimary(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark ? textPrimary : textPrimaryLight;
+
+  static Color getTextSecondary(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark ? textSecondary : textSecondaryLight;
 }

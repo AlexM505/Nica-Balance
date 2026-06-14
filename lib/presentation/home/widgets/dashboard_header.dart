@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nica_balance/core/theme/app_theme.dart';
 import 'package:nica_balance/presentation/analytics/views/analytics_screen.dart';
+import 'package:nica_balance/presentation/settings/views/settings_screen.dart';
 
 class DashboardHeader extends StatelessWidget {
   const DashboardHeader({super.key});
@@ -49,6 +50,16 @@ class DashboardHeader extends StatelessWidget {
             );
           },
           icon: const Icon(Icons.analytics_rounded),
+        ),
+
+        IconButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const SettingsScreen()),
+            );
+          },
+          icon: const Icon(Icons.settings_suggest_rounded),
         ),
       ],
     );
