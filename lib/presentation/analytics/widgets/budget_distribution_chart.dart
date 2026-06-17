@@ -17,16 +17,16 @@ class BudgetDistributionChart extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: AppTheme.surfaceColor,
+        color: AppTheme.getSurfaceColor(context),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppTheme.borderColor),
+        border: Border.all(color: AppTheme.getBorderColor(context)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Distribución de Flujos (Proporcional)',
-            style: TextStyle(color: AppTheme.textSecondary, fontSize: 14, fontWeight: FontWeight.bold),
+            style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 14, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 18),
           // Gráfico de barra partida simétrica
@@ -38,7 +38,7 @@ class BudgetDistributionChart extends StatelessWidget {
                 children: [
                   if (incomes > 0) Expanded(flex: (incomeWidthFactor * 100).toInt(), child: Container(color: AppTheme.accentColor)),
                   if (expenses > 0) Expanded(flex: (expenseWidthFactor * 100).toInt(), child: Container(color: const Color(0xFFEF4444))),
-                  if (incomes == 0 && expenses == 0) Expanded(child: Container(color: AppTheme.borderColor)),
+                  if (incomes == 0 && expenses == 0) Expanded(child: Container(color: AppTheme.getBorderColor(context))),
                 ],
               ),
             ),
@@ -48,8 +48,8 @@ class BudgetDistributionChart extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildLegendItem('Ingresos', incomes, AppTheme.accentColor, total),
-              _buildLegendItem('Gastos', expenses, const Color(0xFFEF4444), total),
+              _buildLegendItem(context, 'Ingresos', incomes, AppTheme.accentColor, total),
+              _buildLegendItem(context, 'Gastos', expenses, const Color(0xFFEF4444), total),
             ],
           )
         ],
@@ -57,7 +57,7 @@ class BudgetDistributionChart extends StatelessWidget {
     );
   }
 
-  Widget _buildLegendItem(String title, double amount, Color color, double total) {
+  Widget _buildLegendItem(BuildContext context, String title, double amount, Color color, double total) {
     final percentage = total > 0 ? (amount / total) * 100 : 0.0;
     return Row(
       children: [
@@ -66,10 +66,10 @@ class BudgetDistributionChart extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
+            Text(title, style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 12)),
             Text(
               '\$ ${amount.toStringAsFixed(2)} (${percentage.toStringAsFixed(1)}%)',
-              style: const TextStyle(color: AppTheme.textPrimary, fontSize: 13, fontWeight: FontWeight.bold),
+              style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 13, fontWeight: FontWeight.bold),
             ),
           ],
         )

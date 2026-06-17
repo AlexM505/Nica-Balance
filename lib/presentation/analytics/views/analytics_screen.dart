@@ -109,7 +109,7 @@ class AnalyticsScreen extends StatelessWidget {
                       Text(
                         // 'Tu tasa de ahorro mensual actual es del ${analyticsVM.savingsRate.toStringAsFixed(1)}%.',
                         subtitleText,
-                        style: const TextStyle(color: AppTheme.textPrimary, fontSize: 13, fontWeight: FontWeight.w500),
+                        style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 13, fontWeight: FontWeight.w500),
                       ),
                     ],
                   ),
@@ -138,11 +138,11 @@ class AnalyticsScreen extends StatelessWidget {
           Row(
             children: [
               // Icon(Icons.escalator_warning, size: 18, color: AppTheme.textSecondary), // Fallback seguro a iconos directos
-              Icon(Icons.assignment_turned_in_rounded, size: 18, color: AppTheme.textSecondary),
+              Icon(Icons.assignment_turned_in_rounded, size: 18, color: AppTheme.getTextSecondary(context)),
               SizedBox(width: 8),
               Text(
                 analyticsVM.hasNoData ? '¿Cómo empezar?' :'Plan de Acción Sugerido',
-                style: TextStyle(color: AppTheme.textPrimary, fontSize: 15, fontWeight: FontWeight.bold),
+                style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 15, fontWeight: FontWeight.bold),
               ),
             ],
           ),
@@ -153,9 +153,9 @@ class AnalyticsScreen extends StatelessWidget {
                 margin: const EdgeInsets.only(bottom: 12),
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: AppTheme.surfaceColor.withValues(alpha: 0.4),
+                  color: AppTheme.getSurfaceColor(context).withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppTheme.borderColor.withValues(alpha: 0.5)),
+                  border: Border.all(color: AppTheme.getBorderColor(context).withValues(alpha: 0.4)),
                 ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,7 +170,7 @@ class AnalyticsScreen extends StatelessWidget {
                     Expanded(
                       child: Text(
                         indication,
-                        style: const TextStyle(color: AppTheme.textPrimary, fontSize: 14, height: 1.3, fontWeight: FontWeight.w400),
+                        style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14, height: 1.3, fontWeight: FontWeight.w400),
                       ),
                     ),
                   ],

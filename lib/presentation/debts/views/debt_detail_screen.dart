@@ -23,7 +23,7 @@ class _DebtDetailScreenState extends State<DebtDetailScreen> {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true, // Permite que el teclado no tape el contenido
-    backgroundColor: AppTheme.surfaceColor,
+    backgroundColor: AppTheme.getSurfaceColor(context),
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
     ),
@@ -49,20 +49,20 @@ class _DebtDetailScreenState extends State<DebtDetailScreen> {
                   height: 4,
                   margin: const EdgeInsets.only(bottom: 20),
                   decoration: BoxDecoration(
-                    color: AppTheme.borderColor,
+                    color: AppTheme.getBorderColor(context),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
               ),
               
-              const Text(
+              Text(
                 'Registrar Abono',
-                style: TextStyle(color: AppTheme.textPrimary, fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 6),
-              const Text(
+              Text(
                 'Ingresa el monto para amortizar tu saldo pendiente.',
-                style: TextStyle(color: AppTheme.textSecondary, fontSize: 13),
+                style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 13),
               ),
               const SizedBox(height: 20),
 
@@ -70,14 +70,14 @@ class _DebtDetailScreenState extends State<DebtDetailScreen> {
               TextFormField(
                 controller: _payController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                style: const TextStyle(color: AppTheme.textPrimary, fontSize: 14),
+                style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14),
                 autofocus: true, // Abre el teclado automáticamente para agilizar la acción
                 decoration: InputDecoration(
                   hintText: '0.00',
-                  hintStyle: const TextStyle(color: AppTheme.textSecondary, fontSize: 14),
-                  prefixIcon: const Icon(Icons.monetization_on_outlined, color: AppTheme.textSecondary, size: 20),
+                  hintStyle: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 14),
+                  prefixIcon: Icon(Icons.monetization_on_outlined, color: AppTheme.getTextSecondary(context), size: 20),
                   filled: true,
-                  fillColor: AppTheme.backgroundColor,
+                  fillColor: AppTheme.getBackgroundColor(context),
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
@@ -85,7 +85,7 @@ class _DebtDetailScreenState extends State<DebtDetailScreen> {
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
-                    borderSide: const BorderSide(color: AppTheme.borderColor, width: 1),
+                    borderSide: BorderSide(color: AppTheme.getBorderColor(context), width: 1),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
@@ -130,7 +130,7 @@ class _DebtDetailScreenState extends State<DebtDetailScreen> {
                         _payController.clear();
                         Navigator.pop(bottomSheetContext);
                       },
-                      child: const Text('Cancelar', style: TextStyle(color: AppTheme.textSecondary, fontWeight: FontWeight.bold)),
+                      child: Text('Cancelar', style: TextStyle(color: AppTheme.getTextSecondary(context), fontWeight: FontWeight.bold)),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -192,8 +192,8 @@ class _DebtDetailScreenState extends State<DebtDetailScreen> {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        backgroundColor: AppTheme.surfaceColor,
-        title: const Text('¿Eliminar Registro?', style: TextStyle(color: AppTheme.textPrimary)),
+        backgroundColor: AppTheme.getSurfaceColor(context),
+        title: Text('¿Eliminar Registro?', style: TextStyle(color: AppTheme.getTextPrimary(context))),
         content: const Text('¿Estás seguro de que deseas borrar este pasivo? Esto la removerá del historial global.'),
         actions: [
           TextButton(onPressed: () => Navigator.pop(dialogContext), child: const Text('Cancelar')),
@@ -213,7 +213,7 @@ class _DebtDetailScreenState extends State<DebtDetailScreen> {
   void _showSuccessSnackBar(BuildContext context, double amount, String debtTitle) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      backgroundColor: AppTheme.surfaceColor,
+      backgroundColor: AppTheme.getSurfaceColor(context),
       behavior: SnackBarBehavior.floating,
       margin: const EdgeInsets.all(16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -239,13 +239,13 @@ class _DebtDetailScreenState extends State<DebtDetailScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   '¡Abono registrado con éxito!',
-                  style: TextStyle(color: AppTheme.textPrimary, fontSize: 13, fontWeight: FontWeight.bold),
+                  style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 13, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   'Se aplicaron \$${amount.toStringAsFixed(2)} a la deuda "$debtTitle".',
-                  style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12),
+                  style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 12),
                 ),
               ],
             ),
@@ -297,7 +297,7 @@ class _DebtDetailScreenState extends State<DebtDetailScreen> {
                 if (widget.debt.currency == Currency.nio)
                   Text(
                     '≈ \$ ${debtVM.convertToUsd(widget.debt.remainingAmount, widget.debt.currency).toStringAsFixed(2)}',
-                    style: const TextStyle(color: AppTheme.textPrimary, fontSize: 18, fontWeight: FontWeight.w500),
+                    style: TextStyle(color: Colors.white70, fontSize: 18, fontWeight: FontWeight.w500),
                   ),
               ],
             ),
@@ -340,15 +340,15 @@ class _DebtDetailScreenState extends State<DebtDetailScreen> {
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppTheme.surfaceColor.withValues(alpha: 0.5),
+        color: AppTheme.getSurfaceColor(context).withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.borderColor.withValues(alpha: 0.5)),
+        border: Border.all(color: AppTheme.getBorderColor(context).withValues(alpha: 0.5)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13)),
-          Text(value, style: const TextStyle(color: AppTheme.textPrimary, fontSize: 13, fontWeight: FontWeight.bold)),
+          Text(label, style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 13)),
+          Text(value, style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 13, fontWeight: FontWeight.bold)),
         ],
       ),
     );

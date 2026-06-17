@@ -74,7 +74,7 @@ class AppTheme {
 
 
   // --- TEMA CLARO ---
-  static const Color backgroundLight = Color(0xFFF8FAFC);
+  static const Color backgroundLight = Color(0xFFEEF0F1);
   static const Color surfaceLight = Colors.white;
   static const Color borderLight = Color(0xFFE2E8F0);
   static const Color textPrimaryLight = Color(0xFF0F172A);

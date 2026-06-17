@@ -76,20 +76,20 @@ class _IncomeFormScreenState extends State<IncomeFormScreen> {
     super.dispose();
   }
 
-  InputDecoration _buildCustomInputDecoration({
+  InputDecoration _buildCustomInputDecoration(BuildContext context,{
     required String label,
     required IconData prefixIcon,
   }) {
     return InputDecoration(
       labelText: label,
-      labelStyle: const TextStyle(color: AppTheme.textSecondary, fontSize: 14, fontWeight: FontWeight.w500),
-      prefixIcon: Icon(prefixIcon, color: AppTheme.textSecondary, size: 20),
+      labelStyle: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 14, fontWeight: FontWeight.w500),
+      prefixIcon: Icon(prefixIcon, color: AppTheme.getTextSecondary(context), size: 20),
       filled: true,
-      fillColor: AppTheme.surfaceColor,
+      fillColor: AppTheme.getSurfaceColor(context),
       contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: AppTheme.borderColor, width: 1.5),
+        borderSide: BorderSide(color: AppTheme.getBorderColor(context), width: 1.5),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
@@ -210,8 +210,9 @@ class _IncomeFormScreenState extends State<IncomeFormScreen> {
             TextFormField(
               controller: _nameController,
               onChanged: (_) => setState(() {}),
-              style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.w600),
+              style: TextStyle(color: AppTheme.getTextPrimary(context), fontWeight: FontWeight.w600),
               decoration: _buildCustomInputDecoration(
+                context,
                 label: '¿Cuál es el origen de este ingreso? *',
                 prefixIcon: Icons.edit_document,
               ),
@@ -228,8 +229,9 @@ class _IncomeFormScreenState extends State<IncomeFormScreen> {
                   child: TextFormField(
                     controller: _amountController,
                     onChanged: (_) => setState(() {}),
-                    style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.w600),
+                    style: TextStyle(color: AppTheme.getTextPrimary(context), fontWeight: FontWeight.w600),
                     decoration: _buildCustomInputDecoration(
+                      context,
                       label: 'Monto Recibido *',
                       prefixIcon: Icons.price_check_rounded,
                     ),
@@ -246,9 +248,9 @@ class _IncomeFormScreenState extends State<IncomeFormScreen> {
                   flex: 2,
                   child: DropdownButtonFormField<Currency>(
                     initialValue: _selectedCurrency,
-                    dropdownColor: AppTheme.surfaceColor,
-                    style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold),
-                    decoration: _buildCustomInputDecoration(label: 'Moneda', prefixIcon: Icons.currency_exchange_rounded),
+                    dropdownColor: AppTheme.getSurfaceColor(context),
+                    style: TextStyle(color: AppTheme.getTextPrimary(context), fontWeight: FontWeight.bold),
+                    decoration: _buildCustomInputDecoration(context, label: 'Moneda', prefixIcon: Icons.currency_exchange_rounded),
                     items: Currency.values.map((c) {
                       return DropdownMenuItem(value: c, child: Text(c.name.toUpperCase()));
                     }).toList(),
@@ -262,9 +264,9 @@ class _IncomeFormScreenState extends State<IncomeFormScreen> {
             // SELECTOR: Categoría Base
             DropdownButtonFormField<IncomeCategory>(
               initialValue: _selectedCategory,
-              dropdownColor: AppTheme.surfaceColor,
-              style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.w600),
-              decoration: _buildCustomInputDecoration(label: 'Categoría de Ingreso', prefixIcon: Icons.dashboard_customize_rounded),
+              dropdownColor: AppTheme.getSurfaceColor(context),
+              style: TextStyle(color: AppTheme.getTextPrimary(context), fontWeight: FontWeight.w600),
+              decoration: _buildCustomInputDecoration(context, label: 'Categoría de Ingreso', prefixIcon: Icons.dashboard_customize_rounded),
               items: IncomeCategory.values.map((cat) {
                 return DropdownMenuItem(value: cat, child: Text(cat.displayName));
               }).toList(),
@@ -279,9 +281,9 @@ class _IncomeFormScreenState extends State<IncomeFormScreen> {
             // SELECTOR: Frecuencia de Repetición (Nuevo Atributo)
             DropdownButtonFormField<RecurrenceFrequency>(
               initialValue: _selectedRecurrence,
-              dropdownColor: AppTheme.surfaceColor,
-              style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.w600),
-              decoration: _buildCustomInputDecoration(label: '¿Este ingreso es recurrente?', prefixIcon: Icons.autorenew_rounded),
+              dropdownColor: AppTheme.getSurfaceColor(context),
+              style: TextStyle(color: AppTheme.getTextPrimary(context), fontWeight: FontWeight.w600),
+              decoration: _buildCustomInputDecoration(context, label: '¿Este ingreso es recurrente?', prefixIcon: Icons.autorenew_rounded),
               items: RecurrenceFrequency.values.map((freq) {
                 return DropdownMenuItem(value: freq, child: Text(freq.displayName));
               }).toList(),
@@ -290,7 +292,7 @@ class _IncomeFormScreenState extends State<IncomeFormScreen> {
             const SizedBox(height: 28),
 
             // SECTOR CUSTOM: Iconos de Personalización
-            const Text('Personalizar Icono de Entrada', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppTheme.textSecondary)),
+            Text('Personalizar Icono de Entrada', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppTheme.getTextSecondary(context))),
             const SizedBox(height: 10),
             SizedBox(
               height: 55,
@@ -307,16 +309,16 @@ class _IncomeFormScreenState extends State<IncomeFormScreen> {
                       margin: const EdgeInsets.only(right: 12),
                       width: 55,
                       decoration: BoxDecoration(
-                        color: isSelected ? Color(_customColorHex) : AppTheme.surfaceColor,
+                        color: isSelected ? Color(_customColorHex) : AppTheme.getSurfaceColor(context),
                         borderRadius: BorderRadius.circular(14),
                         border: Border.all(
-                          color: isSelected ? Colors.transparent : AppTheme.borderColor,
+                          color: isSelected ? Colors.transparent : AppTheme.getBorderColor(context),
                           width: 1.5,
                         ),
                       ),
                       child: Icon(
                         iconData,
-                        color: isSelected ? Colors.white : AppTheme.textSecondary,
+                        color: isSelected ? Colors.white : AppTheme.getTextSecondary(context),
                         size: 22,
                       ),
                     ),
@@ -327,7 +329,7 @@ class _IncomeFormScreenState extends State<IncomeFormScreen> {
             const SizedBox(height: 24),
 
             // SECTOR CUSTOM: Paleta de Colores Circulares
-            const Text('Asignar Color Distintivo', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppTheme.textSecondary)),
+            Text('Asignar Color Distintivo', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppTheme.getTextSecondary(context))),
             const SizedBox(height: 10),
             SizedBox(
               height: 48,
@@ -359,8 +361,9 @@ class _IncomeFormScreenState extends State<IncomeFormScreen> {
             TextFormField(
               controller: _notesController,
               maxLines: 2,
-              style: const TextStyle(color: AppTheme.textPrimary),
+              style: TextStyle(color: AppTheme.getTextPrimary(context)),
               decoration: _buildCustomInputDecoration(
+                context,
                 label: 'Notas explicativas o detalles del depósito',
                 prefixIcon: Icons.description_rounded,
               ),

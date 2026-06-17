@@ -60,17 +60,17 @@ class CalendarHistoryView extends StatelessWidget {
                     label: Text(
                       '${_monthsNames[index]} ${currentYear.toString().substring(2)}',
                       style: TextStyle(
-                        color: isSelected ? Colors.white : AppTheme.textSecondary,
+                        color: isSelected ? Colors.white : AppTheme.getTextSecondary(context),
                         fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                       ),
                     ),
                     selected: isSelected,
                     selectedColor: AppTheme.primaryColor,
-                    backgroundColor: AppTheme.surfaceColor,
+                    backgroundColor: AppTheme.getSurfaceColor(context),
                     checkmarkColor: Colors.white ,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
-                      side: BorderSide(color: isSelected ? AppTheme.primaryColor : AppTheme.borderColor),
+                      side: BorderSide(color: isSelected ? AppTheme.primaryColor : AppTheme.getBorderColor(context)),
                     ),
                     onSelected: (selected) {
                       if (selected) {
@@ -92,11 +92,11 @@ class CalendarHistoryView extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.calendar_month_rounded, size: 64, color: AppTheme.textSecondary.withValues(alpha: 0.3)),
+                        Icon(Icons.calendar_month_rounded, size: 64, color: AppTheme.getTextPrimary(context).withValues(alpha: 0.3)),
                         const SizedBox(height: 16),
-                        const Text(
+                        Text(
                           'No hay actividades registradas en este mes.',
-                          style: TextStyle(color: AppTheme.textSecondary, fontSize: 13, fontWeight: FontWeight.bold),
+                          style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 13, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -120,19 +120,19 @@ class CalendarHistoryView extends StatelessWidget {
                               width: 52,
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
-                                color: AppTheme.surfaceColor,
+                                color: AppTheme.getSurfaceColor(context),
                                 borderRadius: BorderRadius.circular(14),
-                                border: Border.all(color: AppTheme.borderColor),
+                                border: Border.all(color: AppTheme.getBorderColor(context)),
                               ),
                               child: Column(
                                 children: [
                                   Text(
                                     day.toString().padLeft(2, '0'),
-                                    style: const TextStyle(color: AppTheme.textPrimary, fontSize: 18, fontWeight: FontWeight.w700),
+                                    style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 18, fontWeight: FontWeight.w700),
                                   ),
                                   Text(
                                     _monthsNames[calendarVM.selectedMonth.month - 1].toUpperCase(),
-                                    style: const TextStyle(color: AppTheme.textSecondary, fontSize: 10, fontWeight: FontWeight.w700),
+                                    style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 10, fontWeight: FontWeight.w700),
                                   ),
                                 ],
                               ),
@@ -171,9 +171,9 @@ class CalendarHistoryView extends StatelessWidget {
                                     margin: const EdgeInsets.only(bottom: 8),
                                     padding: const EdgeInsets.all(14),
                                     decoration: BoxDecoration(
-                                      color: AppTheme.surfaceColor.withValues(alpha: 0.5),
+                                      color: AppTheme.getSurfaceColor(context).withValues(alpha: 0.5),
                                       borderRadius: BorderRadius.circular(16),
-                                      border: Border.all(color: AppTheme.borderColor.withValues(alpha: 0.6)),
+                                      border: Border.all(color: AppTheme.getBorderColor(context).withValues(alpha: 0.6)),
                                     ),
                                     child: Row(
                                       children: [
@@ -193,7 +193,7 @@ class CalendarHistoryView extends StatelessWidget {
                                             children: [
                                               Text(
                                                 tx.name,
-                                                style: const TextStyle(color: AppTheme.textPrimary, fontSize: 13, fontWeight: FontWeight.bold),
+                                                style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 13, fontWeight: FontWeight.bold),
                                                 overflow: TextOverflow.ellipsis,
                                               ),
                                               const SizedBox(height: 2),
@@ -201,7 +201,7 @@ class CalendarHistoryView extends StatelessWidget {
                                                 tx.type == TransactionType.goal 
                                                     ? 'Objetivo de Ahorro' 
                                                     : tx.category.displayName,
-                                                style: const TextStyle(color: AppTheme.textSecondary, fontSize: 11),
+                                                style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 11),
                                               ),
                                             ],
                                           ),

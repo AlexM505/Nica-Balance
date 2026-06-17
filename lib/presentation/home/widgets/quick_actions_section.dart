@@ -20,9 +20,9 @@ class QuickActionsSection extends StatelessWidget {
       //   borderRadius: BorderRadius.circular(24),
       // ),
       decoration: BoxDecoration(
-        color: AppTheme.surfaceColor.withValues(alpha: 0.5),
+        color: AppTheme.getSurfaceColor(context).withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.borderColor.withValues(alpha: 0.4)),
+        border: Border.all(color: AppTheme.getBorderColor(context).withValues(alpha: 0.4)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,

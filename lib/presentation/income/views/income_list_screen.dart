@@ -31,11 +31,11 @@ class IncomeListScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.payments_rounded, size: 64, color: AppTheme.textSecondary.withValues(alpha: 0.3)),
+                    Icon(Icons.payments_rounded, size: 64, color: AppTheme.getTextSecondary(context).withValues(alpha: 0.3)),
                     const SizedBox(height: 16),
-                    const Text(
+                    Text(
                       'Aún no has registrado ningún ingreso',
-                      style: TextStyle(color: AppTheme.textPrimary, fontSize: 15, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 15, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -48,16 +48,16 @@ class IncomeListScreen extends StatelessWidget {
                   margin: const EdgeInsets.all(18),
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: AppTheme.surfaceColor,
+                    color: AppTheme.getSurfaceColor(context),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: AppTheme.borderColor),
+                    border: Border.all(color: AppTheme.getBorderColor(context)),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                      Text(
                         'Total Acumulado',
-                        style: TextStyle(color: AppTheme.textSecondary, fontSize: 14, fontWeight: FontWeight.w500),
+                        style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 14, fontWeight: FontWeight.w500),
                       ),
                       Text(
                         '\$ ${incomeViewModel.totalIncomesUsd.toStringAsFixed(2)}',
@@ -88,9 +88,9 @@ class IncomeListScreen extends StatelessWidget {
                         child: Container(
                           margin: const EdgeInsets.only(bottom: 12),
                           decoration: BoxDecoration(
-                            color: AppTheme.surfaceColor.withValues(alpha: 0.5),
+                            color: AppTheme.getSurfaceColor(context).withValues(alpha: 0.5),
                             borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: AppTheme.borderColor.withValues(alpha: 0.7)),
+                            border: Border.all(color: AppTheme.getBorderColor(context).withValues(alpha: 0.7)),
                           ),
                           child: ListTile(
                             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -101,11 +101,11 @@ class IncomeListScreen extends StatelessWidget {
                             ),
                             title: Text(
                               income.name,
-                              style: const TextStyle(color: AppTheme.textPrimary, fontSize: 14, fontWeight: FontWeight.bold),
+                              style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14, fontWeight: FontWeight.bold),
                             ),
                             subtitle: Text(
                               cat.displayName,
-                              style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12),
+                              style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 12),
                             ),
                             trailing: 
                               Column(
@@ -123,7 +123,7 @@ class IncomeListScreen extends StatelessWidget {
                                   if (income.currency == Currency.nio)
                                     Text(
                                       '≈ \$ ${incomeViewModel.convertToUsd(income.amount, income.currency).toStringAsFixed(2)}',
-                                      style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12, fontWeight: FontWeight.w500),
+                                      style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 12, fontWeight: FontWeight.w500),
                                     ),
                                 ],
                               ),

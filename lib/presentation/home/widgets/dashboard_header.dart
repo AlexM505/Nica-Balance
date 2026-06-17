@@ -20,7 +20,7 @@ class DashboardHeader extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 12),
-        const Expanded(
+        Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -29,14 +29,14 @@ class DashboardHeader extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w800,
-                  color: AppTheme.textPrimary,
+                  color: AppTheme.getTextPrimary(context),
                 ),
               ),
               Text(
                 'Controla tu dinero inteligentemente',
                 style: TextStyle(
                   fontSize: 12,
-                  color: AppTheme.textSecondary,
+                  color: AppTheme.getTextSecondary(context),
                 ),
               ),
             ],

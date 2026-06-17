@@ -30,11 +30,11 @@ class ExpenseListScreen extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.shopping_bag_rounded, size: 64, color: AppTheme.textSecondary.withValues(alpha: 0.3)),
+                        Icon(Icons.shopping_bag_rounded, size: 64, color: AppTheme.getTextSecondary(context).withValues(alpha: 0.3)),
                         const SizedBox(height: 16),
-                        const Text(
+                        Text(
                           'Aún no has registrado ningún gasto',
-                          style: TextStyle(color: AppTheme.textPrimary, fontSize: 15, fontWeight: FontWeight.bold),
+                          style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 15, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -46,16 +46,16 @@ class ExpenseListScreen extends StatelessWidget {
                       margin: const EdgeInsets.all(18),
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: AppTheme.surfaceColor,
+                        color: AppTheme.getSurfaceColor(context),
                         borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: AppTheme.borderColor),
+                        border: Border.all(color: AppTheme.getBorderColor(context)),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
+                          Text(
                             'Total Acumulado',
-                            style: TextStyle(color: AppTheme.textSecondary, fontSize: 14, fontWeight: FontWeight.w500),
+                            style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 14, fontWeight: FontWeight.w500),
                           ),
                           Text(
                             '\$ ${viewModel.totalExpensesUsd.toStringAsFixed(2)}',
@@ -109,11 +109,11 @@ class _ExpenseCard extends StatelessWidget {
         );
       },
       child: Card(
-        color: AppTheme.surfaceColor,
+        color: AppTheme.getSurfaceColor(context),
         margin: const EdgeInsets.only(bottom: 12),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(color: AppTheme.borderColor, width: 1), // Borde sutil para delimitar la tarjeta
+          side: BorderSide(color: AppTheme.getBorderColor(context), width: 1), // Borde sutil para delimitar la tarjeta
         ),
         child: ListTile(
           leading: CircleAvatar(
@@ -123,9 +123,9 @@ class _ExpenseCard extends StatelessWidget {
               color: Color(category.colorHex),
             ),
           ),
-          title: Text(expense.name, style: const TextStyle(fontWeight: FontWeight.bold, color: AppTheme.textPrimary)),
+          title: Text(expense.name, style: TextStyle(fontWeight: FontWeight.bold, color: AppTheme.getTextPrimary(context))),
           subtitle: Text('${category.displayName} • ${expense.date.day}/${expense.date.month}',
-            style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13),
+            style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 13),
           ),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
@@ -144,7 +144,7 @@ class _ExpenseCard extends StatelessWidget {
                   if (expense.currency == Currency.nio)
                     Text(
                       '≈ \$ ${viewModel.convertToUsd(expense.amount, expense.currency).toStringAsFixed(2)}',
-                      style: const TextStyle(color: AppTheme.textSecondary, fontSize: 11, fontWeight: FontWeight.w500),
+                      style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 11, fontWeight: FontWeight.w500),
                     ),
                 ],
               ),
@@ -152,7 +152,7 @@ class _ExpenseCard extends StatelessWidget {
               IconButton(
                 icon: Icon(
                   expense.isPaid ? Icons.check_circle : Icons.radio_button_unchecked,
-                  color: expense.isPaid ? const Color(0xFF34D399) : AppTheme.textSecondary,
+                  color: expense.isPaid ? const Color(0xFF34D399) : AppTheme.getTextSecondary(context),
                   size: 24,              
                 ),
                 onPressed: () => viewModel.togglePaymentStatus(expense),

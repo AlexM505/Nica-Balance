@@ -41,17 +41,17 @@ class GoalsListView extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.emoji_events_rounded, size: 64, color: AppTheme.textSecondary.withValues(alpha: 0.3)),
+                    Icon(Icons.emoji_events_rounded, size: 64, color: AppTheme.getTextSecondary(context).withValues(alpha: 0.3)),
                     const SizedBox(height: 16),
-                    const Text(
+                    Text(
                       'No hay metas activas',
-                      style: TextStyle(color: AppTheme.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 6),
-                    const Text(
+                    Text(
                       'Define tu próximo gran paso, ya sea un viaje, un auto o un fondo de emergencia. ¡Empieza hoy!',
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: AppTheme.textSecondary, fontSize: 13, height: 1.4),
+                      style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 13, height: 1.4),
                     ),
                   ],
                 ),
@@ -68,9 +68,9 @@ class GoalsListView extends StatelessWidget {
                 return Container(
                   margin: const EdgeInsets.only(bottom: 16),
                   decoration: BoxDecoration(
-                    color: AppTheme.surfaceColor,
+                    color: AppTheme.getSurfaceColor(context),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: AppTheme.borderColor),
+                    border: Border.all(color: AppTheme.getBorderColor(context)),
                   ),
                   child: InkWell(
                     borderRadius: BorderRadius.circular(20),
@@ -94,7 +94,7 @@ class GoalsListView extends StatelessWidget {
                               Expanded(
                                 child: Text(
                                   goal.name,
-                                  style: const TextStyle(color: AppTheme.textPrimary, fontSize: 15, fontWeight: FontWeight.bold),
+                                  style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 15, fontWeight: FontWeight.bold),
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
@@ -115,11 +115,11 @@ class GoalsListView extends StatelessWidget {
                             children: [
                               Text(
                                 '${goal.currency == Currency.usd ? '\$' : 'C\$'} ${goal.currentAmount.toStringAsFixed(2)} recolectados',
-                                style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13),
+                                style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 13),
                               ),
                               Text(
                                 'Objetivo: ${goal.currency == Currency.usd ? '\$' : 'C\$'}${goal.targetAmount.toStringAsFixed(2)}',
-                                style: const TextStyle(color: AppTheme.textPrimary, fontSize: 13, fontWeight: FontWeight.w600),
+                                style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 13, fontWeight: FontWeight.w600),
                               ),
                             ],
                           ),
@@ -129,7 +129,7 @@ class GoalsListView extends StatelessWidget {
                             child: LinearProgressIndicator(
                               value: progress,
                               minHeight: 8,
-                              backgroundColor: AppTheme.borderColor,
+                              backgroundColor: AppTheme.getBorderColor(context),
                               color: Color(cat.colorHex),
                             ),
                           ),
@@ -143,7 +143,7 @@ class GoalsListView extends StatelessWidget {
                               ),
                               Text(
                                 'Límite: ${goal.deadline.day}/${goal.deadline.month}/${goal.deadline.year}',
-                                style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12),
+                                style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 12),
                               ),
                             ],
                           ),
@@ -166,7 +166,7 @@ class GoalsListView extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppTheme.surfaceColor,
+      backgroundColor: AppTheme.getSurfaceColor(context),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -183,34 +183,34 @@ class GoalsListView extends StatelessWidget {
                   child: Container(
                     width: 48,
                     height: 5,
-                    decoration: BoxDecoration(color: AppTheme.borderColor, borderRadius: BorderRadius.circular(10)),
+                    decoration: BoxDecoration(color: AppTheme.getBorderColor(context), borderRadius: BorderRadius.circular(10)),
                   ),
                 ),
                 const SizedBox(height: 20),
                 Text(
                   'Abonar a: ${goal.name}',
-                  style: const TextStyle(color: AppTheme.textPrimary, fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 6),
                 Text(
                   'Monto pendiente necesario: ${goal.currency == Currency.usd ? '\$' : 'C\$'} ${remaining.toStringAsFixed(2)}',
-                  style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13),
+                  style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 13),
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
                   controller: amountController,
-                  style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold),
+                  style: TextStyle(color: AppTheme.getTextPrimary(context), fontWeight: FontWeight.bold),
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   autofocus: true,
                   decoration: InputDecoration(
                     labelText: 'Monto a agregar (${goal.currency == Currency.usd ? '\$' : 'C\$'} )',
-                    labelStyle: const TextStyle(color: AppTheme.textSecondary),
-                    prefixIcon: const Icon(Icons.add_card_rounded, color: AppTheme.textSecondary),
+                    labelStyle: TextStyle(color: AppTheme.getTextSecondary(context)),
+                    prefixIcon: Icon(Icons.add_card_rounded, color: AppTheme.getTextSecondary(context)),
                     filled: true,
-                    fillColor: Colors.black.withValues(alpha: 0.2),
+                    fillColor: AppTheme.getSurfaceColor(context).withValues(alpha: 0.5),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(14),
-                      borderSide: const BorderSide(color: AppTheme.borderColor),
+                      borderSide: BorderSide(color: AppTheme.getBorderColor(context)),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(14),
@@ -282,7 +282,7 @@ class GoalsListView extends StatelessWidget {
       context: context,
       builder: (context) {
         return Dialog(
-          backgroundColor: AppTheme.surfaceColor,
+          backgroundColor: AppTheme.getSurfaceColor(context),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
           child: Padding(
             padding: const EdgeInsets.all(28),
@@ -303,16 +303,16 @@ class GoalsListView extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
-                const Text(
+                Text(
                   '¡Objetivo Logrado!',
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: AppTheme.textPrimary, fontSize: 22, fontWeight: FontWeight.w700, letterSpacing: -0.5),
+                  style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 22, fontWeight: FontWeight.w700, letterSpacing: -0.5),
                 ),
                 const SizedBox(height: 10),
                 Text(
                   'Felicidades, has reunido los \$ ${goal.targetAmount.toStringAsFixed(2)} requeridos para completar tu meta: "${goal.name}". Tu disciplina financiera está dando frutos.',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13, height: 1.4),
+                  style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 13, height: 1.4),
                 ),
                 const SizedBox(height: 24),
                 GestureDetector(

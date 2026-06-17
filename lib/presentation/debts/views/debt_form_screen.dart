@@ -94,13 +94,13 @@ class _DebtFormScreenState extends State<DebtFormScreen> {
   }
 
   // Estilo de decoración de inputs compartido con tus formularios previos
-  InputDecoration _buildInputDecoration({required String hintText, required IconData prefixIcon}) {
+  InputDecoration _buildInputDecoration(BuildContext context, {required String hintText, required IconData prefixIcon}) {
     return InputDecoration(
       hintText: hintText,
-      hintStyle: const TextStyle(color: AppTheme.textSecondary, fontSize: 14),
-      prefixIcon: Icon(prefixIcon, color: AppTheme.textSecondary, size: 20),
+      hintStyle: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 14),
+      prefixIcon: Icon(prefixIcon, color: AppTheme.getTextSecondary(context), size: 20),
       filled: true,
-      fillColor: AppTheme.surfaceColor,
+      fillColor: AppTheme.getSurfaceColor(context),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
@@ -108,7 +108,7 @@ class _DebtFormScreenState extends State<DebtFormScreen> {
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: AppTheme.borderColor, width: 1),
+        borderSide: BorderSide(color: AppTheme.getBorderColor(context), width: 1),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
@@ -143,34 +143,34 @@ class _DebtFormScreenState extends State<DebtFormScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
           children: [
             // Campo: Concepto
-            const Text('Concepto de la Deuda', style: TextStyle(color: AppTheme.textPrimary, fontSize: 14, fontWeight: FontWeight.bold)),
+            Text('Concepto de la Deuda', style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             TextFormField(
               controller: _titleController,
-              style: const TextStyle(color: AppTheme.textPrimary, fontSize: 14),
-              decoration: _buildInputDecoration(hintText: 'Ej. Visa Clásica, Préstamo vehicular', prefixIcon: Icons.bookmark_outline_rounded),
+              style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14),
+              decoration: _buildInputDecoration(context, hintText: 'Ej. Visa Clásica, Préstamo vehicular', prefixIcon: Icons.bookmark_outline_rounded),
               validator: (v) => v!.isEmpty ? 'Por favor escribe el concepto' : null,
             ),
             const SizedBox(height: 16),
             
             // Campo: Acreedor
-            const Text('Acreedor / Prestamista', style: TextStyle(color: AppTheme.textPrimary, fontSize: 14, fontWeight: FontWeight.bold)),
+            Text('Acreedor / Prestamista', style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             TextFormField(
               controller: _creditorController,
-              style: const TextStyle(color: AppTheme.textPrimary, fontSize: 14),
-              decoration: _buildInputDecoration(hintText: '¿A quién le debes? Ej. Banco BAC, Juan', prefixIcon: Icons.business_rounded),
+              style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14),
+              decoration: _buildInputDecoration(context, hintText: '¿A quién le debes? Ej. Banco BAC, Juan', prefixIcon: Icons.business_rounded),
               validator: (v) => v!.isEmpty ? 'Por favor ingresa el acreedor' : null,
             ),
             const SizedBox(height: 16),
 
-            const Text('Tipo de Moneda', style: TextStyle(color: AppTheme.textPrimary, fontSize: 14, fontWeight: FontWeight.bold)),
+            Text('Tipo de Moneda', style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
 
             DropdownButtonFormField<Currency>(
               initialValue: _selectedCurrency,
-              style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold),
-              decoration: _buildInputDecoration(hintText: 'Moneda', prefixIcon: Icons.shutter_speed_rounded),
+              style: TextStyle(color: AppTheme.getTextPrimary(context), fontWeight: FontWeight.bold),
+              decoration: _buildInputDecoration(context, hintText: 'Moneda', prefixIcon: Icons.shutter_speed_rounded),
               items: Currency.values.map((c) {
                 return DropdownMenuItem(value: c, child: Text(c.name.toUpperCase()));
               }).toList(),
@@ -189,13 +189,13 @@ class _DebtFormScreenState extends State<DebtFormScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Monto Actual (\$)', style: TextStyle(color: AppTheme.textPrimary, fontSize: 14, fontWeight: FontWeight.bold)),
+                      Text('Monto Actual (\$)', style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14, fontWeight: FontWeight.bold)),
                       const SizedBox(height: 8),
                       TextFormField(
                         controller: _amountController,
                         keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                        style: const TextStyle(color: AppTheme.textPrimary, fontSize: 14),
-                        decoration: _buildInputDecoration(hintText: '0.00', prefixIcon: Icons.monetization_on_outlined),
+                        style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14),
+                        decoration: _buildInputDecoration(context, hintText: '0.00', prefixIcon: Icons.monetization_on_outlined),
                         validator: (v) => double.tryParse(v ?? '') == null ? 'Monto inválido' : null,
                       ),
                     ],
@@ -206,13 +206,13 @@ class _DebtFormScreenState extends State<DebtFormScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Interés Anual (%)', style: TextStyle(color: AppTheme.textPrimary, fontSize: 14, fontWeight: FontWeight.bold)),
+                      Text('Interés Anual (%)', style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14, fontWeight: FontWeight.bold)),
                       const SizedBox(height: 8),
                       TextFormField(
                         controller: _interestController,
                         keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                        style: const TextStyle(color: AppTheme.textPrimary, fontSize: 14),
-                        decoration: _buildInputDecoration(hintText: '0.0', prefixIcon: Icons.percent_rounded),
+                        style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14),
+                        decoration: _buildInputDecoration(context, hintText: '0.0', prefixIcon: Icons.percent_rounded),
                         validator: (v) => double.tryParse(v ?? '') == null ? 'Porcentaje inválido' : null,
                       ),
                     ],
@@ -223,7 +223,7 @@ class _DebtFormScreenState extends State<DebtFormScreen> {
             const SizedBox(height: 20),
 
             // Selector Horizontal Tipo de Deuda (ChoiceChips Premium)
-            const Text('Clasificación del Pasivo', style: TextStyle(color: AppTheme.textPrimary, fontSize: 14, fontWeight: FontWeight.bold)),
+            Text('Clasificación del Pasivo', style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14, fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
             SizedBox(
               height: 38,
@@ -237,16 +237,16 @@ class _DebtFormScreenState extends State<DebtFormScreen> {
                       label: Text(
                         type.displayName,
                         style: TextStyle(
-                          color: isSelected ? Colors.white : AppTheme.textSecondary,
+                          color: isSelected ? Colors.white : AppTheme.getTextSecondary(context),
                           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                         ),
                       ),
                       selected: isSelected,
                       selectedColor: AppTheme.primaryColor,
-                      backgroundColor: AppTheme.surfaceColor,
+                      backgroundColor: AppTheme.getSurfaceColor(context),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
-                        side: BorderSide(color: isSelected ? AppTheme.primaryColor : AppTheme.borderColor),
+                        side: BorderSide(color: isSelected ? AppTheme.primaryColor : AppTheme.getBorderColor(context)),
                       ),
                       onSelected: (_) => setState(() => _selectedType = type),
                     ),
@@ -257,7 +257,7 @@ class _DebtFormScreenState extends State<DebtFormScreen> {
             const SizedBox(height: 20),
 
             // Disparador de Fecha de Próximo Pago estilo ListTile Premium
-            const Text('Próxima Fecha de Pago', style: TextStyle(color: AppTheme.textPrimary, fontSize: 14, fontWeight: FontWeight.bold)),
+            Text('Próxima Fecha de Pago', style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             InkWell(
               onTap: _presentDatePicker,
@@ -265,20 +265,20 @@ class _DebtFormScreenState extends State<DebtFormScreen> {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 decoration: BoxDecoration(
-                  color: AppTheme.surfaceColor,
+                  color: AppTheme.getSurfaceColor(context),
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppTheme.borderColor),
+                  border: Border.all(color: AppTheme.getBorderColor(context)),
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.calendar_month_rounded, color: AppTheme.textSecondary, size: 20),
+                    Icon(Icons.calendar_month_rounded, color: AppTheme.getTextSecondary(context), size: 20),
                     const SizedBox(width: 12),
                     Text(
                       '${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}',
-                      style: const TextStyle(color: AppTheme.textPrimary, fontSize: 14, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                     const Spacer(),
-                    const Icon(Icons.arrow_forward_ios_rounded, color: AppTheme.textSecondary, size: 14),
+                    Icon(Icons.arrow_forward_ios_rounded, color: AppTheme.getTextSecondary(context), size: 14),
                   ],
                 ),
               ),

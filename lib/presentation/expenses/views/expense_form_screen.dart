@@ -86,11 +86,11 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
       prefixIcon: Icon(prefixIcon, color: const Color(0xFF9CA3AF), size: 20),
       prefixText: prefixText,
       filled: true,
-      fillColor: AppTheme.surfaceColor,
+      fillColor: AppTheme.getSurfaceColor(context),
       contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: AppTheme.borderColor, width: 1.5),
+        borderSide: BorderSide(color: AppTheme.getBorderColor(context), width: 1.5),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
@@ -217,7 +217,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
               TextFormField(
                 controller: _nameController,
                 onChanged: (_) => setState(() {}),
-                style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.w600),
+                style: TextStyle(color: AppTheme.getTextPrimary(context), fontWeight: FontWeight.w600),
                 decoration: _buildCustomInputDecoration(
                   label: '¿En qué gastaste? *',
                   prefixIcon: Icons.edit_note_rounded,
@@ -235,7 +235,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                     child: TextFormField(
                       controller: _amountController,
                       onChanged: (_) => setState(() {}),
-                      style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.w600),
+                      style: TextStyle(color: AppTheme.getTextPrimary(context), fontWeight: FontWeight.w600),
                       decoration: _buildCustomInputDecoration(
                         label: 'Monto Total *',
                         prefixIcon: Icons.payments_rounded,
@@ -253,7 +253,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                     flex: 2,
                     child: DropdownButtonFormField<Currency>(
                       initialValue: _selectedCurrency,
-                      style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: AppTheme.getTextPrimary(context), fontWeight: FontWeight.bold),
                       decoration: _buildCustomInputDecoration(label: 'Moneda', prefixIcon: Icons.shutter_speed_rounded),
                       items: Currency.values.map((c) {
                         return DropdownMenuItem(value: c, child: Text(c.name.toUpperCase()));
@@ -270,7 +270,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
               // CATEGORÍA BASE (Desplegable Estilizado)
               DropdownButtonFormField<ExpenseCategory>(
                 initialValue: _selectedCategory,
-                style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.w600),
+                style: TextStyle(color: AppTheme.getTextPrimary(context), fontWeight: FontWeight.w600),
                 decoration: _buildCustomInputDecoration(label: 'Categoría Base', prefixIcon: Icons.grid_view_rounded),
                 items: ExpenseCategory.values.map((cat) {
                   return DropdownMenuItem(value: cat, child: Text(cat.displayName));
@@ -285,7 +285,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
               const SizedBox(height: 28),
 
               // Selector Custom de Iconos (Horizontal & Atractivo)
-              const Text('Personalizar Icono de Identificación', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppTheme.textSecondary)),
+              Text('Personalizar Icono de Identificación', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppTheme.getTextSecondary(context))),
               const SizedBox(height: 10),
               SizedBox(
                 height: 55,
@@ -302,16 +302,16 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
                         margin: const EdgeInsets.only(right: 12),
                         width: 55,
                         decoration: BoxDecoration(
-                          color: isSelected ? Color(_customColorHex) : AppTheme.surfaceColor,
+                          color: isSelected ? Color(_customColorHex) : AppTheme.getSurfaceColor(context),
                           borderRadius: BorderRadius.circular(14),
                           border: Border.all(
-                            color: isSelected ? Colors.transparent : AppTheme.borderColor,
+                            color: isSelected ? Colors.transparent : AppTheme.getBorderColor(context),
                             width: 1.5,
                           ),
                         ),
                         child: Icon(
                           iconCode, 
-                          color: isSelected ? Colors.white : AppTheme.textSecondary,
+                          color: isSelected ? Colors.white : AppTheme.getTextSecondary(context),
                           size: 22,
                         ),
                       ),
@@ -322,7 +322,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
               const SizedBox(height: 24),
 
               // Selector Custom de Colores de Acento (Paleta Elegante)
-              const Text('Asignar Color Distintivo', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppTheme.textSecondary)),
+              Text('Asignar Color Distintivo', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppTheme.getTextSecondary(context))),
               const SizedBox(height: 10),
               SizedBox(
                 height: 48,
@@ -355,7 +355,7 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
               TextFormField(
                 controller: _notesController,
                 maxLines: 2,
-                style: TextStyle(color: AppTheme.textPrimary),
+                style: TextStyle(color: AppTheme.getTextPrimary(context)),
                 decoration: _buildCustomInputDecoration(
                   label: 'Anotaciones u observaciones adicionales',
                   prefixIcon: Icons.description_rounded,
@@ -364,19 +364,19 @@ class _ExpenseFormScreenState extends State<ExpenseFormScreen> {
               const SizedBox(height: 20),
 
               Material(
-                color: AppTheme.surfaceColor, // El fondo se define aquí en el contenedor Material
+                color: AppTheme.getSurfaceColor(context), // El fondo se define aquí en el contenedor Material
                 borderRadius: BorderRadius.circular(16),
                 clipBehavior: Clip.antiAlias, // Asegura que el efecto splash no se salga de las esquinas redondeadas
                 child: Container(
                   // Agregamos el borde usando un Container intermedio sin color de fondo
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppTheme.borderColor, width: 1.5),
+                    border: Border.all(color: AppTheme.getBorderColor(context), width: 1.5),
                   ),
                   child: SwitchListTile(
-                    title: const Text(
+                    title: Text(
                       '¿Este gasto ya fue liquidado / pagado?', 
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppTheme.textPrimary),
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppTheme.getTextPrimary(context)),
                     ),
                     value: _isPaid,
                     activeThumbColor: Color(_customColorHex),

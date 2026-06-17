@@ -75,12 +75,12 @@ Widget build(BuildContext context) {
                   return Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                     decoration: BoxDecoration(
-                      color: AppTheme.surfaceColor.withValues(alpha: 0.6), //withOpacity(0.6),
+                      color: AppTheme.getSurfaceColor(context).withValues(alpha: 0.6), //withOpacity(0.6),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
                         color: totalRemaining > 0 
                             ? const Color(0xFFEF4444).withValues(alpha: 0.6) // Borde rojo sutil si debe dinero
-                            : AppTheme.borderColor.withValues(alpha: 0.6),
+                            : AppTheme.getBorderColor(context).withValues(alpha: 0.6),
                       ),
                     ),
                     child: InkWell(
@@ -104,14 +104,14 @@ Widget build(BuildContext context) {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
+                                Text(
                                   'Pasivos / Deudas Totales',
-                                  style: TextStyle(color: AppTheme.textSecondary, fontSize: 12, fontWeight: FontWeight.w500),
+                                  style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 12, fontWeight: FontWeight.w500),
                                 ),
                                 const SizedBox(height: 2),
                                 Text(
                                   '\$ ${totalRemaining.toStringAsFixed(2)}',
-                                  style: const TextStyle(color: AppTheme.textPrimary, fontSize: 16, fontWeight: FontWeight.bold),
+                                  style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 16, fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
@@ -137,6 +137,7 @@ Widget build(BuildContext context) {
 
               //         // SECCIÓN: Últimos Gastos
               _buildSectionHeader(
+                context,
                 title: 'Gastos Recientes', 
                 icon: Icons.shopping_bag_rounded,
                 showButton: dashboardVM.recentExpenses.length >= 3, // Validamos el total real de la lista completa
@@ -147,7 +148,7 @@ Widget build(BuildContext context) {
               ),
               const SizedBox(height: 12),
               if (dashboardVM.recentExpenses.isEmpty)
-                _buildEmptyPlaceholder(message: 'No hay gastos registrados todavía.', icon: Icons.shopping_bag_rounded,)
+                _buildEmptyPlaceholder(context,message: 'No hay gastos registrados todavía.', icon: Icons.shopping_bag_rounded,)
               else
                 ...dashboardVM.recentExpenses.map((expense) => _buildRecentExpenseRow(context, dashboardVM, expense)),
 
@@ -155,6 +156,7 @@ Widget build(BuildContext context) {
 
               // SECCIÓN: Últimos Ingresos
               _buildSectionHeader(
+                context,
                 title: 'Ingresos Recientes', 
                 icon: Icons.payments_rounded,
                 showButton: dashboardVM.recentIncomes.length >= 3, // Validamos el total real de la lista completa
@@ -165,7 +167,7 @@ Widget build(BuildContext context) {
               ),
               const SizedBox(height: 12),
               if (dashboardVM.recentIncomes.isEmpty)
-                _buildEmptyPlaceholder(message: 'No hay ingresos registrados todavía.', icon: Icons.payments_rounded)
+                _buildEmptyPlaceholder(context, message: 'No hay ingresos registrados todavía.', icon: Icons.payments_rounded)
               else
                 ...dashboardVM.recentIncomes.map((income) => _buildRecentIncomeRow(context, dashboardVM, income)),
             
@@ -177,7 +179,7 @@ Widget build(BuildContext context) {
   );
 }
 
-  Widget _buildSectionHeader({
+  Widget _buildSectionHeader(BuildContext context,{
   required String title,
   required IconData icon,
   required bool showButton,
@@ -188,11 +190,11 @@ Widget build(BuildContext context) {
     children: [
       Row(
         children: [
-          Icon(icon, size: 20, color: AppTheme.textSecondary),
+          Icon(icon, size: 20, color: AppTheme.getTextSecondary(context)),
           const SizedBox(width: 8),
           Text(
             title,
-            style: const TextStyle(color: AppTheme.textPrimary, fontSize: 15, fontWeight: FontWeight.bold, letterSpacing: -0.2),
+            style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 15, fontWeight: FontWeight.bold, letterSpacing: -0.2),
           ),
         ],
       ),
@@ -238,9 +240,9 @@ Widget build(BuildContext context) {
         margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: AppTheme.surfaceColor.withValues(alpha: 0.6),
+          color: AppTheme.getSurfaceColor(context).withValues(alpha: 0.6),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppTheme.borderColor.withValues(alpha: 0.8)),
+          border: Border.all(color: AppTheme.getBorderColor(context).withValues(alpha: 0.8)),
         ),
         child: Row(
           children: [
@@ -253,7 +255,7 @@ Widget build(BuildContext context) {
             Expanded(
               child: Text(
                 expense.name,
-                style: const TextStyle(color: AppTheme.textPrimary, fontSize: 14, fontWeight: FontWeight.w600),
+                style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14, fontWeight: FontWeight.w600),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -268,7 +270,7 @@ Widget build(BuildContext context) {
                 if (isNio)
                   Text(
                     '≈ \$ ${vm.convertToUsd(expense.amount, expense.currency).toStringAsFixed(2)}',
-                    style: const TextStyle(color: AppTheme.textSecondary, fontSize: 11, fontWeight: FontWeight.w500),
+                    style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 11, fontWeight: FontWeight.w500),
                   ),
               ],
             ),
@@ -296,9 +298,9 @@ Widget build(BuildContext context) {
         margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: AppTheme.surfaceColor.withValues(alpha: 0.6),
+          color: AppTheme.getSurfaceColor(context).withValues(alpha: 0.6),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppTheme.borderColor.withValues(alpha: 0.8)),
+          border: Border.all(color: AppTheme.getBorderColor(context).withValues(alpha: 0.8)),
         ),
         child: Row(
           children: [
@@ -311,7 +313,7 @@ Widget build(BuildContext context) {
             Expanded(
               child: Text(
                 income.name,
-                style: const TextStyle(color: AppTheme.textPrimary, fontSize: 14, fontWeight: FontWeight.w600),
+                style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14, fontWeight: FontWeight.w600),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -326,7 +328,7 @@ Widget build(BuildContext context) {
                 if (isNio)
                   Text(
                     '≈ \$ ${vm.convertToUsd(income.amount, income.currency).toStringAsFixed(2)}',
-                    style: const TextStyle(color: AppTheme.textSecondary, fontSize: 11, fontWeight: FontWeight.w500),
+                    style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 11, fontWeight: FontWeight.w500),
                   ),
               ],
             ),
@@ -336,13 +338,13 @@ Widget build(BuildContext context) {
     );
   }
 
-  Widget _buildEmptyPlaceholder({required String message, required IconData icon,}) {
+  Widget _buildEmptyPlaceholder(BuildContext context,{required String message, required IconData icon,}) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
       decoration: BoxDecoration(
-        color: AppTheme.surfaceColor.withValues(alpha: 0.5),
+        color: AppTheme.getSurfaceColor(context).withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.borderColor.withValues(alpha: 0.4)),
+        border: Border.all(color: AppTheme.getBorderColor(context).withValues(alpha: 0.4)),
       ),
       child: Center(
         child: Column(
@@ -350,14 +352,14 @@ Widget build(BuildContext context) {
             children: [
               CircleAvatar(
                 radius: 28,
-                backgroundColor: AppTheme.textSecondary.withValues(alpha: 0.12),
-                child: Icon(icon, size: 32, color: AppTheme.textSecondary.withValues(alpha: 0.5)),
+                backgroundColor: AppTheme.getTextSecondary(context).withValues(alpha: 0.12),
+                child: Icon(icon, size: 32, color: AppTheme.getTextSecondary(context).withValues(alpha: 0.5)),
               ),
               const SizedBox(height: 8),
               Text(
                 message,
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12, fontStyle: FontStyle.normal),
+                style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 12, fontStyle: FontStyle.normal),
               ),
             ],
           ),

@@ -99,9 +99,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       margin: const EdgeInsets.fromLTRB(24, 0, 24, 24),
       height: 72,
       decoration: BoxDecoration(
-        color: AppTheme.surfaceColor.withValues(alpha: 0.85),
+        color: AppTheme.getSurfaceColor(context).withValues(alpha: 0.85),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppTheme.borderColor.withValues(alpha: 0.6), width: 1.5),
+        border: Border.all(color: AppTheme.getBorderColor(context).withValues(alpha: 0.6), width: 1.5),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.3),
@@ -134,7 +134,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 Container(
                   height: 32,
                   width: 1.5,
-                  color: AppTheme.borderColor.withValues(alpha: 0.5),
+                  color: AppTheme.getBorderColor(context).withValues(alpha: 0.5),
                 ),
                 const SizedBox(width: 12),
 
@@ -285,13 +285,13 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: AppTheme.surfaceColor,
+            color: AppTheme.getSurfaceColor(context),
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: AppTheme.borderColor, width: 1),
+            border: Border.all(color: AppTheme.getBorderColor(context), width: 1),
           ),
           child: Text(
             label,
-            style: const TextStyle(color: AppTheme.textPrimary, fontSize: 12, fontWeight: FontWeight.bold),
+            style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 12, fontWeight: FontWeight.bold),
           ),
         ),
         const SizedBox(width: 12),
@@ -302,7 +302,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-              color: AppTheme.surfaceColor,
+              color: AppTheme.getSurfaceColor(context),
               shape: BoxShape.circle,
               border: Border.all(color: color.withValues(alpha: 0.6), width: 1.5),
               boxShadow: [

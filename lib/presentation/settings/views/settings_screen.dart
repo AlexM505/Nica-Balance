@@ -22,9 +22,9 @@ class SettingsScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         children: [
-          const Text(
+          Text(
             'Aspecto e Interfaz',
-            style: TextStyle(color: AppTheme.textSecondary, fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 0.5),
+            style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 0.5),
           ),
           const SizedBox(height: 10),
 
@@ -43,9 +43,9 @@ class SettingsScreen extends StatelessWidget {
           ),
           const SizedBox(height: 24),
 
-          const Text(
+          Text(
             'Preferencias Financieras',
-            style: TextStyle(color: AppTheme.textSecondary, fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 0.5),
+            style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 0.5),
           ),
           const SizedBox(height: 10),
 
@@ -59,16 +59,16 @@ class SettingsScreen extends StatelessWidget {
             trailing: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               decoration: BoxDecoration(
-                color: AppTheme.backgroundColor,
+                color: AppTheme.getBackgroundColor(context),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppTheme.borderColor),
+                border: Border.all(color: AppTheme.getBorderColor(context)),
               ),
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<AppCurrency>(
                   value: prefsVM.selectedCurrency,
-                  dropdownColor: AppTheme.surfaceColor,
-                  icon: const Icon(Icons.keyboard_arrow_down_rounded, color: AppTheme.textSecondary),
-                  style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold, fontSize: 14),
+                  dropdownColor: AppTheme.getSurfaceColor(context),
+                  icon: Icon(Icons.keyboard_arrow_down_rounded, color: AppTheme.getTextSecondary(context)),
+                  style: TextStyle(color: AppTheme.getTextPrimary(context), fontWeight: FontWeight.bold, fontSize: 14),
                   onChanged: (AppCurrency? newValue) {
                     if (newValue != null) prefsVM.updateCurrency(newValue);
                   },

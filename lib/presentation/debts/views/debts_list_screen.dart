@@ -35,9 +35,9 @@ class DebtsListScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.gavel_rounded, size: 64, color: AppTheme.textSecondary.withValues(alpha: 0.3)),
+                  Icon(Icons.gavel_rounded, size: 64, color: AppTheme.getTextSecondary(context).withValues(alpha: 0.3)),
                   const SizedBox(height: 16),
-                  const Text('¡Felicidades, estás libre de deudas!', style: TextStyle(color: AppTheme.textSecondary, fontSize: 14)),
+                  Text('¡Felicidades, estás libre de deudas!', style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 14)),
                 ],
               ),
             )
@@ -52,9 +52,9 @@ class DebtsListScreen extends StatelessWidget {
                 return Container(
                   margin: const EdgeInsets.only(bottom: 14),
                   decoration: BoxDecoration(
-                    color: AppTheme.surfaceColor,
+                    color: AppTheme.getSurfaceColor(context),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: AppTheme.borderColor),
+                    border: Border.all(color: AppTheme.getBorderColor(context)),
                   ),
                   child: InkWell(
                     borderRadius: BorderRadius.circular(20),
@@ -82,11 +82,11 @@ class DebtsListScreen extends StatelessWidget {
                                   children: [
                                     Text(
                                       debt.title,
-                                      style: const TextStyle(color: AppTheme.textPrimary, fontSize: 14, fontWeight: FontWeight.bold),
+                                      style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14, fontWeight: FontWeight.bold),
                                     ),
                                     Text(
                                       'Acreedor: ${debt.creditor}',
-                                      style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12),
+                                      style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 12),
                                     ),
                                   ],
                                 ),
@@ -108,27 +108,27 @@ class DebtsListScreen extends StatelessWidget {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text('Saldo Restante', style: TextStyle(color: AppTheme.textSecondary, fontSize: 11)),
+                                  Text('Saldo Restante', style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 11)),
 
                                   Text(
                                     '${debt.currency == Currency.usd ? '\$' : 'C\$'}${debt.remainingAmount.toStringAsFixed(2)}',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      color: AppTheme.textPrimary, fontSize: 16
+                                      color: AppTheme.getTextPrimary(context), fontSize: 16
                                     ),
                                   ),
                                   if (debt.currency == Currency.nio)
                                     Text(
                                       '≈ \$ ${debtVM.convertToUsd(debt.remainingAmount, debt.currency).toStringAsFixed(2)}',
-                                      style: const TextStyle(color: AppTheme.textSecondary, fontSize: 11, fontWeight: FontWeight.w500),
+                                      style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 11, fontWeight: FontWeight.w500),
                                     ),
                                 ],
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  const Text('Tasa / Interés', style: TextStyle(color: AppTheme.textSecondary, fontSize: 11)),
-                                  Text('${debt.interestRate}% Anual', style: const TextStyle(color: AppTheme.textPrimary, fontSize: 13, fontWeight: FontWeight.bold)),
+                                  Text('Tasa / Interés', style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 11)),
+                                  Text('${debt.interestRate}% Anual', style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 13, fontWeight: FontWeight.bold)),
                                 ],
                               )
                             ],
@@ -140,7 +140,7 @@ class DebtsListScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(4),
                             child: LinearProgressIndicator(
                               value: debt.paidPercentage,
-                              backgroundColor: AppTheme.borderColor,
+                              backgroundColor: AppTheme.getBorderColor(context),
                               valueColor: AlwaysStoppedAnimation<Color>(debt.isPaidOff ? AppTheme.accentColor : color),
                               minHeight: 6,
                             ),

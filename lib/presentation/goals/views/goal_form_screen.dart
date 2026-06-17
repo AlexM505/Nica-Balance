@@ -63,16 +63,16 @@ class _GoalFormScreenState extends State<GoalFormScreen> {
     }
   }
 
-  InputDecoration _buildInputDecoration(String label, IconData icon) {
+  InputDecoration _buildInputDecoration(BuildContext context,  label, IconData icon) {
     return InputDecoration(
       labelText: label,
-      labelStyle: const TextStyle(color: AppTheme.textSecondary, fontSize: 14),
-      prefixIcon: Icon(icon, color: AppTheme.textSecondary, size: 20),
+      labelStyle: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 14),
+      prefixIcon: Icon(icon, color: AppTheme.getTextSecondary(context), size: 20),
       filled: true,
-      fillColor: AppTheme.surfaceColor,
+      fillColor: AppTheme.getSurfaceColor(context),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: AppTheme.borderColor, width: 1.5),
+        borderSide: BorderSide(color: AppTheme.getBorderColor(context), width: 1.5),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
@@ -184,8 +184,8 @@ class _GoalFormScreenState extends State<GoalFormScreen> {
             TextFormField(
               controller: _nameController,
               onChanged: (_) => setState(() {}),
-              style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.w600),
-              decoration: _buildInputDecoration('¿Qué estás planeando cumplir? *', Icons.stars_rounded),
+              style: TextStyle(color: AppTheme.getTextPrimary(context), fontWeight: FontWeight.w600),
+              decoration: _buildInputDecoration(context, '¿Qué estás planeando cumplir? *', Icons.stars_rounded),
               validator: (v) => v == null || v.trim().isEmpty ? 'Ingresa un nombre para tu objetivo' : null,
             ),
             const SizedBox(height: 20),
@@ -197,8 +197,8 @@ class _GoalFormScreenState extends State<GoalFormScreen> {
                   child: TextFormField(
                     controller: _targetAmountController,
                     onChanged: (_) => setState(() {}),
-                    style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold),
-                    decoration: _buildInputDecoration('Monto Requerido', Icons.track_changes_rounded),
+                    style: TextStyle(color: AppTheme.getTextPrimary(context), fontWeight: FontWeight.bold),
+                    decoration: _buildInputDecoration(context, 'Monto Requerido', Icons.track_changes_rounded),
                     keyboardType: TextInputType.number,
                     validator: (v) => v == null || double.tryParse(v) == null || double.parse(v) <= 0 ? 'Monto requerido' : null,
                   ),
@@ -207,8 +207,8 @@ class _GoalFormScreenState extends State<GoalFormScreen> {
                 Expanded(
                   child: DropdownButtonFormField<Currency>(
                     initialValue: _selectedCurrency,
-                    style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold),
-                    decoration: _buildInputDecoration('Moneda', Icons.shutter_speed_rounded),
+                    style: TextStyle(color: AppTheme.getTextPrimary(context), fontWeight: FontWeight.bold),
+                    decoration: _buildInputDecoration(context, 'Moneda', Icons.shutter_speed_rounded),
                     items: Currency.values.map((c) {
                       return DropdownMenuItem(value: c, child: Text(c.name.toUpperCase()));
                     }).toList(),
@@ -231,8 +231,8 @@ class _GoalFormScreenState extends State<GoalFormScreen> {
 
             TextFormField(
               controller: _currentAmountController,
-              style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold),
-              decoration: _buildInputDecoration('Ahorro Inicial', Icons.savings_rounded),
+              style: TextStyle(color: AppTheme.getTextPrimary(context), fontWeight: FontWeight.bold),
+              decoration: _buildInputDecoration(context, 'Ahorro Inicial', Icons.savings_rounded),
               keyboardType: TextInputType.number,
             ),
 
@@ -241,9 +241,9 @@ class _GoalFormScreenState extends State<GoalFormScreen> {
             // DROP DRAW: Categorías de metas
             DropdownButtonFormField<GoalCategory>(
               initialValue: _selectedCategory,
-              dropdownColor: AppTheme.surfaceColor,
-              style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.w600),
-              decoration: _buildInputDecoration('Categoría de Meta', Icons.folder_special_rounded),
+              dropdownColor: AppTheme.getSurfaceColor(context),
+              style: TextStyle(color: AppTheme.getTextPrimary(context), fontWeight: FontWeight.w600),
+              decoration: _buildInputDecoration(context, 'Categoría de Meta', Icons.folder_special_rounded),
               items: GoalCategory.values.map((cat) {
                 return DropdownMenuItem(value: cat, child: Text(cat.displayName));
               }).toList(),
@@ -260,18 +260,18 @@ class _GoalFormScreenState extends State<GoalFormScreen> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                       decoration: BoxDecoration(
-                        color: AppTheme.surfaceColor,
+                        color: AppTheme.getSurfaceColor(context),
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: AppTheme.borderColor, width: 1.5),
+                        border: Border.all(color: AppTheme.getBorderColor(context), width: 1.5),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('Fecha de Inicio', style: TextStyle(color: AppTheme.textSecondary, fontSize: 11)),
+                          Text('Fecha de Inicio', style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 11)),
                           const SizedBox(height: 6),
                           Text(
                             '${_startDate.day}/${_startDate.month}/${_startDate.year}',
-                            style: const TextStyle(color: AppTheme.textPrimary, fontSize: 14, fontWeight: FontWeight.bold),
+                            style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14, fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -285,18 +285,18 @@ class _GoalFormScreenState extends State<GoalFormScreen> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                       decoration: BoxDecoration(
-                        color: AppTheme.surfaceColor,
+                        color: AppTheme.getSurfaceColor(context),
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: AppTheme.borderColor, width: 1.5),
+                        border: Border.all(color: AppTheme.getBorderColor(context), width: 1.5),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('Fecha Objetivo', style: TextStyle(color: AppTheme.textSecondary, fontSize: 11)),
+                          Text('Fecha Objetivo', style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 11)),
                           const SizedBox(height: 6),
                           Text(
                             '${_deadline.day}/${_deadline.month}/${_deadline.year}',
-                            style: const TextStyle(color: AppTheme.textPrimary, fontSize: 14, fontWeight: FontWeight.bold),
+                            style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14, fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),

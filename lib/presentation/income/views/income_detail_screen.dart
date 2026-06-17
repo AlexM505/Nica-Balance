@@ -15,13 +15,13 @@ class IncomeDetailScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        backgroundColor: AppTheme.surfaceColor,
-        title: const Text('¿Eliminar Ingreso?', style: TextStyle(color: AppTheme.textPrimary)),
+        backgroundColor: AppTheme.getSurfaceColor(context),
+        title: Text('¿Eliminar Ingreso?', style: TextStyle(color: AppTheme.getTextPrimary(context))),
         content: Text('¿Estás seguro de que deseas borrar "${income.name}"? Esta acción afectará tu balance global.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Cancelar', style: TextStyle(color: AppTheme.textSecondary)),
+            child: Text('Cancelar', style: TextStyle(color: AppTheme.getTextSecondary(context))),
           ),
           TextButton(
             onPressed: () {
@@ -112,12 +112,12 @@ class IncomeDetailScreen extends StatelessWidget {
           ),
           const SizedBox(height: 32),
 
-          const Text('Metadatos de la Transacción', style: TextStyle(color: AppTheme.textSecondary, fontSize: 13, fontWeight: FontWeight.bold)),
+          Text('Metadatos de la Transacción', style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 13, fontWeight: FontWeight.bold)),
           const SizedBox(height: 12),
           
-          _buildInfoRow(Icons.calendar_month_rounded, 'Fecha de entrada', '${income.date.day}/${income.date.month}/${income.date.year}'),
-          _buildInfoRow(Icons.currency_exchange_rounded, 'Moneda de origen', isNio ? 'Córdobas (NIO)' : 'Dólares (USD)'),
-          _buildInfoRow(Icons.fingerprint_rounded, 'Identificador local', '#${income.id}'),
+          _buildInfoRow(context, Icons.calendar_month_rounded, 'Fecha de entrada', '${income.date.day}/${income.date.month}/${income.date.year}'),
+          _buildInfoRow(context, Icons.currency_exchange_rounded, 'Moneda de origen', isNio ? 'Córdobas (NIO)' : 'Dólares (USD)'),
+          _buildInfoRow(context, Icons.fingerprint_rounded, 'Identificador local', '#${income.id}'),
           
           const SizedBox(height: 48),
 
@@ -134,18 +134,18 @@ class IncomeDetailScreen extends StatelessWidget {
             child: Container(
               height: 54,
               decoration: BoxDecoration(
-                color: AppTheme.surfaceColor,
+                color: AppTheme.getSurfaceColor(context),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppTheme.borderColor, width: 1.5),
+                border: Border.all(color: AppTheme.getBorderColor(context), width: 1.5),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.edit_rounded, color: AppTheme.primaryColor, size: 18),
                   SizedBox(width: 8),
                   Text(
                     'Modificar Información',
-                    style: TextStyle(color: AppTheme.textPrimary, fontSize: 14, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -156,22 +156,22 @@ class IncomeDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoRow(IconData icon, String title, String value) {
+  Widget _buildInfoRow(BuildContext context, IconData icon, String title, String value) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppTheme.surfaceColor.withValues(alpha: 0.4),
+        color: AppTheme.getSurfaceColor(context).withValues(alpha: 0.4),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.borderColor.withValues(alpha: 0.5)),
+        border: Border.all(color: AppTheme.getBorderColor(context).withValues(alpha: 0.5)),
       ),
       child: Row(
         children: [
-          Icon(icon, color: AppTheme.textSecondary, size: 20),
+          Icon(icon, color: AppTheme.getTextSecondary(context), size: 20),
           const SizedBox(width: 12),
-          Text(title, style: const TextStyle(color: AppTheme.textSecondary, fontSize: 13, fontWeight: FontWeight.w500)),
+          Text(title, style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 13, fontWeight: FontWeight.w500)),
           const Spacer(),
-          Text(value, style: const TextStyle(color: AppTheme.textPrimary, fontSize: 13, fontWeight: FontWeight.bold)),
+          Text(value, style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 13, fontWeight: FontWeight.bold)),
         ],
       ),
     );
