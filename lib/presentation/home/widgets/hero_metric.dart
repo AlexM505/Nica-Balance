@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nica_balance/presentation/settings/viewmodels/preferences_viewmodel.dart';
+import 'package:provider/provider.dart';
 
 class Metric extends StatelessWidget {
   final String title;
@@ -13,6 +15,7 @@ class Metric extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final prefsVM = context.watch<PreferencesViewModel>();
     return Row(
       children: [
         Icon(
@@ -32,7 +35,9 @@ class Metric extends StatelessWidget {
               ),
             ),
             Text(
-              '\$ ${value.toStringAsFixed(2)}',
+              prefsVM.hideBalances 
+              ? '•••••••' 
+              : '\$ ${value.toStringAsFixed(2)}',
               style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,

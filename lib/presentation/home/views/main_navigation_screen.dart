@@ -1,11 +1,14 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:nica_balance/core/services/bio_auth_service.dart';
 import 'package:nica_balance/core/theme/app_theme.dart';
 import 'package:nica_balance/presentation/calendar/views/calendar_history_view.dart';
 import 'package:nica_balance/presentation/goals/views/goals_list_view.dart';
 import 'package:nica_balance/presentation/home/views/home_dashboard_view.dart';
 import 'package:nica_balance/presentation/income/views/income_form_screen.dart';
+import 'package:nica_balance/presentation/settings/viewmodels/preferences_viewmodel.dart';
+import 'package:provider/provider.dart';
 import '../../expenses/views/expense_form_screen.dart';
 
 class MainNavigationScreen extends StatefulWidget {
@@ -15,10 +18,10 @@ class MainNavigationScreen extends StatefulWidget {
   State<MainNavigationScreen> createState() => _MainNavigationScreenState();
 }
 
-class _MainNavigationScreenState extends State<MainNavigationScreen> {
+class _MainNavigationScreenState extends State<MainNavigationScreen> with WidgetsBindingObserver{
   int _selectedIndex = 0;
   bool _isMenuOpen = false;
-  
+  bool _isAuthenticated = true;
 
   final List<Widget> _views = [
     const HomeDashboardView(),
@@ -37,21 +40,124 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     super.initState();
 
     FlutterNativeSplash.remove();
+
+    WidgetsBinding.instance.addObserver(this);
+    
+    final prefsVM = context.read<PreferencesViewModel>();
+    if (prefsVM.biometricAuth) {
+      _isAuthenticated = false;
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+
+    final prefsVM = context.read<PreferencesViewModel>();
+    if (state == AppLifecycleState.resumed) {
+      if (prefsVM.biometricAuth) {
+        setState(() {
+          _isAuthenticated = false;
+        });
+      }
+    }
+  }
+
+  /// Método manual disparado únicamente por la acción táctil del usuario
+  Future<void> _executeManualDesblock() async {
+    final prefsVM = context.read<PreferencesViewModel>();
+    final success = await BioAuthService.authenticate();
+    if (success) {
+      await prefsVM.toggleBiometricAuth(false);
+      setState(() {
+        _isAuthenticated = true;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+
+    final prefsVM = context.watch<PreferencesViewModel>();
+
+    if (!prefsVM.biometricAuth && !_isAuthenticated) {
+      _isAuthenticated = true;
+    }
+
+    if (prefsVM.biometricAuth && _isAuthenticated) {
+      Future.delayed(Duration.zero, () {
+        if (mounted) {
+          setState(() {
+            _isAuthenticated = false; 
+          });
+        }
+      });
+    }
+
+    // Si requiere autenticación y no la ha superado, mostramos cortina de seguridad premium
+    if (prefsVM.biometricAuth && !_isAuthenticated) {
+      return Scaffold(
+        backgroundColor: AppTheme.getBackgroundColor(context),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.lock_outline_rounded,
+                size: 64,
+                color: AppTheme.primaryColor.withValues(alpha: 0.8),
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'Aplicación Bloqueada',
+                style: TextStyle(
+                  color: AppTheme.getTextPrimary(context),
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Usa tu huella o rostro para desbloquear',
+                style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 13),
+              ),
+              const SizedBox(height: 32),
+              ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.primaryColor,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  elevation: 2,
+                ),
+                // LA CLAVE: El sensor se abre SOLO si presionan este botón
+                onPressed: _executeManualDesblock, 
+                icon: const Icon(Icons.fingerprint_rounded, size: 24),
+                label: const Text(
+                  'Desbloquear con Huella',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       extendBody: true,
       body: Stack(
         children: [
-          // _views[_selectedIndex],
 
           AnimatedSwitcher(
-            duration: const Duration(milliseconds: 250), // Transición rápida y fluida
-            switchInCurve: Curves.easeOutCubic,         // Curva suave al entrar
-            switchOutCurve: Curves.easeInCubic,          // Curva suave al salir
-            // Modificamos el constructor de transición para que haga un Fade + Scale premium
+            duration: const Duration(milliseconds: 250),
+            switchInCurve: Curves.easeOutCubic,
+            switchOutCurve: Curves.easeInCubic,
             transitionBuilder: (Widget child, Animation<double> animation) {
               return FadeTransition(
                 opacity: animation,
@@ -61,15 +167,12 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 ),
               );
             },
-            // Es indispensable pasarle una Key única basada en el índice para que reconozca el cambio de pantalla
             child: KeyedSubtree(
               key: ValueKey<int>(_selectedIndex),
               child: _views[_selectedIndex],
             ),
           ),
 
-
-          // Capa de desenfoque con transición suave al abrir menú
           AnimatedOpacity(
             opacity: _isMenuOpen ? 1.0 : 0.0,
             duration: const Duration(milliseconds: 200),
@@ -85,7 +188,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 : const SizedBox.shrink(),
           ),
 
-          // Opciones flotantes con animación de elevación y opacidad
           _buildAnimatedQuickMenu(),
         ],
       ),
@@ -130,7 +232,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                   ),
                 ),
                 
-                // Divisor sutil vertical para separar el menú del botón de acción
                 Container(
                   height: 32,
                   width: 1.5,
@@ -161,11 +262,10 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          // INDICADOR DE SELECCIÓN CORREGIDO: Usamos AnimatedScale para evitar anchos/altos negativos
           AnimatedScale(
-            scale: isSelected ? 1.0 : 0.0, // Escala de 0% a 100%
+            scale: isSelected ? 1.0 : 0.0,
             duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOutBack, // El efecto elástico/rebote ahora es 100% seguro aquí
+            curve: Curves.easeInOutBack,
             child: Container(
               width: 48,
               height: 48,
@@ -175,7 +275,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               ),
             ),
           ),
-          // El ícono cambia de color con transiciones suaves
           AnimatedContainer(
             duration: const Duration(milliseconds: 200),
             padding: const EdgeInsets.all(12),
@@ -193,7 +292,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   // Botón Gatillo con rotación fluida integrado en la misma barra
   Widget _buildActionMenuButton() {
     return AnimatedRotation(
-      turns: _isMenuOpen ? 0.125 : 0, // Convierte de + a x rotando 45 grados
+      turns: _isMenuOpen ? 0.125 : 0,
       duration: const Duration(milliseconds: 250),
       curve: Curves.easeInOut,
       child: GestureDetector(
@@ -223,15 +322,13 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   Widget _buildAnimatedQuickMenu() {
     return AnimatedPositioned(
       duration: const Duration(milliseconds: 300),
-      curve: Curves.fastOutSlowIn, // Animación de aceleración y frenado natural
-      bottom: _isMenuOpen ? 104 : 20, // Sube desde la barra de navegación
-      right: 38, // Centrado perfectamente sobre el botón derecho
+      curve: Curves.fastOutSlowIn,
+      bottom: _isMenuOpen ? 104 : 20,
+      right: 38,
       child: AnimatedOpacity(
         opacity: _isMenuOpen ? 1.0 : 0.0,
         duration: const Duration(milliseconds: 200),
         child: 
-        // _isMenuOpen
-        //     ? 
           IgnorePointer(
             ignoring: !_isMenuOpen,
             child: 
@@ -266,7 +363,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                   ),
                 ],
               )
-            // : const SizedBox.shrink(),
           )
       ),
     );
@@ -281,7 +377,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Etiqueta flotante
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
@@ -295,7 +390,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           ),
         ),
         const SizedBox(width: 12),
-        // Botón Circular de Acción
         GestureDetector(
           onTap: onTap,
           child: Container(

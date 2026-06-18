@@ -75,11 +75,54 @@ class SettingsScreen extends StatelessWidget {
                   items: AppCurrency.values.map((AppCurrency currency) {
                     return DropdownMenuItem<AppCurrency>(
                       value: currency,
-                      child: Text(currency.name),
+                      child: Text('${currency.code} ( ${currency.symbol} )'),
                     );
                   }).toList(),
                 ),
               ),
+            ),
+          ),
+
+          const SizedBox(height: 24),
+          const Text(
+            'Seguridad y Privacidad',
+            style: TextStyle(color: AppTheme.textSecondary, fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 0.5),
+          ),
+          const SizedBox(height: 10),
+
+          // Ocultar Saldos
+          _buildSettingsTile(
+            context,
+            icon: prefsVM.hideBalances ? Icons.visibility_off_rounded : Icons.visibility_rounded,
+            iconColor: const Color(0xFF8B5CF6),
+            title: 'Ocultar saldos',
+            subtitle: 'Muestra asteriscos en los balances globales',
+            trailing: Switch.adaptive(
+              value: prefsVM.hideBalances,
+              activeThumbColor: AppTheme.primaryColor,
+              onChanged: (value) => prefsVM.toggleHideBalances(value),
+            ),
+          ),
+          const SizedBox(height: 12),
+
+          // Autenticación Biométrica
+          _buildSettingsTile(
+            context,
+            icon: Icons.fingerprint_rounded,
+            iconColor: const Color(0xFFEF4444),
+            title: 'Bloqueo biométrico',
+            subtitle: 'Solicitar Face ID o Huella al abrir la app',
+            trailing: Switch.adaptive(
+              value: prefsVM.biometricAuth,
+              activeThumbColor: AppTheme.primaryColor,
+              onChanged: (bool newValue) async {
+                
+                await prefsVM.toggleBiometricAuth(newValue);
+                
+                if (newValue && context.mounted) {
+                  Navigator.pop(context);
+                }
+              },
             ),
           ),
         ],

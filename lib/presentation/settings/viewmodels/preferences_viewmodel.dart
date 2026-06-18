@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-enum AppCurrency { NIO, USD }
+enum AppCurrency { 
+  USD(symbol: '\$', code: 'USD', name: 'Dólares Americanos'), 
+  NIO(symbol: 'C\$', code: 'NIO', name: 'Córdobas Oro');
+
+  final String symbol;
+  final String code;
+  final String name;
+
+  const AppCurrency({required this.symbol, required this.code, required this.name});
+}
 
 class PreferencesViewModel extends ChangeNotifier {
   ThemeMode _themeMode = ThemeMode.dark; // Por defecto tu tema oscuro premium
@@ -10,9 +19,18 @@ class PreferencesViewModel extends ChangeNotifier {
   ThemeMode get themeMode => _themeMode;
   AppCurrency get selectedCurrency => _selectedCurrency;
 
-  // Helpers para obtener strings o símbolos limpios en tus vistas
-  String get currencySymbol => _selectedCurrency == AppCurrency.USD ? '\$' : 'C\$';
-  String get currencyCode => _selectedCurrency.name;
+  // Shortcuts de utilidad global para tus vistas
+  String get currencySymbol => _selectedCurrency.symbol;
+  String get currencyCode => _selectedCurrency.code;
+
+  bool _hideBalances = false;
+  bool _biometricAuth = false;
+
+  bool _isAuthenticating = false;
+
+  bool get hideBalances => _hideBalances;
+  bool get biometricAuth => _biometricAuth;
+  bool get isAuthenticating => _isAuthenticating; // Getter público
 
   PreferencesViewModel() {
     _loadPreferences();
@@ -27,8 +45,12 @@ class PreferencesViewModel extends ChangeNotifier {
     _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
 
     // Cargar Moneda por defecto
-    // final currencyIndex = prefs.getInt('selected_currency_index') ?? AppCurrency.USD.index;
-    // _selectedCurrency = AppCurrency.values[currencyIndex];
+    final currencyIndex = prefs.getInt('selected_currency_index') ?? AppCurrency.USD.index;
+    _selectedCurrency = AppCurrency.values[currencyIndex];
+
+    // Cargar Configuraciones de Seguridad
+    _hideBalances = prefs.getBool('security_hide_balances') ?? false;
+    _biometricAuth = prefs.getBool('security_biometric_auth') ?? false;
     
     notifyListeners();
   }
@@ -47,5 +69,26 @@ class PreferencesViewModel extends ChangeNotifier {
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('selected_currency_index', currency.index);
+  }
+
+  // Modificar estado de ocultar saldos
+  Future<void> toggleHideBalances(bool value) async {
+    _hideBalances = value;
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('security_hide_balances', value);
+  }
+
+  // Modificar estado de autenticación biométrica
+  Future<void> toggleBiometricAuth(bool value) async {
+    _biometricAuth = value;
+    notifyListeners();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('security_biometric_auth', value);
+  }
+
+  void setIsAuthenticating(bool value) {
+    _isAuthenticating = value;
+    notifyListeners();
   }
 }

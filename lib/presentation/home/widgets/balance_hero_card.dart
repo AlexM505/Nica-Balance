@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nica_balance/core/theme/app_theme.dart';
 import 'package:nica_balance/presentation/home/widgets/hero_metric.dart';
+import 'package:nica_balance/presentation/settings/viewmodels/preferences_viewmodel.dart';
+import 'package:provider/provider.dart';
 
 class BalanceHeroCard extends StatelessWidget {
   final double balance;
@@ -16,6 +18,7 @@ class BalanceHeroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final prefsVM = context.watch<PreferencesViewModel>();
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       decoration: BoxDecoration(
@@ -46,7 +49,9 @@ class BalanceHeroCard extends StatelessWidget {
           const SizedBox(height: 4),
 
           Text(
-            '\$ ${balance.toStringAsFixed(2)}',
+            prefsVM.hideBalances 
+            ? '\$ •••••••••' 
+            : '\$ ${balance.toStringAsFixed(2)}',
             style: const TextStyle(
               fontSize: 34,
               fontWeight: FontWeight.w900,
