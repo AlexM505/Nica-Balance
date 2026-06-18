@@ -13,6 +13,7 @@ import 'package:nica_balance/presentation/home/views/main_navigation_screen.dart
 import 'package:nica_balance/presentation/income/viewmodels/income_viewmodel.dart';
 import 'package:nica_balance/presentation/onboarding/onboarding_screen.dart';
 import 'package:nica_balance/presentation/settings/viewmodels/preferences_viewmodel.dart';
+import 'package:nica_balance/presentation/statistics/viewmodels/statistics_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/database/objectbox_store.dart';
@@ -68,6 +69,11 @@ void main() async {
         ChangeNotifierProxyProvider<DashboardViewModel, AnalyticsViewModel>(
           create: (context) => AnalyticsViewModel(dashboardViewModel: context.read<DashboardViewModel>()),
           update: (context, dashboardVM, previous) => AnalyticsViewModel(dashboardViewModel: dashboardVM),
+        ),
+
+        ChangeNotifierProxyProvider<DashboardViewModel, StatisticsViewModel>(
+          create: (context) => StatisticsViewModel(dashboardViewModel: context.read<DashboardViewModel>()),
+          update: (context, dashboardVM, previous) => StatisticsViewModel(dashboardViewModel: dashboardVM),
         ),
 
         ChangeNotifierProvider(

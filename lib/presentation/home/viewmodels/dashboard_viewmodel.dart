@@ -11,6 +11,9 @@ class DashboardViewModel extends ChangeNotifier {
 
   static const double _exchangeRate = 36.0;
 
+  List<Expense> get expensesList => _expenseViewModel.expenses;
+  List<Income> get incomesList => _incomeViewModel.incomes;
+
   DashboardViewModel({
     required this._expenseViewModel,
     required this._incomeViewModel,
