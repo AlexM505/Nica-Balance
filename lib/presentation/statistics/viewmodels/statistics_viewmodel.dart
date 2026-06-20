@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nica_balance/data/models/expense_enums.dart';
 import '../../home/viewmodels/dashboard_viewmodel.dart';
 
 class CategoryStatsData {
@@ -20,6 +21,8 @@ class StatisticsViewModel extends ChangeNotifier {
   
   int _selectedPeriodIndex = 0; 
   int get selectedPeriodIndex => _selectedPeriodIndex;
+
+  static const double _exchangeRate = 36.0;
 
   StatisticsViewModel({required this.dashboardViewModel});
 
@@ -45,14 +48,14 @@ class StatisticsViewModel extends ChangeNotifier {
 
     for (final exp in expenses) {
       final String categoryKey = exp.category.displayName;
+
+      final double usdAmount = convertToUsd(exp.amount, exp.currency);
       
-      // Si la categoría ya existe, sumamos el monto
       if (grouped.containsKey(categoryKey)) {
-        grouped[categoryKey]!.amount += exp.amount;
+        grouped[categoryKey]!.amount += usdAmount;//exp.amount;
       } else {
-        // Si es nueva, tomamos su colorHex base o uno por defecto de la lista
         final int hex = exp.colorHex != 0 ? exp.colorHex : defaultColors[colorIndex % defaultColors.length].value;
-        grouped[categoryKey] = _CategoryTempData(amount: exp.amount, colorHex: hex, icon: exp.category.icon);
+        grouped[categoryKey] = _CategoryTempData(amount: usdAmount, colorHex: hex, icon: exp.category.icon);
         colorIndex++;
       }
     }
@@ -85,14 +88,13 @@ class StatisticsViewModel extends ChangeNotifier {
 
     for (final inc in incomes) {
       final String categoryKey = inc.category.displayName.toUpperCase();
+      final double usdAmount = convertToUsd(inc.amount, inc.currency);
       
-      // Si la categoría ya existe, sumamos el monto
       if (grouped.containsKey(categoryKey)) {
-        grouped[categoryKey]!.amount += inc.amount;
+        grouped[categoryKey]!.amount += usdAmount;//inc.amount;
       } else {
-        // Si es nueva, tomamos su colorHex base o uno por defecto de la lista
         final int hex = inc.colorHex != 0 ? inc.colorHex : defaultColors[colorIndex % defaultColors.length].value;
-        grouped[categoryKey] = _CategoryTempData(amount: inc.amount, colorHex: hex, icon: inc.category.icon);
+        grouped[categoryKey] = _CategoryTempData(amount: usdAmount, colorHex: hex, icon: inc.category.icon);
         colorIndex++;
       }
     }
@@ -131,6 +133,14 @@ class StatisticsViewModel extends ChangeNotifier {
         icon: Icons.account_balance_outlined,
       );
     }).toList();
+  }
+
+  // Lógica de conversión encapsulada en el dominio del ViewModel
+  double convertToUsd(double amount, Currency currency) {
+    if (currency == Currency.nio) {
+      return amount / _exchangeRate;
+    }
+    return amount;
   }
 }
 

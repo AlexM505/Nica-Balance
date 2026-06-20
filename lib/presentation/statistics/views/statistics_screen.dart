@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nica_balance/data/models/expense_enums.dart';
 import 'package:provider/provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../../../core/theme/app_theme.dart';
@@ -49,17 +50,47 @@ class _StatisticsScreenState extends State<StatisticsScreen> with SingleTickerPr
           'Estadísticas',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
-        bottom: TabBar(
-          controller: _tabController,
-          indicatorColor: AppTheme.primaryColor,
-          labelColor: AppTheme.getTextPrimary(context),
-          unselectedLabelColor: AppTheme.getTextSecondary(context),
-          indicatorSize: TabBarIndicatorSize.label,
-          tabs: const [
-            Tab(text: 'Gastos'),
-            Tab(text: 'Ingresos'),
-            Tab(text: 'Deudas'),
-          ],
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: () => Navigator.pop(context),
+        ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(60),
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+            padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color: AppTheme.getSurfaceColor(context),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppTheme.getBorderColor(context).withValues(alpha: 0.5)),
+            ),
+            child: TabBar(
+              controller: _tabController,
+              indicatorSize: TabBarIndicatorSize.tab, 
+              dividerColor: Colors.transparent,
+              indicator: BoxDecoration(
+                color: AppTheme.primaryColor,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppTheme.primaryColor.withValues(alpha: 0.25),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              labelColor: Colors.white,
+              labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, letterSpacing: 0.2),
+              unselectedLabelColor: AppTheme.getTextSecondary(context),
+              unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+              overlayColor: WidgetStateProperty.all(Colors.transparent), 
+              tabs: const [
+                Tab(height: 38, text: 'Gastos'),
+                Tab(height: 38, text: 'Ingresos'),
+                Tab(height: 38, text: 'Deudas'),
+              ],
+            ),
+          ),
         ),
       ),
       body: TabBarView(
@@ -79,7 +110,11 @@ class _StatisticsScreenState extends State<StatisticsScreen> with SingleTickerPr
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.pie_chart_outline_rounded, size: 48, color: AppTheme.getTextSecondary(context).withValues(alpha: 0.5)),
+            CircleAvatar(
+              radius: 40,
+              backgroundColor: AppTheme.getTextSecondary(context).withValues(alpha: 0.12),
+              child: Icon(Icons.pie_chart_outline_rounded, size: 50, color: AppTheme.getTextSecondary(context).withValues(alpha: 0.5)),
+            ),
             const SizedBox(height: 16),
             Text('No hay datos registrados en esta sección.', style: TextStyle(color: AppTheme.getTextSecondary(context))),
           ],
@@ -88,11 +123,11 @@ class _StatisticsScreenState extends State<StatisticsScreen> with SingleTickerPr
     }
 
     final double totalAmount = data.fold(0, (sum, item) => sum + item.amount);
+    final statisticsVM = context.read<StatisticsViewModel>();
 
     return ListView(
       padding: const EdgeInsets.all(24),
       children: [
-        // Gráfico Circular de Dona
         Container(
           height: 260,
           padding: const EdgeInsets.all(16),
@@ -140,45 +175,116 @@ class _StatisticsScreenState extends State<StatisticsScreen> with SingleTickerPr
             final item = data[index];
             final percentage = (item.amount / totalAmount) * 100;
 
-            return Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: AppTheme.getSurfaceColor(context),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppTheme.getBorderColor(context)),
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    width: 14,
-                    height: 14,
-                    decoration: BoxDecoration(color: item.color, shape: BoxShape.circle),
+            // Filtramos la lista real de transacciones que pertenecen a ESTA categoría específica
+            // desde las listas globales del DashboardViewModel
+            final List transactionsOfCategory = _tabController.index == 0
+                ? statisticsVM.dashboardViewModel.expensesList.where((e) => e.category.displayName.toLowerCase() == item.categoryName.toLowerCase()).toList()
+                : _tabController.index == 1
+                    ? statisticsVM.dashboardViewModel.incomesList.where((i) => i.category.displayName.toLowerCase() == item.categoryName.toLowerCase()).toList()
+                    : []; // Si son deudas, enlazar debtVM.debtsList de igual forma si aplica
+
+            return Theme(
+              data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+              child: 
+                ExpansionTile(
+                  clipBehavior: Clip.antiAlias,
+                  collapsedBackgroundColor: AppTheme.getSurfaceColor(context),
+                  backgroundColor: AppTheme.getSurfaceColor(context),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    side: BorderSide(color: AppTheme.getBorderColor(context)),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      item.categoryName,
-                      style: TextStyle(color: AppTheme.getTextPrimary(context), fontWeight: FontWeight.w600, fontSize: 14),
-                    ),
+                  collapsedShape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    side: BorderSide(color: AppTheme.getBorderColor(context)),
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                  trailing: Icon(Icons.keyboard_arrow_down_rounded, color: AppTheme.getTextSecondary(context)),
+                  title: Row(
                     children: [
-                      Text(
-                        '\$${item.amount.toStringAsFixed(2)}',
-                        style: TextStyle(color: AppTheme.getTextPrimary(context), fontWeight: FontWeight.bold, fontSize: 14),
+                      Container(
+                        width: 14,
+                        height: 14,
+                        decoration: BoxDecoration(color: item.color, shape: BoxShape.circle),
                       ),
-                      Text(
-                        '${percentage.toStringAsFixed(1)}%',
-                        style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 11),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          item.categoryName,
+                          style: TextStyle(
+                            color: AppTheme.getTextPrimary(context), 
+                            fontWeight: FontWeight.bold, 
+                            fontSize: 14
+                          ),
+                        ),
                       ),
                     ],
-                  )
-                ],
-              ),
+                  ),
+                  subtitle: Padding(
+                    padding: const EdgeInsets.only(left: 26, top: 2),
+                    child: Text(
+                      'Representa el ${percentage.toStringAsFixed(1)}%',
+                      style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 11),
+                    ),
+                  ),
+                  leading: null, 
+                  expandedCrossAxisAlignment: CrossAxisAlignment.stretch,
+                  childrenPadding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                  
+                  children: [
+                    const SizedBox(height: 2),
+                    
+                    if (transactionsOfCategory.isEmpty)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Text(
+                          'No hay transacciones individuales',
+                          style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 12, fontStyle: FontStyle.italic),
+                        ),
+                      )
+                    else
+                      // Mapeamos los elementos reales que engloban la categoría
+                      ...transactionsOfCategory.map((tx) {
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 8),
+                          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                          decoration: BoxDecoration(
+                            color: AppTheme.getSurfaceColor(context).withValues(alpha: 0.8),
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: AppTheme.getBorderColor(context).withValues(alpha: 0.9)),
+                          ),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: Color(tx.colorHex).withValues(alpha: 0.15),
+                                radius: 18,
+                                child: Icon(tx.category.icon, color: Color(tx.colorHex), size: 18),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Text(
+                                  tx.name,
+                                  style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14, fontWeight: FontWeight.w600),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    '${tx.currency == Currency.usd ? '\$' : 'C\$'}${tx.amount.toStringAsFixed(2)}',
+                                    style: const TextStyle(color: Color(0xFFF87171), fontSize: 14, fontWeight: FontWeight.w700),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
+                  ],
+                ),
             );
-          },
-        ),
+        }),
       ],
     );
   }
@@ -214,27 +320,31 @@ class _StatisticsScreenState extends State<StatisticsScreen> with SingleTickerPr
   }
 
   Widget _buildBadgeIcon(CategoryStatsData item, bool isTouched) {
-    final double size = isTouched ? 36.0 : 30.0;
+    final double size = isTouched ? 42.0 : 36.0;
     
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
+      duration: PieChart.defaultDuration,
       width: size,
       height: size,
       decoration: BoxDecoration(
         color: Colors.white,
         shape: BoxShape.circle,
+        border: Border.all(
+          color: item.color,
+          width: 2,
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.15),
+            color: Colors.black.withValues(alpha: 0.20),
             blurRadius: 4,
-            offset: const Offset(0, 2),
+            offset: const Offset(3, 3),
           ),
         ],
       ),
       child: Center(
         child: Icon(
           item.icon,
-          size: isTouched ? 18.0 : 15.0,
+          size: isTouched ? 22.0 : 18.0,
           color: item.color,
         ),
       ),

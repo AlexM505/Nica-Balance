@@ -26,7 +26,6 @@ void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  // Leemos si es la primera vez que se abre la app (por defecto será true si no existe la llave)
   final prefs = await SharedPreferences.getInstance();
   final bool showOnboarding = prefs.getBool('show_onboarding') ?? true;
 
@@ -85,12 +84,6 @@ void main() async {
         ),
       ],
       child: MyApp(showOnboarding: showOnboarding),
-      // MaterialApp(
-      //   debugShowCheckedModeBanner: false,
-      //   theme: AppTheme.premiumDarkTheme,
-      //   themeMode: ThemeMode.dark,
-      //   home: showOnboarding ? const OnboardingScreen() :const MainNavigationScreen(),
-      // ),
     ),
   );
 }
@@ -102,19 +95,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Escuchamos activamente los cambios en las preferencias del usuario
+    
     final prefsVM = context.watch<PreferencesViewModel>();
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      
-      // Enlazamos dinámicamente el tema actual (ThemeMode.dark o ThemeMode.light)
       themeMode: prefsVM.themeMode,
-      
-      // Asignamos las dos variantes de tu AppTheme
       theme: AppTheme.lightTheme, 
-      darkTheme: AppTheme.premiumDarkTheme, // Tu tema oscuro existente
-      
+      darkTheme: AppTheme.premiumDarkTheme,
       home: showOnboarding ? const OnboardingScreen() : const MainNavigationScreen(),
     );
   }
