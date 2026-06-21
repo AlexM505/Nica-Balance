@@ -8,6 +8,7 @@ import 'package:nica_balance/presentation/goals/views/goals_list_view.dart';
 import 'package:nica_balance/presentation/home/views/home_dashboard_view.dart';
 import 'package:nica_balance/presentation/income/views/income_form_screen.dart';
 import 'package:nica_balance/presentation/settings/viewmodels/preferences_viewmodel.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import '../../expenses/views/expense_form_screen.dart';
 
@@ -46,6 +47,29 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Widget
     final prefsVM = context.read<PreferencesViewModel>();
     if (prefsVM.biometricAuth) {
       _isAuthenticated = false;
+    }
+
+    _requestNotificationPermission();
+  }
+
+  Future<void> _requestNotificationPermission() async {
+    var status = await Permission.notification.status;
+    if (status.isDenied || status.isPermanentlyDenied) {
+      final newStatus = await Permission.notification.request();
+      if (newStatus.isGranted) {
+        debugPrint('Permiso de notificación concedido.');
+      } else if (newStatus.isDenied) {
+        debugPrint('Permiso de notificación denegado.');
+      } else if (newStatus.isPermanentlyDenied) {
+        debugPrint(
+          'Permiso de notificación denegado permanentemente. Abrir configuración.',
+        );
+        openAppSettings();
+      }
+    } else {
+      debugPrint(
+        'Permiso de notificación ya concedido o restringido.',
+      );
     }
   }
 

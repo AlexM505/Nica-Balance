@@ -125,6 +125,72 @@ class SettingsScreen extends StatelessWidget {
               },
             ),
           ),
+
+          // ─── SECCIÓN: NOTIFICACIONES ───
+          const SizedBox(height: 24),
+          const Text(
+            'Notificaciones',
+            style: TextStyle(color: AppTheme.textSecondary, fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 0.5),
+          ),
+          const SizedBox(height: 10),
+          _buildSettingsTile(
+            context,
+            icon: Icons.notifications_active_rounded,
+            iconColor: const Color(0xFFF59E0B),
+            title: 'Recordatorio diario',
+            subtitle: 'Recordar registrar transacciones al final del día',
+            trailing: Switch.adaptive(
+              value: prefsVM.dailyReminder,
+              activeThumbColor: AppTheme.primaryColor,
+              onChanged: (bool newValue) async {
+                await prefsVM.toggleDailyReminder(newValue);
+              },
+            ),
+          ),
+
+          // Si está encendido, mostramos la opción para cambiar la hora de forma dinámica
+          if (prefsVM.dailyReminder)
+            Padding(
+              padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 8.0),
+              child: InkWell(
+                onTap: () async {
+                  final TimeOfDay? pickedTime = await showTimePicker(
+                    context: context,
+                    initialTime: TimeOfDay(hour: prefsVM.reminderHour, minute: prefsVM.reminderMinute),
+                  );
+                  if (pickedTime != null) {
+                    await prefsVM.updateReminderTime(pickedTime.hour, pickedTime.minute);
+                  }
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: AppTheme.getSurfaceColor(context).withValues(alpha: 0.5),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: AppTheme.getBorderColor(context).withValues(alpha: 0.3)),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Hora del aviso',
+                        style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 13),
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            prefsVM.formattedReminderTime,
+                            style: TextStyle(color: AppTheme.primaryColor, fontWeight: FontWeight.bold, fontSize: 14),
+                          ),
+                          const SizedBox(width: 8),
+                          Icon(Icons.access_time_rounded, size: 16, color: AppTheme.primaryColor),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );

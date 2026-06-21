@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:nica_balance/core/services/notification_service.dart';
 import 'package:nica_balance/core/theme/app_theme.dart';
 import 'package:nica_balance/data/repositories/debt_repository.dart';
 import 'package:nica_balance/data/repositories/goal_repository.dart';
@@ -25,6 +26,8 @@ void main() async {
   // WidgetsFlutterBinding.ensureInitialized();
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
+  await NotificationService.init();
 
   final prefs = await SharedPreferences.getInstance();
   final bool showOnboarding = prefs.getBool('show_onboarding') ?? true;
