@@ -115,7 +115,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     
-    final prefsVM = context.watch<PreferencesViewModel>();
+    // final prefsVM = context.watch<PreferencesViewModel>();
+    final themeMode = context.select((PreferencesViewModel vm) => vm.themeMode);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       // await NotificationService.init();
@@ -124,7 +125,7 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      themeMode: prefsVM.themeMode,
+      themeMode: themeMode,//prefsVM.themeMode,
       theme: AppTheme.lightTheme, 
       darkTheme: AppTheme.premiumDarkTheme,
       home: showOnboarding ? const OnboardingScreen() : const MainNavigationScreen(),

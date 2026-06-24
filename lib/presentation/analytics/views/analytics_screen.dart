@@ -82,101 +82,104 @@ class AnalyticsScreen extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: ListView(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-        children: [
-          // ─── TARJETA DE STATUS DIAGNÓSTICO ───
-          Container(
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              color: healthColor.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: healthColor.withValues(alpha: 0.4), width: 1.5),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // ─── TARJETA DE STATUS DIAGNÓSTICO ───
+            Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: healthColor.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: healthColor.withValues(alpha: 0.4), width: 1.5),
+              ),
+              child: Row(
+                children: [
+                  Icon(healthIcon, color: healthColor, size: 40),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          healthTitle,
+                          style: TextStyle(color: healthColor, fontSize: 16, fontWeight: FontWeight.w700),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          // 'Tu tasa de ahorro mensual actual es del ${analyticsVM.savingsRate.toStringAsFixed(1)}%.',
+                          subtitleText,
+                          style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 13, fontWeight: FontWeight.w500),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
-            child: Row(
+            const SizedBox(height: 24),
+
+            // ─── DIAGRAMA PROPORCIONAL DE FLUJOS ───
+            // Si no hay datos, ocultamos el gráfico proporcional para evitar barras vacías confusas
+            if (!analyticsVM.hasNoData) ...[
+              BudgetDistributionChart(
+                incomes: analyticsVM.totalIncomes,
+                expenses: analyticsVM.totalExpenses,
+              ),
+              const SizedBox(height: 32),
+            ],
+            // BudgetDistributionChart(
+            //   incomes: analyticsVM.totalIncomes,
+            //   expenses: analyticsVM.totalExpenses,
+            // ),
+            // const SizedBox(height: 32),
+
+            // ─── INDICACIONES Y PLANIFICACIÓN FUTURA ───
+            Row(
               children: [
-                Icon(healthIcon, color: healthColor, size: 40),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
+                // Icon(Icons.escalator_warning, size: 18, color: AppTheme.textSecondary), // Fallback seguro a iconos directos
+                Icon(Icons.assignment_turned_in_rounded, size: 18, color: AppTheme.getTextSecondary(context)),
+                SizedBox(width: 8),
+                Text(
+                  analyticsVM.hasNoData ? '¿Cómo empezar?' :'Plan de Acción Sugerido',
+                  style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 15, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+
+            // Renderizar dinámicamente las indicaciones del ViewModel
+            ...analyticsVM.getActionPlan().map((indication) => Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: AppTheme.getSurfaceColor(context).withValues(alpha: 0.3),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: AppTheme.getBorderColor(context).withValues(alpha: 0.4)),
+                  ),
+                  child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        healthTitle,
-                        style: TextStyle(color: healthColor, fontSize: 16, fontWeight: FontWeight.w700),
+                      Container(
+                        margin: const EdgeInsets.only(top: 4),
+                        width: 6,
+                        height: 6,
+                        decoration: BoxDecoration(color: healthColor, shape: BoxShape.circle),
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        // 'Tu tasa de ahorro mensual actual es del ${analyticsVM.savingsRate.toStringAsFixed(1)}%.',
-                        subtitleText,
-                        style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 13, fontWeight: FontWeight.w500),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          indication,
+                          style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14, height: 1.3, fontWeight: FontWeight.w400),
+                        ),
                       ),
                     ],
                   ),
-                )
-              ],
-            ),
-          ),
-          const SizedBox(height: 24),
-
-          // ─── DIAGRAMA PROPORCIONAL DE FLUJOS ───
-          // Si no hay datos, ocultamos el gráfico proporcional para evitar barras vacías confusas
-          if (!analyticsVM.hasNoData) ...[
-            BudgetDistributionChart(
-              incomes: analyticsVM.totalIncomes,
-              expenses: analyticsVM.totalExpenses,
-            ),
-            const SizedBox(height: 32),
+                )),
           ],
-          // BudgetDistributionChart(
-          //   incomes: analyticsVM.totalIncomes,
-          //   expenses: analyticsVM.totalExpenses,
-          // ),
-          // const SizedBox(height: 32),
-
-          // ─── INDICACIONES Y PLANIFICACIÓN FUTURA ───
-          Row(
-            children: [
-              // Icon(Icons.escalator_warning, size: 18, color: AppTheme.textSecondary), // Fallback seguro a iconos directos
-              Icon(Icons.assignment_turned_in_rounded, size: 18, color: AppTheme.getTextSecondary(context)),
-              SizedBox(width: 8),
-              Text(
-                analyticsVM.hasNoData ? '¿Cómo empezar?' :'Plan de Acción Sugerido',
-                style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 15, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-
-          // Renderizar dinámicamente las indicaciones del ViewModel
-          ...analyticsVM.getActionPlan().map((indication) => Container(
-                margin: const EdgeInsets.only(bottom: 12),
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppTheme.getSurfaceColor(context).withValues(alpha: 0.3),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppTheme.getBorderColor(context).withValues(alpha: 0.4)),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(top: 4),
-                      width: 6,
-                      height: 6,
-                      decoration: BoxDecoration(color: healthColor, shape: BoxShape.circle),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        indication,
-                        style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14, height: 1.3, fontWeight: FontWeight.w400),
-                      ),
-                    ),
-                  ],
-                ),
-              )),
-        ],
+        ),
       ),
     );
   }

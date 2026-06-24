@@ -125,167 +125,170 @@ class _StatisticsScreenState extends State<StatisticsScreen> with SingleTickerPr
     final double totalAmount = data.fold(0, (sum, item) => sum + item.amount);
     final statisticsVM = context.read<StatisticsViewModel>();
 
-    return ListView(
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
-      children: [
-        Container(
-          height: 260,
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: AppTheme.getSurfaceColor(context),
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: AppTheme.getBorderColor(context)),
-          ),
-          child: PieChart(
-            PieChartData(
-              pieTouchData: PieTouchData(
-                touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                  setState(() {
-                    if (!event.isInterestedForInteractions ||
-                        pieTouchResponse == null ||
-                        pieTouchResponse.touchedSection == null) {
-                      _touchedIndex = -1;
-                      return;
-                    }
-                    _touchedIndex = pieTouchResponse.touchedSection!.touchedSectionIndex;
-                  });
-                },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 260,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppTheme.getSurfaceColor(context),
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(color: AppTheme.getBorderColor(context)),
+            ),
+            child: PieChart(
+              PieChartData(
+                pieTouchData: PieTouchData(
+                  touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                    setState(() {
+                      if (!event.isInterestedForInteractions ||
+                          pieTouchResponse == null ||
+                          pieTouchResponse.touchedSection == null) {
+                        _touchedIndex = -1;
+                        return;
+                      }
+                      _touchedIndex = pieTouchResponse.touchedSection!.touchedSectionIndex;
+                    });
+                  },
+                ),
+                borderData: FlBorderData(show: false),
+                sectionsSpace: 4,
+                centerSpaceRadius: 45,
+                sections: _generateChartSections(data, totalAmount),
               ),
-              borderData: FlBorderData(show: false),
-              sectionsSpace: 4,
-              centerSpaceRadius: 45,
-              sections: _generateChartSections(data, totalAmount),
             ),
           ),
-        ),
-        const SizedBox(height: 28),
+          const SizedBox(height: 28),
 
-        Text(
-          'Desglose por Categorías',
-          style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 15, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 12),
-        
-        ListView.separated(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: data.length,
-          separatorBuilder: (context, index) => const SizedBox(height: 10),
-          itemBuilder: (context, index) {
-            final item = data[index];
-            final percentage = (item.amount / totalAmount) * 100;
+          Text(
+            'Desglose por Categorías',
+            style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 15, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 12),
+          
+          ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: data.length,
+            separatorBuilder: (context, index) => const SizedBox(height: 10),
+            itemBuilder: (context, index) {
+              final item = data[index];
+              final percentage = (item.amount / totalAmount) * 100;
 
-            // Filtramos la lista real de transacciones que pertenecen a ESTA categoría específica
-            // desde las listas globales del DashboardViewModel
-            final List transactionsOfCategory = _tabController.index == 0
-                ? statisticsVM.dashboardViewModel.expensesList.where((e) => e.category.displayName.toLowerCase() == item.categoryName.toLowerCase()).toList()
-                : _tabController.index == 1
-                    ? statisticsVM.dashboardViewModel.incomesList.where((i) => i.category.displayName.toLowerCase() == item.categoryName.toLowerCase()).toList()
-                    : []; // Si son deudas, enlazar debtVM.debtsList de igual forma si aplica
+              // Filtramos la lista real de transacciones que pertenecen a ESTA categoría específica
+              // desde las listas globales del DashboardViewModel
+              final List transactionsOfCategory = _tabController.index == 0
+                  ? statisticsVM.dashboardViewModel.expensesList.where((e) => e.category.displayName.toLowerCase() == item.categoryName.toLowerCase()).toList()
+                  : _tabController.index == 1
+                      ? statisticsVM.dashboardViewModel.incomesList.where((i) => i.category.displayName.toLowerCase() == item.categoryName.toLowerCase()).toList()
+                      : []; // Si son deudas, enlazar debtVM.debtsList de igual forma si aplica
 
-            return Theme(
-              data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-              child: 
-                ExpansionTile(
-                  clipBehavior: Clip.antiAlias,
-                  collapsedBackgroundColor: AppTheme.getSurfaceColor(context),
-                  backgroundColor: AppTheme.getSurfaceColor(context),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    side: BorderSide(color: AppTheme.getBorderColor(context)),
-                  ),
-                  collapsedShape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    side: BorderSide(color: AppTheme.getBorderColor(context)),
-                  ),
-                  trailing: Icon(Icons.keyboard_arrow_down_rounded, color: AppTheme.getTextSecondary(context)),
-                  title: Row(
-                    children: [
-                      Container(
-                        width: 14,
-                        height: 14,
-                        decoration: BoxDecoration(color: item.color, shape: BoxShape.circle),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          item.categoryName,
-                          style: TextStyle(
-                            color: AppTheme.getTextPrimary(context), 
-                            fontWeight: FontWeight.bold, 
-                            fontSize: 14
+              return Theme(
+                data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                child: 
+                  ExpansionTile(
+                    clipBehavior: Clip.antiAlias,
+                    collapsedBackgroundColor: AppTheme.getSurfaceColor(context),
+                    backgroundColor: AppTheme.getSurfaceColor(context),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      side: BorderSide(color: AppTheme.getBorderColor(context)),
+                    ),
+                    collapsedShape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      side: BorderSide(color: AppTheme.getBorderColor(context)),
+                    ),
+                    trailing: Icon(Icons.keyboard_arrow_down_rounded, color: AppTheme.getTextSecondary(context)),
+                    title: Row(
+                      children: [
+                        Container(
+                          width: 14,
+                          height: 14,
+                          decoration: BoxDecoration(color: item.color, shape: BoxShape.circle),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            item.categoryName,
+                            style: TextStyle(
+                              color: AppTheme.getTextPrimary(context), 
+                              fontWeight: FontWeight.bold, 
+                              fontSize: 14
+                            ),
                           ),
                         ),
+                      ],
+                    ),
+                    subtitle: Padding(
+                      padding: const EdgeInsets.only(left: 26, top: 2),
+                      child: Text(
+                        'Representa el ${percentage.toStringAsFixed(1)}%',
+                        style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 11),
                       ),
+                    ),
+                    leading: null, 
+                    expandedCrossAxisAlignment: CrossAxisAlignment.stretch,
+                    childrenPadding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+                    
+                    children: [
+                      const SizedBox(height: 2),
+                      
+                      if (transactionsOfCategory.isEmpty)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Text(
+                            'No hay transacciones individuales',
+                            style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 12, fontStyle: FontStyle.italic),
+                          ),
+                        )
+                      else
+                        // Mapeamos los elementos reales que engloban la categoría
+                        ...transactionsOfCategory.map((tx) {
+                          return Container(
+                            margin: const EdgeInsets.only(bottom: 8),
+                            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                            decoration: BoxDecoration(
+                              color: AppTheme.getSurfaceColor(context).withValues(alpha: 0.8),
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(color: AppTheme.getBorderColor(context).withValues(alpha: 0.9)),
+                            ),
+                            child: Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundColor: Color(tx.colorHex).withValues(alpha: 0.15),
+                                  radius: 18,
+                                  child: Icon(tx.category.icon, color: Color(tx.colorHex), size: 18),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Text(
+                                    tx.name,
+                                    style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14, fontWeight: FontWeight.w600),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      '${tx.currency == Currency.usd ? '\$' : 'C\$'}${tx.amount.toStringAsFixed(2)}',
+                                      style: const TextStyle(color: Color(0xFFF87171), fontSize: 14, fontWeight: FontWeight.w700),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
+                        }),
                     ],
                   ),
-                  subtitle: Padding(
-                    padding: const EdgeInsets.only(left: 26, top: 2),
-                    child: Text(
-                      'Representa el ${percentage.toStringAsFixed(1)}%',
-                      style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 11),
-                    ),
-                  ),
-                  leading: null, 
-                  expandedCrossAxisAlignment: CrossAxisAlignment.stretch,
-                  childrenPadding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-                  
-                  children: [
-                    const SizedBox(height: 2),
-                    
-                    if (transactionsOfCategory.isEmpty)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Text(
-                          'No hay transacciones individuales',
-                          style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 12, fontStyle: FontStyle.italic),
-                        ),
-                      )
-                    else
-                      // Mapeamos los elementos reales que engloban la categoría
-                      ...transactionsOfCategory.map((tx) {
-                        return Container(
-                          margin: const EdgeInsets.only(bottom: 8),
-                          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-                          decoration: BoxDecoration(
-                            color: AppTheme.getSurfaceColor(context).withValues(alpha: 0.8),
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: AppTheme.getBorderColor(context).withValues(alpha: 0.9)),
-                          ),
-                          child: Row(
-                            children: [
-                              CircleAvatar(
-                                backgroundColor: Color(tx.colorHex).withValues(alpha: 0.15),
-                                radius: 18,
-                                child: Icon(tx.category.icon, color: Color(tx.colorHex), size: 18),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Text(
-                                  tx.name,
-                                  style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14, fontWeight: FontWeight.w600),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    '${tx.currency == Currency.usd ? '\$' : 'C\$'}${tx.amount.toStringAsFixed(2)}',
-                                    style: const TextStyle(color: Color(0xFFF87171), fontSize: 14, fontWeight: FontWeight.w700),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        );
-                      }),
-                  ],
-                ),
-            );
-        }),
-      ],
+              );
+          }),
+        ],
+      ),
     );
   }
 

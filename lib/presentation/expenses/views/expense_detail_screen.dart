@@ -60,104 +60,107 @@ class ExpenseDetailScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: ListView(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-        children: [
-          // CABECERA DESTACADA: Tarjeta con Identidad Visual de Categoría
-          Container(
-            padding: const EdgeInsets.all(28),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [categoryColor, categoryColor.withValues(alpha: 0.6)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(24),
-              boxShadow: [
-                BoxShadow(
-                  color: categoryColor.withValues(alpha: 0.25),
-                  blurRadius: 16,
-                  offset: const Offset(0, 8),
-                )
-              ],
-            ),
-            child: Column(
-              children: [
-                CircleAvatar(
-                  backgroundColor: Colors.white.withValues(alpha: 0.2),
-                  radius: 28,
-                  child: Icon(cat.icon, color: Colors.white, size: 32),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  expense.name,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w700),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  cat.displayName,
-                  style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 13, fontWeight: FontWeight.w500),
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  '- ${isNio ? 'C\$' : '\$'} ${expense.amount.toStringAsFixed(2)}',
-                  style: const TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.w900, letterSpacing: -0.5),
-                ),
-                if (isNio) ...[
-                  const SizedBox(height: 4),
-                  Text(
-                    '≈ \$ ${(expense.amount / 36.0).toStringAsFixed(2)} USD',
-                    style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 13, fontWeight: FontWeight.w600),
-                  ),
-                ]
-              ],
-            ),
-          ),
-          const SizedBox(height: 32),
-
-          // BLOQUE DE INFORMACIÓN ESPECÍFICA
-          Text('Metadatos de la Transacción', style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 13, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 12),
-          
-          _buildInfoRow(context, Icons.calendar_month_rounded, 'Fecha de registro', '${expense.date.day}/${expense.date.month}/${expense.date.year}'),
-          _buildInfoRow(context, Icons.currency_exchange_rounded, 'Moneda original', isNio ? 'Córdobas (NIO)' : 'Dólares (USD)'),
-          _buildInfoRow(context, Icons.fingerprint_rounded, 'Identificador local', '#${expense.id}'),
-          
-          const SizedBox(height: 48),
-
-          // BOTÓN DE ACCIÓN: Editar Gasto
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  // Navega a tu formulario pasándole el gasto para editar
-                  builder: (_) => ExpenseFormScreen(expenseToEdit: expense),
-                ),
-              );
-            },
-            child: Container(
-              height: 54,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // CABECERA DESTACADA: Tarjeta con Identidad Visual de Categoría
+            Container(
+              padding: const EdgeInsets.all(28),
               decoration: BoxDecoration(
-                color: AppTheme.getSurfaceColor(context),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppTheme.getBorderColor(context), width: 1.5),
+                gradient: LinearGradient(
+                  colors: [categoryColor, categoryColor.withValues(alpha: 0.6)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: categoryColor.withValues(alpha: 0.25),
+                    blurRadius: 16,
+                    offset: const Offset(0, 8),
+                  )
+                ],
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: Column(
                 children: [
-                  Icon(Icons.edit_rounded, color: AppTheme.primaryColor, size: 18),
-                  SizedBox(width: 8),
-                  Text(
-                    'Modificar Información',
-                    style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14, fontWeight: FontWeight.bold),
+                  CircleAvatar(
+                    backgroundColor: Colors.white.withValues(alpha: 0.2),
+                    radius: 28,
+                    child: Icon(cat.icon, color: Colors.white, size: 32),
                   ),
+                  const SizedBox(height: 16),
+                  Text(
+                    expense.name,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w700),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    cat.displayName,
+                    style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 13, fontWeight: FontWeight.w500),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    '- ${isNio ? 'C\$' : '\$'} ${expense.amount.toStringAsFixed(2)}',
+                    style: const TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.w900, letterSpacing: -0.5),
+                  ),
+                  if (isNio) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      '≈ \$ ${(expense.amount / 36.0).toStringAsFixed(2)} USD',
+                      style: TextStyle(color: Colors.white.withValues(alpha: 0.7), fontSize: 13, fontWeight: FontWeight.w600),
+                    ),
+                  ]
                 ],
               ),
             ),
-          ),
-        ],
+            const SizedBox(height: 32),
+
+            // BLOQUE DE INFORMACIÓN ESPECÍFICA
+            Text('Metadatos de la Transacción', style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 13, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 12),
+            
+            _buildInfoRow(context, Icons.calendar_month_rounded, 'Fecha de registro', '${expense.date.day}/${expense.date.month}/${expense.date.year}'),
+            _buildInfoRow(context, Icons.currency_exchange_rounded, 'Moneda original', isNio ? 'Córdobas (NIO)' : 'Dólares (USD)'),
+            _buildInfoRow(context, Icons.fingerprint_rounded, 'Identificador local', '#${expense.id}'),
+            
+            const SizedBox(height: 48),
+
+            // BOTÓN DE ACCIÓN: Editar Gasto
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    // Navega a tu formulario pasándole el gasto para editar
+                    builder: (_) => ExpenseFormScreen(expenseToEdit: expense),
+                  ),
+                );
+              },
+              child: Container(
+                height: 54,
+                decoration: BoxDecoration(
+                  color: AppTheme.getSurfaceColor(context),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppTheme.getBorderColor(context), width: 1.5),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.edit_rounded, color: AppTheme.primaryColor, size: 18),
+                    SizedBox(width: 8),
+                    Text(
+                      'Modificar Información',
+                      style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

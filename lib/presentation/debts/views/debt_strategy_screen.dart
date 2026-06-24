@@ -53,51 +53,54 @@ class _DebtStrategyScreenState extends State<DebtStrategyScreen> {
           ? _buildLoadingState() // 1. Si está calculando, muestra spinner
           : projections.isEmpty
             ? _buildEmptyState(context)
-            : ListView(
+            : SingleChildScrollView(
                 padding: const EdgeInsets.all(20),
-                children: [
-                  // ─── CARD EXPLICATIVO DE MÉTODOS ───
-                  _buildStrategySelector(context, strategyVM),
-                  const SizedBox(height: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // ─── CARD EXPLICATIVO DE MÉTODOS ───
+                    _buildStrategySelector(context, strategyVM),
+                    const SizedBox(height: 24),
 
-                  // ─── SLIDER DE DINERO EXTRA (EFECTO ACELERADOR) ───
-                  _buildSnowballSlider(context, strategyVM),
-                  const SizedBox(height: 28),
+                    // ─── SLIDER DE DINERO EXTRA (EFECTO ACELERADOR) ───
+                    _buildSnowballSlider(context, strategyVM),
+                    const SizedBox(height: 28),
 
-                  // ─── LISTADO DE ORDEN DE PAGO INTELIGENTE ───
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Orden de Pago Sugerido',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: Colors.blue.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(12),
+                    // ─── LISTADO DE ORDEN DE PAGO INTELIGENTE ───
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Orden de Pago Sugerido',
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
-                        child: Text(
-                          strategyVM.selectedStrategy == DebtStrategy.snowball ? 'Psicológico' : 'Económico',
-                          style: const TextStyle(fontSize: 11, color: Colors.blue, fontWeight: FontWeight.bold),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: Colors.blue.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            strategyVM.selectedStrategy == DebtStrategy.snowball ? 'Psicológico' : 'Económico',
+                            style: const TextStyle(fontSize: 11, color: Colors.blue, fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
 
-                  ListView.separated(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: projections.length,
-                    separatorBuilder: (_, _) => const SizedBox(height: 12),
-                    itemBuilder: (context, index) {
-                      final item = projections[index];
-                      return _buildDebtStrategyCard(context, item, index + 1);
-                    },
-                  ),
-                ],
+                    ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: projections.length,
+                      separatorBuilder: (_, _) => const SizedBox(height: 12),
+                      itemBuilder: (context, index) {
+                        final item = projections[index];
+                        return _buildDebtStrategyCard(context, item, index + 1);
+                      },
+                    ),
+                  ],
+                ),
               ),
     );
   }

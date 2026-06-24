@@ -273,64 +273,67 @@ class _DebtDetailScreenState extends State<DebtDetailScreen> {
           )
         ],
       ),
-      body: ListView(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        children: [
-          // Tarjeta Principal de Información Retenida
-          Container(
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [color, color.withValues(alpha: 0.6)]),
-              borderRadius: BorderRadius.circular(24),
-            ),
-            child: Column(
-              children: [
-                Icon(type.icon, color: Colors.white, size: 36),
-                const SizedBox(height: 12),
-                Text(widget.debt.title, style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-                Text('Acreedor: ${widget.debt.creditor}', style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 13)),
-                const SizedBox(height: 24),
-                const Text('SALDO PENDIENTE', style: TextStyle(color: Colors.white60, fontSize: 11, fontWeight: FontWeight.bold)),
-                Text( '${widget.debt.currency == Currency.usd ? '\$' : 'C\$'}${widget.debt.remainingAmount.toStringAsFixed(2)}',
-                  style: const TextStyle(color: Colors.white, fontSize: 34, fontWeight: FontWeight.w700)
-                ),
-                if (widget.debt.currency == Currency.nio)
-                  Text(
-                    '≈ \$ ${debtVM.convertToUsd(widget.debt.remainingAmount, widget.debt.currency).toStringAsFixed(2)}',
-                    style: TextStyle(color: Colors.white70, fontSize: 18, fontWeight: FontWeight.w500),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Tarjeta Principal de Información Retenida
+            Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(colors: [color, color.withValues(alpha: 0.6)]),
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: Column(
+                children: [
+                  Icon(type.icon, color: Colors.white, size: 36),
+                  const SizedBox(height: 12),
+                  Text(widget.debt.title, style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+                  Text('Acreedor: ${widget.debt.creditor}', style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 13)),
+                  const SizedBox(height: 24),
+                  const Text('SALDO PENDIENTE', style: TextStyle(color: Colors.white60, fontSize: 11, fontWeight: FontWeight.bold)),
+                  Text( '${widget.debt.currency == Currency.usd ? '\$' : 'C\$'}${widget.debt.remainingAmount.toStringAsFixed(2)}',
+                    style: const TextStyle(color: Colors.white, fontSize: 34, fontWeight: FontWeight.w700)
                   ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 24),
-
-          // Metadatos de Amortización
-          _buildDetailRow('Monto Inicial Registrado', '${widget.debt.currency == Currency.usd ? '\$' : 'C\$'}${widget.debt.totalAmount.toStringAsFixed(2)}'),
-          _buildDetailRow('Total Abonado a la Fecha', '${widget.debt.currency == Currency.usd ? '\$' : 'C\$'}${widget.debt.totalPaid.toStringAsFixed(2)}'),
-          _buildDetailRow('Tasa de Interés Ajustada', '${widget.debt.interestRate}% Anual'),
-          _buildDetailRow('Próximo Vencimiento', '${widget.debt.dueDate.day}/${widget.debt.dueDate.month}/${widget.debt.dueDate.year} (${daysLeft < 0 ? 'Vencida' : 'en $daysLeft días'})'),
-          
-          const SizedBox(height: 40),
-
-          // Botón para desplegar el Abono
-          if (!widget.debt.isPaidOff)
-            GestureDetector(
-              onTap: () => _showPaymentBottomSheet(context),
-              child: Container(
-                height: 54,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [AppTheme.primaryColor, Colors.indigoAccent.shade700]
-                  ),
-                  // color: AppTheme.primaryColor, 
-                  borderRadius: BorderRadius.circular(16)
-                ),
-                child: const Center(
-                  child: Text('Registrar Abono / Pago', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
-                ),
+                  if (widget.debt.currency == Currency.nio)
+                    Text(
+                      '≈ \$ ${debtVM.convertToUsd(widget.debt.remainingAmount, widget.debt.currency).toStringAsFixed(2)}',
+                      style: TextStyle(color: Colors.white70, fontSize: 18, fontWeight: FontWeight.w500),
+                    ),
+                ],
               ),
             ),
-        ],
+            const SizedBox(height: 24),
+
+            // Metadatos de Amortización
+            _buildDetailRow('Monto Inicial Registrado', '${widget.debt.currency == Currency.usd ? '\$' : 'C\$'}${widget.debt.totalAmount.toStringAsFixed(2)}'),
+            _buildDetailRow('Total Abonado a la Fecha', '${widget.debt.currency == Currency.usd ? '\$' : 'C\$'}${widget.debt.totalPaid.toStringAsFixed(2)}'),
+            _buildDetailRow('Tasa de Interés Ajustada', '${widget.debt.interestRate}% Anual'),
+            _buildDetailRow('Próximo Vencimiento', '${widget.debt.dueDate.day}/${widget.debt.dueDate.month}/${widget.debt.dueDate.year} (${daysLeft < 0 ? 'Vencida' : 'en $daysLeft días'})'),
+            
+            const SizedBox(height: 40),
+
+            // Botón para desplegar el Abono
+            if (!widget.debt.isPaidOff)
+              GestureDetector(
+                onTap: () => _showPaymentBottomSheet(context),
+                child: Container(
+                  height: 54,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [AppTheme.primaryColor, Colors.indigoAccent.shade700]
+                    ),
+                    // color: AppTheme.primaryColor, 
+                    borderRadius: BorderRadius.circular(16)
+                  ),
+                  child: const Center(
+                    child: Text('Registrar Abono / Pago', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
