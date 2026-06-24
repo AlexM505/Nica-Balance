@@ -211,6 +211,58 @@ class SettingsScreen extends StatelessWidget {
             onTap: () async {
               final dashboardVM = context.read<DashboardViewModel>();
 
+              // ─── VALIDACIÓN PREVENTIVA DE REGISTROS ───
+              if (dashboardVM.expensesList.isEmpty && dashboardVM.incomesList.isEmpty) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Row(
+                        children: [
+                          Icon(Icons.info_outline_rounded, color: Colors.white),
+                          SizedBox(width: 10),
+                          Text('No hay transacciones registradas para exportar.',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                            ),  
+                          ),
+                        ],
+                      ),
+                      backgroundColor: const Color(0xFFEF4444),
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    ),
+                  );
+                }
+                return;
+              }
+
+              // Mostramos un aviso temporal de que el proceso inició si pasa la validación
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: const Row(
+                    children: [
+                      SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                      ),
+                      SizedBox(width: 12),
+                      Text('Generando reporte CSV...',
+                        style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                            ),  
+                      ),
+                    ],
+                  ),
+                  backgroundColor: Colors.indigo,
+                  duration: const Duration(seconds: 1),
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+              );
+
               final bool success = await ExportService.exportTransactionsToCSV(
                 expenses: dashboardVM.expensesList,
                 incomes: dashboardVM.incomesList,
@@ -218,15 +270,22 @@ class SettingsScreen extends StatelessWidget {
 
               if (success && context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
+                  SnackBar(
                     content: Row(
                       children: [
                         Icon(Icons.check_circle_rounded, color: Colors.white),
                         SizedBox(width: 10),
-                        Text('Archivo guardado en el dispositivo con éxito'),
+                        Text('Archivo guardado en el dispositivo con éxito',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                            ),  
+                        ),
                       ],
                     ),
                     backgroundColor: Colors.green,
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
                 );
               }
