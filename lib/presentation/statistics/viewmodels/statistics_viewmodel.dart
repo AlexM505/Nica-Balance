@@ -31,6 +31,22 @@ class StatisticsViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Helper interno para filtrar listas según el período seleccionado (_selectedPeriodIndex)
+  bool _filterByPeriod(DateTime itemDate) {
+    final now = DateTime.now();
+    switch (_selectedPeriodIndex) {
+      case 0: // 7 Días
+        final oneWeekAgo = now.subtract(const Duration(days: 7));
+        return itemDate.isAfter(oneWeekAgo);
+      case 1: // Este Mes
+        return itemDate.year == now.year && itemDate.month == now.month;
+      case 2: // Este Año
+        return itemDate.year == now.year;
+      default:
+        return true;
+    }
+  }
+
   /// Obtiene los datos procesados de Gastos agrupados por Categoría
   List<CategoryStatsData> getExpenseCategoryData() {
     final expenses = dashboardViewModel.expensesList; 
@@ -45,8 +61,10 @@ class StatisticsViewModel extends ChangeNotifier {
     ];
 
     int colorIndex = 0;
+    // APLICACIÓN DEL FILTRO: Solo procesamos los gastos que cumplen la condición de tiempo
+    final filteredExpenses = expenses.where((exp) => _filterByPeriod(exp.date));
 
-    for (final exp in expenses) {
+    for (final exp in filteredExpenses) { //expenses
       final String categoryKey = exp.category.displayName;
 
       final double usdAmount = convertToUsd(exp.amount, exp.currency);
@@ -85,8 +103,10 @@ class StatisticsViewModel extends ChangeNotifier {
     ];
 
     int colorIndex = 0;
+    // APLICACIÓN DEL FILTRO: Solo procesamos los ingresos que cumplen la condición de tiempo
+    final filteredIncomes = incomes.where((inc) => _filterByPeriod(inc.date));
 
-    for (final inc in incomes) {
+    for (final inc in filteredIncomes) { //incomes
       final String categoryKey = inc.category.displayName.toUpperCase();
       final double usdAmount = convertToUsd(inc.amount, inc.currency);
       
@@ -141,6 +161,11 @@ class StatisticsViewModel extends ChangeNotifier {
       return amount / _exchangeRate;
     }
     return amount;
+  }
+
+  /// Calcula el monto total sumado del período actual (Útil para centrar en el PieChart)
+  double getTotalAmountForCurrentPeriod() {
+    return getExpenseCategoryData().fold(0, (sum, item) => sum + item.amount);
   }
 }
 

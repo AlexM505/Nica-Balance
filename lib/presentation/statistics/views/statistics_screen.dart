@@ -105,90 +105,131 @@ class _StatisticsScreenState extends State<StatisticsScreen> with SingleTickerPr
   }
 
   Widget _buildStatisticsTab(BuildContext context, List<CategoryStatsData> data, String title) {
-    if (data.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircleAvatar(
-              radius: 40,
-              backgroundColor: AppTheme.getTextSecondary(context).withValues(alpha: 0.12),
-              child: Icon(Icons.pie_chart_outline_rounded, size: 50, color: AppTheme.getTextSecondary(context).withValues(alpha: 0.5)),
-            ),
-            const SizedBox(height: 16),
-            Text('No hay datos registrados en esta sección.', style: TextStyle(color: AppTheme.getTextSecondary(context))),
-          ],
-        ),
-      );
-    }
+    final statisticsVM = context.watch<StatisticsViewModel>();
+    final isDebtTab = _tabController.index == 2;
 
+    // Calculamos el monto acumulado del set de datos filtrados actual
     final double totalAmount = data.fold(0, (sum, item) => sum + item.amount);
-    final statisticsVM = context.read<StatisticsViewModel>();
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            height: 260,
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: AppTheme.getSurfaceColor(context),
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: AppTheme.getBorderColor(context)),
-            ),
-            child: PieChart(
-              PieChartData(
-                pieTouchData: PieTouchData(
-                  touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                    setState(() {
-                      if (!event.isInterestedForInteractions ||
-                          pieTouchResponse == null ||
-                          pieTouchResponse.touchedSection == null) {
-                        _touchedIndex = -1;
-                        return;
-                      }
-                      _touchedIndex = pieTouchResponse.touchedSection!.touchedSectionIndex;
-                    });
-                  },
-                ),
-                borderData: FlBorderData(show: false),
-                sectionsSpace: 4,
-                centerSpaceRadius: 45,
-                sections: _generateChartSections(data, totalAmount),
+          // 1. SELECTOR DE PERÍODOS TEMPORALES (Solo se muestra para Gastos e Ingresos)
+          if (!isDebtTab) ...[
+            _buildPeriodSelector(context, statisticsVM),
+            const SizedBox(height: 16),
+          ],
+
+          // CASO EN QUE NO HAY DATOS EN EL PERÍODO SELECCIONADO
+          if (data.isEmpty) ...[
+            const SizedBox(height: 60),
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 40,
+                    backgroundColor: AppTheme.getTextSecondary(context).withValues(alpha: 0.12),
+                    child: Icon(Icons.pie_chart_outline_rounded, size: 50, color: AppTheme.getTextSecondary(context).withValues(alpha: 0.5)),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'No hay registros para este período.', 
+                    style: TextStyle(color: AppTheme.getTextSecondary(context), fontWeight: FontWeight.w500),
+                  ),
+                ],
               ),
             ),
-          ),
-          const SizedBox(height: 28),
+          ] else ...[
+            // 2. CONTENEDOR DEL GRÁFICO (PIE CHART)
+            Container(
+              height: 260,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppTheme.getSurfaceColor(context),
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: AppTheme.getBorderColor(context)),
+              ),
+              child: Stack(
+                children: [
+                  PieChart(
+                    PieChartData(
+                      pieTouchData: PieTouchData(
+                        touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                          setState(() {
+                            if (!event.isInterestedForInteractions ||
+                                pieTouchResponse == null ||
+                                pieTouchResponse.touchedSection == null) {
+                              _touchedIndex = -1;
+                              return;
+                            }
+                            _touchedIndex = pieTouchResponse.touchedSection!.touchedSectionIndex;
+                          });
+                        },
+                      ),
+                      borderData: FlBorderData(show: false),
+                      sectionsSpace: 4,
+                      centerSpaceRadius: 55, // Un poco más espacioso para el texto central
+                      sections: _generateChartSections(data, totalAmount),
+                    ),
+                  ),
+                  // Indicador central con el monto total totalizado en USD
+                  Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Total',
+                          style: TextStyle(fontSize: 12, color: AppTheme.getTextSecondary(context), fontWeight: FontWeight.w600),
+                        ),
+                        Text(
+                          '\$${totalAmount.toStringAsFixed(2)}',
+                          style: TextStyle(fontSize: 16, color: AppTheme.getTextPrimary(context), fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 28),
 
-          Text(
-            'Desglose por Categorías',
-            style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 15, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 12),
-          
-          ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: data.length,
-            separatorBuilder: (context, index) => const SizedBox(height: 10),
-            itemBuilder: (context, index) {
-              final item = data[index];
-              final percentage = (item.amount / totalAmount) * 100;
+            // 3. SECCIÓN DE DESGLOSE POR CATEGORÍAS
+            Text(
+              'Desglose por Categorías',
+              style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+            
+            ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: data.length,
+              separatorBuilder: (context, index) => const SizedBox(height: 10),
+              itemBuilder: (context, index) {
+                final item = data[index];
+                final percentage = (item.amount / totalAmount) * 100;
 
-              // Filtramos la lista real de transacciones que pertenecen a ESTA categoría específica
-              // desde las listas globales del DashboardViewModel
-              final List transactionsOfCategory = _tabController.index == 0
-                  ? statisticsVM.dashboardViewModel.expensesList.where((e) => e.category.displayName.toLowerCase() == item.categoryName.toLowerCase()).toList()
-                  : _tabController.index == 1
-                      ? statisticsVM.dashboardViewModel.incomesList.where((i) => i.category.displayName.toLowerCase() == item.categoryName.toLowerCase()).toList()
-                      : []; // Si son deudas, enlazar debtVM.debtsList de igual forma si aplica
+                // FILTRADO CON BASE EN LA CATEGORÍA Y EL RANGO DE TIEMPO
+                final List transactionsOfCategory = _tabController.index == 0
+                    ? statisticsVM.dashboardViewModel.expensesList.where((e) {
+                        final matchesCategory = e.category.displayName.toLowerCase() == item.categoryName.toLowerCase();
+                        final matchesDate = _evaluateDateFilter(e.date, statisticsVM.selectedPeriodIndex);
+                        return matchesCategory && matchesDate;
+                      }).toList()
+                    : _tabController.index == 1
+                        ? statisticsVM.dashboardViewModel.incomesList.where((i) {
+                            final matchesCategory = i.category.displayName.toLowerCase() == item.categoryName.toLowerCase();
+                            final matchesDate = _evaluateDateFilter(i.date, statisticsVM.selectedPeriodIndex);
+                            return matchesCategory && matchesDate;
+                          }).toList()
+                        : [];
 
-              return Theme(
-                data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-                child: 
-                  ExpansionTile(
+                return Theme(
+                  data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                  child: ExpansionTile(
                     clipBehavior: Clip.antiAlias,
                     collapsedBackgroundColor: AppTheme.getSurfaceColor(context),
                     backgroundColor: AppTheme.getSurfaceColor(context),
@@ -228,14 +269,11 @@ class _StatisticsScreenState extends State<StatisticsScreen> with SingleTickerPr
                         style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 11),
                       ),
                     ),
-                    leading: null, 
                     expandedCrossAxisAlignment: CrossAxisAlignment.stretch,
                     childrenPadding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-                    
                     children: [
                       const SizedBox(height: 2),
-                      
-                      if (transactionsOfCategory.isEmpty)
+                      if (transactionsOfCategory.isEmpty && !isDebtTab)
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
                           child: Text(
@@ -243,9 +281,20 @@ class _StatisticsScreenState extends State<StatisticsScreen> with SingleTickerPr
                             style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 12, fontStyle: FontStyle.italic),
                           ),
                         )
+                      else if (isDebtTab)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Text(
+                            'Monto consolidado en acreedor',
+                            style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 12, fontStyle: FontStyle.italic),
+                          ),
+                        )
                       else
-                        // Mapeamos los elementos reales que engloban la categoría
                         ...transactionsOfCategory.map((tx) {
+                          // Determinamos color de texto por flujo: Gastos (Rojo) / Ingresos (Verde)
+                          final isExpense = _tabController.index == 0;
+                          final valueColor = isExpense ? const Color(0xFFF87171) : const Color(0xFF34D399);
+
                           return Container(
                             margin: const EdgeInsets.only(bottom: 8),
                             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
@@ -275,7 +324,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> with SingleTickerPr
                                   children: [
                                     Text(
                                       '${tx.currency == Currency.usd ? '\$' : 'C\$'}${tx.amount.toStringAsFixed(2)}',
-                                      style: const TextStyle(color: Color(0xFFF87171), fontSize: 14, fontWeight: FontWeight.w700),
+                                      style: TextStyle(color: valueColor, fontSize: 14, fontWeight: FontWeight.w700),
                                     ),
                                   ],
                                 ),
@@ -285,22 +334,81 @@ class _StatisticsScreenState extends State<StatisticsScreen> with SingleTickerPr
                         }),
                     ],
                   ),
-              );
-          }),
+                );
+              },
+            ),
+          ],
         ],
       ),
     );
+  }
+
+  /// Construye los Chips horizontales de selección temporal
+  Widget _buildPeriodSelector(BuildContext context, StatisticsViewModel vm) {
+    final periods = ['7 Días', 'Este Mes', 'Este Año'];
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: List.generate(periods.length, (index) {
+        final isSelected = vm.selectedPeriodIndex == index;
+        return Expanded(
+          child: GestureDetector(
+            onTap: () {
+              setState(() { _touchedIndex = -1; });
+              vm.changePeriod(index);
+            },
+            child: Container(
+              margin: EdgeInsets.only(
+                left: index == 0 ? 0 : 6,
+                right: index == periods.length - 1 ? 0 : 6,
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: isSelected ? AppTheme.primaryColor.withValues(alpha: 0.12) : AppTheme.getSurfaceColor(context),
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(
+                  color: isSelected ? AppTheme.primaryColor : AppTheme.getBorderColor(context),
+                  width: isSelected ? 1.5 : 1.0,
+                ),
+              ),
+              child: Text(
+                periods[index],
+                style: TextStyle(
+                  color: isSelected ? AppTheme.primaryColor : AppTheme.getTextSecondary(context),
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                  fontSize: 12,
+                ),
+              ),
+            ),
+          ),
+        );
+      }),
+    );
+  }
+
+  /// Helper de UI complementario para validar si la fecha pertenece al rango
+  bool _evaluateDateFilter(DateTime date, int index) {
+    final now = DateTime.now();
+    if (index == 0) {
+      return date.isAfter(now.subtract(const Duration(days: 7)));
+    } else if (index == 1) {
+      return date.year == now.year && date.month == now.month;
+    } else if (index == 2) {
+      return date.year == now.year;
+    }
+    return true;
   }
 
   List<PieChartSectionData> _generateChartSections(List<CategoryStatsData> data, double total) {
     return List.generate(data.length, (i) {
       final item = data[i];
       final isTouched = i == _touchedIndex;
-      final double radius = isTouched ? 80.0 : 70.0;
+      final double radius = isTouched ? 76.0 : 66.0;
       final percentage = (item.amount / total) * 100;
-      final String sectionTitle = isTouched 
-        ? '${item.categoryName}\n${percentage.toStringAsFixed(1)}%' 
-        : item.categoryName;
+      
+      // Optimizamos el título para que no sobrecargue la dona visualmente
+      final String sectionTitle = isTouched ? '${percentage.toStringAsFixed(1)}%' : '';
 
       return PieChartSectionData(
         color: item.color,
@@ -316,14 +424,14 @@ class _StatisticsScreenState extends State<StatisticsScreen> with SingleTickerPr
           ],
         ),
         badgeWidget: _buildBadgeIcon(item, isTouched),
-        titlePositionPercentageOffset: 0.35,
+        titlePositionPercentageOffset: 0.4,
         badgePositionPercentageOffset: 0.95,
       );
     });
   }
 
   Widget _buildBadgeIcon(CategoryStatsData item, bool isTouched) {
-    final double size = isTouched ? 42.0 : 36.0;
+    final double size = isTouched ? 40.0 : 34.0;
     
     return AnimatedContainer(
       duration: PieChart.defaultDuration,
@@ -332,22 +440,19 @@ class _StatisticsScreenState extends State<StatisticsScreen> with SingleTickerPr
       decoration: BoxDecoration(
         color: Colors.white,
         shape: BoxShape.circle,
-        border: Border.all(
-          color: item.color,
-          width: 2,
-        ),
+        border: Border.all(color: item.color, width: 2),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.20),
+            color: Colors.black.withValues(alpha: 0.15),
             blurRadius: 4,
-            offset: const Offset(3, 3),
+            offset: const Offset(2, 2),
           ),
         ],
       ),
       child: Center(
         child: Icon(
           item.icon,
-          size: isTouched ? 22.0 : 18.0,
+          size: isTouched ? 20.0 : 16.0,
           color: item.color,
         ),
       ),
