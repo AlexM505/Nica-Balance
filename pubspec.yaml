@@ -1,7 +1,7 @@
 name: nica_balance
 description: "Toma el control de tu dinero. Registra gastos, ingesos y alcanza tus metas de ahorro fácilmente con nuestra app. Tus finanzas siempre organizadas, en un solo lugar y al alcance de tu mano."
 publish_to: 'none'
-version: 0.1.1+2
+version: 0.1.1+1
 
 environment:
   sdk: ^3.12.0

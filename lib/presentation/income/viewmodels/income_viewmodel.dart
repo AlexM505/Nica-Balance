@@ -17,7 +17,8 @@ class IncomeViewModel extends ChangeNotifier {
 
   IncomeViewModel(this._incomeRepository) {
     // Cargamos los datos automáticamente al inicializar el ViewModel
-    fetchIncomes();
+    // fetchIncomes();
+    Future.microtask(() => fetchIncomes());
   }
 
   /// Recupera la lista actualizada de ingresos desde ObjectBox

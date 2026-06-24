@@ -75,7 +75,7 @@ class _DebtStrategyScreenState extends State<DebtStrategyScreen> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(
-                          color: Colors.blue.withOpacity(0.1),
+                          color: Colors.blue.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
@@ -91,7 +91,7 @@ class _DebtStrategyScreenState extends State<DebtStrategyScreen> {
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: projections.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 12),
+                    separatorBuilder: (_, _) => const SizedBox(height: 12),
                     itemBuilder: (context, index) {
                       final item = projections[index];
                       return _buildDebtStrategyCard(context, item, index + 1);
@@ -152,9 +152,9 @@ class _DebtStrategyScreenState extends State<DebtStrategyScreen> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.blue.withOpacity(0.04),
+        color: Colors.blue.withValues(alpha: 0.04),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.blue.withOpacity(0.15)),
+        border: Border.all(color: Colors.blue.withValues(alpha: 0.15)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -183,7 +183,7 @@ class _DebtStrategyScreenState extends State<DebtStrategyScreen> {
             max: 500,
             divisions: 50,
             activeColor: Colors.blue,
-            inactiveColor: Colors.blue.withOpacity(0.2),
+            inactiveColor: Colors.blue.withValues(alpha: 0.2),
             onChanged: (val) => vm.updateExtraBudget(val),
           ),
         ],
@@ -208,7 +208,7 @@ class _DebtStrategyScreenState extends State<DebtStrategyScreen> {
               width: 32,
               height: 32,
               decoration: BoxDecoration(
-                color: priorityIndex == 1 ? Colors.green : Colors.grey.withOpacity(0.12),
+                color: priorityIndex == 1 ? Colors.green : Colors.grey.withValues(alpha: 0.12),
                 shape: BoxShape.circle,
               ),
               child: Center(

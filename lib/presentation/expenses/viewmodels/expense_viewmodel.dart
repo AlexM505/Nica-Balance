@@ -15,7 +15,9 @@ class ExpenseViewModel extends ChangeNotifier {
   static const double _exchangeRate = 36.0;
 
   ExpenseViewModel(this._repository) {
-    _listenToExpenses();
+
+    Future.microtask(() => _listenToExpenses());
+    // _listenToExpenses();
   }
 
   void _listenToExpenses() {

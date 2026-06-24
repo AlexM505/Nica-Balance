@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:nica_balance/core/theme/app_theme.dart';
 import 'package:nica_balance/presentation/home/views/main_navigation_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -56,7 +55,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void initState() {
     super.initState();
 
-    FlutterNativeSplash.remove();
   }
 
   @override

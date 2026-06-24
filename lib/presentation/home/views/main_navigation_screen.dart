@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:nica_balance/core/services/bio_auth_service.dart';
+import 'package:nica_balance/core/services/notification_service.dart';
 import 'package:nica_balance/core/theme/app_theme.dart';
 import 'package:nica_balance/presentation/calendar/views/calendar_history_view.dart';
 import 'package:nica_balance/presentation/goals/views/goals_list_view.dart';
@@ -40,8 +40,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Widget
   void initState() {
     super.initState();
 
-    FlutterNativeSplash.remove();
-
     WidgetsBinding.instance.addObserver(this);
     
     final prefsVM = context.read<PreferencesViewModel>();
@@ -58,6 +56,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> with Widget
       final newStatus = await Permission.notification.request();
       if (newStatus.isGranted) {
         debugPrint('Permiso de notificación concedido.');
+        await NotificationService.init();
       } else if (newStatus.isDenied) {
         debugPrint('Permiso de notificación denegado.');
       } else if (newStatus.isPermanentlyDenied) {

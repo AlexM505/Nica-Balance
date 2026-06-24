@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:nica_balance/core/services/notification_service.dart';
 import 'package:nica_balance/core/theme/app_theme.dart';
 import 'package:nica_balance/data/repositories/debt_repository.dart';
 import 'package:nica_balance/data/repositories/goal_repository.dart';
@@ -24,17 +23,21 @@ import 'presentation/expenses/viewmodels/expense_viewmodel.dart';
 
 void main() async {
 
-  // WidgetsFlutterBinding.ensureInitialized();
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  await NotificationService.init();
+  // await NotificationService.init();
 
-  final prefs = await SharedPreferences.getInstance();
+  final List<dynamic> initResults = await Future.wait([
+    SharedPreferences.getInstance(),
+    ObjectBoxStore.create(),
+  ]);
+
+  final SharedPreferences prefs = initResults[0] as SharedPreferences;
   final bool showOnboarding = prefs.getBool('show_onboarding') ?? true;
 
   // Inicialización de ObjectBox
-  final database = await ObjectBoxStore.create();
+  final database = initResults[1];
   // Repositorio directo\
   final expenseRepository = ExpenseRepository(database);
   final incomeRepository = IncomeRepository(database);
@@ -57,8 +60,10 @@ void main() async {
             expenseViewModel: context.read<ExpenseViewModel>(),
             incomeViewModel: context.read<IncomeViewModel>(),
           ),
-          update: (context, expenseVM, incomeVM, previousDashboardVM) =>
-              DashboardViewModel(expenseViewModel: expenseVM, incomeViewModel: incomeVM),
+          update: (_, expenseVM, incomeVM, previous) {
+            if (previous != null) return previous;
+            return DashboardViewModel(expenseViewModel: expenseVM, incomeViewModel: incomeVM);
+          },
         ),
 
         ChangeNotifierProvider(
@@ -71,12 +76,18 @@ void main() async {
 
         ChangeNotifierProxyProvider<DashboardViewModel, AnalyticsViewModel>(
           create: (context) => AnalyticsViewModel(dashboardViewModel: context.read<DashboardViewModel>()),
-          update: (context, dashboardVM, previous) => AnalyticsViewModel(dashboardViewModel: dashboardVM),
+          update: (_, dashboardVM, previous) {
+            if (previous != null) return previous;
+            return AnalyticsViewModel(dashboardViewModel: dashboardVM);
+          },
         ),
 
         ChangeNotifierProxyProvider<DashboardViewModel, StatisticsViewModel>(
           create: (context) => StatisticsViewModel(dashboardViewModel: context.read<DashboardViewModel>()),
-          update: (context, dashboardVM, previous) => StatisticsViewModel(dashboardViewModel: dashboardVM),
+          update: (_, dashboardVM, previous) {
+            if (previous != null) return previous;
+            return StatisticsViewModel(dashboardViewModel: dashboardVM);
+          },
         ),
 
         ChangeNotifierProvider(
@@ -105,6 +116,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     
     final prefsVM = context.watch<PreferencesViewModel>();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // await NotificationService.init();
+      FlutterNativeSplash.remove();
+    });
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
