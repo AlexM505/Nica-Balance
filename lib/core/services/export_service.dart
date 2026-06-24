@@ -37,7 +37,7 @@ class ExportService {
 
     final String csvContent = csv.encode(rows);
 
-    final List<int> bytes = csvContent.codeUnits;
+    // final List<int> bytes = csvContent.codeUnits;
     final Uint8List fileBytes = Uint8List.fromList(csvContent.codeUnits);
     final String fileName = 'reporte_financiero_${DateTime.now().millisecondsSinceEpoch}.csv';
 

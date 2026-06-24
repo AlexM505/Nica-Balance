@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nica_balance/core/services/export_service.dart';
 import 'package:nica_balance/core/theme/app_theme.dart';
+import 'package:nica_balance/presentation/debts/views/debt_strategy_screen.dart';
 import 'package:nica_balance/presentation/home/viewmodels/dashboard_viewmodel.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/preferences_viewmodel.dart';
@@ -83,6 +84,23 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
             ),
+          ),
+
+          const SizedBox(height: 12),
+          
+          _buildSettingsTile(
+            context,
+            icon: Icons.analytics_rounded, // O el icono financiero de tu preferencia
+            iconColor: Colors.purple,
+            title: 'Estrategias de Pago',
+            subtitle: 'Simula el método Bola de Nieve o Avalancha',
+            trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const DebtStrategyScreen()),
+              );
+            },
           ),
 
           const SizedBox(height: 24),

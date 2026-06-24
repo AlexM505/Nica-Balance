@@ -162,7 +162,7 @@
     },
     {
       "id": "4:7502451798277903778",
-      "lastPropertyId": "9:4084936473241046134",
+      "lastPropertyId": "10:2474889688355389263",
       "name": "Debt",
       "properties": [
         {
@@ -210,13 +210,55 @@
           "id": "9:4084936473241046134",
           "name": "dbCurrency",
           "type": 9
+        },
+        {
+          "id": "10:2474889688355389263",
+          "name": "minimumPayment",
+          "type": 8
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "5:4425572893543727994",
+      "lastPropertyId": "5:6477457538515216353",
+      "name": "Payment",
+      "properties": [
+        {
+          "id": "1:7703682160376137992",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:514891938525210185",
+          "name": "amountPaid",
+          "type": 8
+        },
+        {
+          "id": "3:5671098793648555514",
+          "name": "paymentDate",
+          "type": 10
+        },
+        {
+          "id": "4:8004230338219543986",
+          "name": "notes",
+          "type": 9
+        },
+        {
+          "id": "5:6477457538515216353",
+          "name": "debtId",
+          "indexId": "1:1801596210573471784",
+          "type": 11,
+          "flags": 520,
+          "relationTarget": "Debt"
         }
       ],
       "relations": []
     }
   ],
-  "lastEntityId": "4:7502451798277903778",
-  "lastIndexId": "0:0",
+  "lastEntityId": "5:4425572893543727994",
+  "lastIndexId": "1:1801596210573471784",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

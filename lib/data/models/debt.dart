@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nica_balance/data/models/expense_enums.dart';
+import 'package:nica_balance/data/models/payment.dart';
 import 'package:objectbox/objectbox.dart';
 
 enum DebtType {
@@ -29,6 +30,7 @@ class Debt {
   double totalAmount;    // Monto inicial/total de la deuda
   double remainingAmount;// Cuánto se debe actualmente
   double interestRate;   // Porcentaje de interés (ej. 12.5 para 12.5%)
+  double minimumPayment; // Pago mínimo mensual
   
   int dueDateMilli;      // Próxima fecha límite de pago
 
@@ -36,6 +38,9 @@ class Debt {
 
   // Almacenamos el índice del enum para la persistencia
   int typeIndex;
+
+  @Backlink('debt')
+  final ToMany<Payment> payments = ToMany<Payment>();
 
   Debt({
     this.id = 0,
@@ -47,6 +52,7 @@ class Debt {
     required this.dueDateMilli,
     required this.typeIndex,
     required this.dbCurrency,
+    required this.minimumPayment,
   });
 
   // --- Getters de Utilidad ---

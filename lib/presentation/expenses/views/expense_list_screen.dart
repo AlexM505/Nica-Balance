@@ -20,7 +20,13 @@ class ExpenseListScreen extends StatelessWidget {
 
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Mis Gastos')),
+      appBar: AppBar(
+        title: const Text('Mis Gastos'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: viewModel.isLoading
           ? const Center(child: CircularProgressIndicator())
           : viewModel.expenses.isEmpty
@@ -30,11 +36,15 @@ class ExpenseListScreen extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.shopping_bag_rounded, size: 64, color: AppTheme.getTextSecondary(context).withValues(alpha: 0.3)),
+                        CircleAvatar(
+                          radius: 45,
+                          backgroundColor: AppTheme.getTextSecondary(context).withValues(alpha: 0.12),
+                          child: Icon(Icons.shopping_bag_rounded, size: 64, color: AppTheme.getTextSecondary(context).withValues(alpha: 0.4)),
+                        ),
                         const SizedBox(height: 16),
                         Text(
                           'Aún no has registrado ningún gasto',
-                          style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 15, fontWeight: FontWeight.bold),
+                          style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 14, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),

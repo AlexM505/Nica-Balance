@@ -81,6 +81,7 @@ class _DebtFormScreenState extends State<DebtFormScreen> {
       dueDateMilli: _selectedDate.millisecondsSinceEpoch,
       typeIndex: _selectedType.index,
       dbCurrency: _selectedCurrency.name,
+      minimumPayment: 0.0,
     );
 
     final viewModel = context.read<DebtViewModel>();

@@ -1,7 +1,7 @@
 name: nica_balance
 description: "Toma el control de tu dinero. Registra gastos, ingesos y alcanza tus metas de ahorro fácilmente con nuestra app. Tus finanzas siempre organizadas, en un solo lugar y al alcance de tu mano."
 publish_to: 'none'
-version: 0.1.0+1
+version: 0.1.1+2
 
 environment:
   sdk: ^3.12.0
@@ -51,24 +51,24 @@ flutter:
 
 flutter_native_splash:
   color: "#0C1324"
-  image: assets/images/1024.png
+  image: assets/images/nicabalance.png
   android: true
   ios: true
-  image_dark: assets/images/1024.png
+  image_dark: assets/images/nicabalance.png
   color_dark: "#0C1324"
 
   android_12:
-      image: assets/images/1024.png
+      image: assets/images/nicabalance.png
       icon_background_color: "#0C1324"
-      image_dark: assets/images/1024.png
+      image_dark: assets/images/nicabalance.png
       icon_background_color_dark: "#0C1324"
       fullscreen: true
 
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/images/nbicon.png"
+  image_path: "assets/images/nicabalance.png"
   min_sdk_android: 21 
   adaptive_icon_background: "#1E293B"
-  adaptive_icon_foreground: "assets/images/nbicon.png"
+  adaptive_icon_foreground: "assets/images/nicabalance.png"
   adaptive_icon_foreground_inset: 16

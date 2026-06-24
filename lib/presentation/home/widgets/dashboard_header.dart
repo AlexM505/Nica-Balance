@@ -13,7 +13,7 @@ class DashboardHeader extends StatelessWidget {
         ClipRRect(
           borderRadius: BorderRadius.circular(14),
           child: Image.asset(
-            'assets/images/nbicon.png',
+            'assets/images/nicabalance.png',
             width: 50,
             height: 50,
             fit: BoxFit.cover,

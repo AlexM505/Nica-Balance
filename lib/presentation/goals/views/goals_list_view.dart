@@ -41,7 +41,11 @@ class GoalsListView extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.emoji_events_rounded, size: 64, color: AppTheme.getTextSecondary(context).withValues(alpha: 0.3)),
+                    CircleAvatar(
+                          radius: 45,
+                          backgroundColor: AppTheme.getTextSecondary(context).withValues(alpha: 0.12),
+                          child: Icon(Icons.emoji_events_rounded, size: 64, color: AppTheme.getTextSecondary(context).withValues(alpha: 0.4)),
+                        ),
                     const SizedBox(height: 16),
                     Text(
                       'No hay metas activas',

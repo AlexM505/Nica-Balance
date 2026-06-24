@@ -31,11 +31,15 @@ class IncomeListScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.payments_rounded, size: 64, color: AppTheme.getTextSecondary(context).withValues(alpha: 0.3)),
+                    CircleAvatar(
+                          radius: 45,
+                          backgroundColor: AppTheme.getTextSecondary(context).withValues(alpha: 0.12),
+                          child: Icon(Icons.payments_rounded, size: 64, color: AppTheme.getTextSecondary(context).withValues(alpha: 0.4)),
+                        ),
                     const SizedBox(height: 16),
                     Text(
                       'Aún no has registrado ningún ingreso',
-                      style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 15, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),

@@ -18,6 +18,7 @@ import 'data/models/debt.dart';
 import 'data/models/expense.dart';
 import 'data/models/goal.dart';
 import 'data/models/income.dart';
+import 'data/models/payment.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
@@ -211,7 +212,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(4, 7502451798277903778),
     name: 'Debt',
-    lastPropertyId: const obx_int.IdUid(9, 4084936473241046134),
+    lastPropertyId: const obx_int.IdUid(10, 2474889688355389263),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -268,6 +269,61 @@ final _entities = <obx_int.ModelEntity>[
         type: 9,
         flags: 0,
       ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(10, 2474889688355389263),
+        name: 'minimumPayment',
+        type: 8,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[
+      obx_int.ModelBacklink(
+        name: 'payments',
+        srcEntity: 'Payment',
+        srcField: 'debt',
+      ),
+    ],
+  ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(5, 4425572893543727994),
+    name: 'Payment',
+    lastPropertyId: const obx_int.IdUid(5, 6477457538515216353),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 7703682160376137992),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 514891938525210185),
+        name: 'amountPaid',
+        type: 8,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 5671098793648555514),
+        name: 'paymentDate',
+        type: 10,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 8004230338219543986),
+        name: 'notes',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 6477457538515216353),
+        name: 'debtId',
+        type: 11,
+        flags: 520,
+        indexId: const obx_int.IdUid(1, 1801596210573471784),
+        relationField: 'debt',
+        relationTarget: 'Debt',
+      ),
     ],
     relations: <obx_int.ModelRelation>[],
     backlinks: <obx_int.ModelBacklink>[],
@@ -317,8 +373,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
     // Typically, this is done with `dart run build_runner build`.
     generatorVersion: obx_int.GeneratorVersion.v2025_12_16,
     entities: _entities,
-    lastEntityId: const obx_int.IdUid(4, 7502451798277903778),
-    lastIndexId: const obx_int.IdUid(0, 0),
+    lastEntityId: const obx_int.IdUid(5, 4425572893543727994),
+    lastIndexId: const obx_int.IdUid(1, 1801596210573471784),
     lastRelationId: const obx_int.IdUid(0, 0),
     lastSequenceId: const obx_int.IdUid(0, 0),
     retiredEntityUids: const [],
@@ -584,7 +640,13 @@ obx_int.ModelDefinition getObjectBoxModel() {
     Debt: obx_int.EntityDefinition<Debt>(
       model: _entities[3],
       toOneRelations: (Debt object) => [],
-      toManyRelations: (Debt object) => {},
+      toManyRelations: (Debt object) => {
+        obx_int.RelInfo<Payment>.toOneBacklink(
+          5,
+          object.id,
+          (Payment srcObject) => srcObject.debt,
+        ): object.payments,
+      },
       getId: (Debt object) => object.id,
       setId: (Debt object, int id) {
         object.id = id;
@@ -593,7 +655,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final titleOffset = fbb.writeString(object.title);
         final creditorOffset = fbb.writeString(object.creditor);
         final dbCurrencyOffset = fbb.writeString(object.dbCurrency);
-        fbb.startTable(10);
+        fbb.startTable(11);
         fbb.addInt64(0, object.id);
         fbb.addOffset(1, titleOffset);
         fbb.addOffset(2, creditorOffset);
@@ -603,6 +665,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         fbb.addInt64(6, object.dueDateMilli);
         fbb.addInt64(7, object.typeIndex);
         fbb.addOffset(8, dbCurrencyOffset);
+        fbb.addFloat64(9, object.minimumPayment);
         fbb.finish(fbb.endTable());
         return object.id;
       },
@@ -654,6 +717,12 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final dbCurrencyParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 20, '');
+        final minimumPaymentParam = const fb.Float64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          22,
+          0,
+        );
         final object = Debt(
           id: idParam,
           title: titleParam,
@@ -664,8 +733,75 @@ obx_int.ModelDefinition getObjectBoxModel() {
           dueDateMilli: dueDateMilliParam,
           typeIndex: typeIndexParam,
           dbCurrency: dbCurrencyParam,
+          minimumPayment: minimumPaymentParam,
         );
-
+        obx_int.InternalToManyAccess.setRelInfo<Debt>(
+          object.payments,
+          store,
+          obx_int.RelInfo<Payment>.toOneBacklink(
+            5,
+            object.id,
+            (Payment srcObject) => srcObject.debt,
+          ),
+        );
+        return object;
+      },
+    ),
+    Payment: obx_int.EntityDefinition<Payment>(
+      model: _entities[4],
+      toOneRelations: (Payment object) => [object.debt],
+      toManyRelations: (Payment object) => {},
+      getId: (Payment object) => object.id,
+      setId: (Payment object, int id) {
+        object.id = id;
+      },
+      objectToFB: (Payment object, fb.Builder fbb) {
+        final notesOffset = object.notes == null
+            ? null
+            : fbb.writeString(object.notes!);
+        fbb.startTable(6);
+        fbb.addInt64(0, object.id);
+        fbb.addFloat64(1, object.amountPaid);
+        fbb.addInt64(2, object.paymentDate.millisecondsSinceEpoch);
+        fbb.addOffset(3, notesOffset);
+        fbb.addInt64(4, object.debt.targetId);
+        fbb.finish(fbb.endTable());
+        return object.id;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final idParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          4,
+          0,
+        );
+        final amountPaidParam = const fb.Float64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          6,
+          0,
+        );
+        final paymentDateParam = DateTime.fromMillisecondsSinceEpoch(
+          const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0),
+        );
+        final notesParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 10);
+        final object = Payment(
+          id: idParam,
+          amountPaid: amountPaidParam,
+          paymentDate: paymentDateParam,
+          notes: notesParam,
+        );
+        object.debt.targetId = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          12,
+          0,
+        );
+        object.debt.attach(store);
         return object;
       },
     ),
@@ -850,5 +986,41 @@ class Debt_ {
   /// See [Debt.dbCurrency].
   static final dbCurrency = obx.QueryStringProperty<Debt>(
     _entities[3].properties[8],
+  );
+
+  /// See [Debt.minimumPayment].
+  static final minimumPayment = obx.QueryDoubleProperty<Debt>(
+    _entities[3].properties[9],
+  );
+
+  /// see [Debt.payments]
+  static final payments = obx.QueryBacklinkToMany<Payment, Debt>(Payment_.debt);
+}
+
+/// [Payment] entity fields to define ObjectBox queries.
+class Payment_ {
+  /// See [Payment.id].
+  static final id = obx.QueryIntegerProperty<Payment>(
+    _entities[4].properties[0],
+  );
+
+  /// See [Payment.amountPaid].
+  static final amountPaid = obx.QueryDoubleProperty<Payment>(
+    _entities[4].properties[1],
+  );
+
+  /// See [Payment.paymentDate].
+  static final paymentDate = obx.QueryDateProperty<Payment>(
+    _entities[4].properties[2],
+  );
+
+  /// See [Payment.notes].
+  static final notes = obx.QueryStringProperty<Payment>(
+    _entities[4].properties[3],
+  );
+
+  /// See [Payment.debt].
+  static final debt = obx.QueryRelationToOne<Payment, Debt>(
+    _entities[4].properties[4],
   );
 }
