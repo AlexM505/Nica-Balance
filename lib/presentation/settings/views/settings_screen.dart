@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:nica_balance/core/services/export_service.dart';
 import 'package:nica_balance/core/theme/app_theme.dart';
+import 'package:nica_balance/presentation/home/viewmodels/dashboard_viewmodel.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/preferences_viewmodel.dart';
 
@@ -191,6 +193,46 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
             ),
+
+          // ─── SECCIÓN: Gestor de datos ───
+          const SizedBox(height: 24),
+          const Text(
+            'Datos y Almacenamiento',
+            style: TextStyle(color: AppTheme.textSecondary, fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 0.5),
+          ),
+          const SizedBox(height: 10),
+          _buildSettingsTile(
+            context,
+            icon: Icons.file_download_rounded,
+            iconColor: Colors.blue,
+            title: 'Exportar datos',
+            subtitle: 'Descarga tus transacciones en formato CSV para Excel',
+            trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14),
+            onTap: () async {
+              final dashboardVM = context.read<DashboardViewModel>();
+
+              final bool success = await ExportService.exportTransactionsToCSV(
+                expenses: dashboardVM.expensesList,
+                incomes: dashboardVM.incomesList,
+              );
+
+              if (success && context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Row(
+                      children: [
+                        Icon(Icons.check_circle_rounded, color: Colors.white),
+                        SizedBox(width: 10),
+                        Text('Archivo guardado en el dispositivo con éxito'),
+                      ],
+                    ),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              }
+            },
+          ),
+
         ],
       ),
     );
@@ -204,44 +246,50 @@ class SettingsScreen extends StatelessWidget {
     required String title,
     required String subtitle,
     required Widget trailing,
+    VoidCallback? onTap,
   }) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppTheme.getSurfaceColor(context),
+    return InkWell(
+        onTap: onTap,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppTheme.getBorderColor(context)),
-      ),
-      child: Row(
-        children: [
+        child:
           Container(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: iconColor.withValues(alpha: 0.12),
-              shape: BoxShape.circle,
+              color: AppTheme.getSurfaceColor(context),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: AppTheme.getBorderColor(context)),
             ),
-            child: Icon(icon, color: iconColor, size: 22),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
               children: [
-                Text(
-                  title,
-                  style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14, fontWeight: FontWeight.bold),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: iconColor.withValues(alpha: 0.12),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(icon, color: iconColor, size: 22),
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  subtitle,
-                  style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 12),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 14, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        subtitle,
+                        style: TextStyle(color: AppTheme.getTextSecondary(context), fontSize: 12),
+                      ),
+                    ],
+                  ),
                 ),
+                trailing,
               ],
             ),
           ),
-          trailing,
-        ],
-      ),
     );
   }
 }
