@@ -113,7 +113,7 @@ class _DebtDetailScreenState extends State<DebtDetailScreen> {
                   }
                   // Validación Clave: No permitir abonar más de lo que se debe
                   if (amount > widget.debt.remainingAmount) {
-                    return 'El abono excede el saldo pendiente (\$${widget.debt.remainingAmount.toStringAsFixed(2)})';
+                    return 'El abono excede el saldo pendiente ($currencySymbol${widget.debt.remainingAmount.toStringAsFixed(2)})';
                   }
                   return null;
                 },
