@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nica_balance/core/services/export_service.dart';
 import 'package:nica_balance/core/theme/app_theme.dart';
+import 'package:nica_balance/presentation/budgets/views/budget_overview_screen.dart';
 import 'package:nica_balance/presentation/debts/views/debt_strategy_screen.dart';
 import 'package:nica_balance/presentation/home/viewmodels/dashboard_viewmodel.dart';
 import 'package:provider/provider.dart';
@@ -102,6 +103,23 @@ class SettingsScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const DebtStrategyScreen()),
+                  );
+                },
+              ),
+
+              const SizedBox(height: 12),
+              
+              _buildSettingsTile(
+                context,
+                icon: Icons.track_changes_rounded,
+                iconColor: Colors.limeAccent,
+                title: 'Presupuestos Mensuales',
+                subtitle: 'Gestionar límites y metas de gasto diario',
+                trailing: const Icon(Icons.chevron_right_rounded, size: 14),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const BudgetOverviewScreen()),
                   );
                 },
               ),

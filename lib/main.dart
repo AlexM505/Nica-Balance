@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:nica_balance/core/theme/app_theme.dart';
+import 'package:nica_balance/data/repositories/budget_repository.dart';
 import 'package:nica_balance/data/repositories/debt_repository.dart';
 import 'package:nica_balance/data/repositories/goal_repository.dart';
 import 'package:nica_balance/data/repositories/income_repository.dart';
 import 'package:nica_balance/presentation/analytics/viewmodels/analytics_viewmodel.dart';
+import 'package:nica_balance/presentation/budgets/viewmodels/budget_viewmodel.dart';
 import 'package:nica_balance/presentation/calendar/viewmodels/calendar_viewmodel.dart';
 import 'package:nica_balance/presentation/debts/viewmodels/debt_strategy_viewmodel.dart';
 import 'package:nica_balance/presentation/debts/viewmodels/debt_viewmodel.dart';
@@ -43,6 +45,7 @@ void main() async {
   final incomeRepository = IncomeRepository(database);
   final goalRepository = GoalRepository(database);
   final debtRepository = DebtRepository(database);
+  final budgetRepository = BudgetRepository(database);
 
   runApp(
     MultiProvider(
@@ -101,6 +104,10 @@ void main() async {
         ChangeNotifierProvider(
           create: (_) => DebtStrategyViewModel(),
         ),
+
+        ChangeNotifierProvider(
+          create: (context) => BudgetViewModel(budgetRepository),
+        )
       ],
       child: MyApp(showOnboarding: showOnboarding),
     ),

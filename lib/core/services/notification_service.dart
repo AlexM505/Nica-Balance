@@ -38,11 +38,60 @@ class NotificationService {
       showBadge: true,
     );
 
-    await _notificationsPlugin
-        .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin
-        >()
-        ?.createNotificationChannel(channel);
+    // ─── CANAL 2: ALERTAS DE PRESUPUESTOS (NUEVO) ───
+    const AndroidNotificationChannel budgetChannel = AndroidNotificationChannel(
+      'budget_alert_channel',
+      'Alertas de Presupuestos',
+      description: 'Canal para notificar advertencias de límites y sobregiros de presupuestos',
+      importance: Importance.max, // Máxima importancia para desplegar el Banner superior (Heads-up)
+      playSound: true,
+      enableVibration: true,
+    );
+
+    // await _notificationsPlugin
+    //     .resolvePlatformSpecificImplementation<
+    //       AndroidFlutterLocalNotificationsPlugin
+    //     >()
+    //     ?.createNotificationChannel(channel);
+
+    final androidImplementation = _notificationsPlugin
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+
+    if (androidImplementation != null) {
+      await androidImplementation.createNotificationChannel(channel);
+      await androidImplementation.createNotificationChannel(budgetChannel); // Registramos el nuevo canal
+    }
+  }
+
+  ///Dispara una alerta push instantánea (Heads-up) en tiempo real
+  static Future<void> showInstantNotification({
+    required int id,
+    required String title,
+    required String body,
+  }) async {
+    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+      'budget_alert_channel',
+      'Alertas de Presupuestos',
+      channelDescription: 'Canal para notificar advertencias de límites y sobregiros de presupuestos',
+      importance: Importance.max,
+      priority: Priority.high,
+      ticker: 'ticker',
+    );
+
+    const NotificationDetails notificationDetails = NotificationDetails(
+      android: androidDetails,
+      iOS: DarwinNotificationDetails(
+        presentAlert: true, // Fuerza a que se muestre en iOS aunque la app esté abierta
+        presentSound: true,
+      ),
+    );
+
+    await _notificationsPlugin.show(
+      id: id,
+      title: title,
+      body: body,
+      notificationDetails: notificationDetails,
+    );
   }
 
   /// Programa una notificación que se repetirá todos los días a una hora específica

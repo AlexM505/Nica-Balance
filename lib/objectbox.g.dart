@@ -14,6 +14,7 @@ import 'package:objectbox/internal.dart'
 import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
+import 'data/models/budget.dart';
 import 'data/models/debt.dart';
 import 'data/models/expense.dart';
 import 'data/models/goal.dart';
@@ -328,6 +329,52 @@ final _entities = <obx_int.ModelEntity>[
     relations: <obx_int.ModelRelation>[],
     backlinks: <obx_int.ModelBacklink>[],
   ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(6, 9049747817326412775),
+    name: 'Budget',
+    lastPropertyId: const obx_int.IdUid(6, 2574199423382725367),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 7231066404197682071),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 3577178831266225775),
+        name: 'limitAmount',
+        type: 8,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 3743437277280066327),
+        name: 'dbCategory',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 9030009940380572787),
+        name: 'targetMonth',
+        type: 10,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 8942974915669833457),
+        name: 'notified80',
+        type: 1,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(6, 2574199423382725367),
+        name: 'notified100',
+        type: 1,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
 ];
 
 /// Shortcut for [obx.Store.new] that passes [getObjectBoxModel] and for Flutter
@@ -373,7 +420,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
     // Typically, this is done with `dart run build_runner build`.
     generatorVersion: obx_int.GeneratorVersion.v2025_12_16,
     entities: _entities,
-    lastEntityId: const obx_int.IdUid(5, 4425572893543727994),
+    lastEntityId: const obx_int.IdUid(6, 9049747817326412775),
     lastIndexId: const obx_int.IdUid(1, 1801596210573471784),
     lastRelationId: const obx_int.IdUid(0, 0),
     lastSequenceId: const obx_int.IdUid(0, 0),
@@ -805,6 +852,71 @@ obx_int.ModelDefinition getObjectBoxModel() {
         return object;
       },
     ),
+    Budget: obx_int.EntityDefinition<Budget>(
+      model: _entities[5],
+      toOneRelations: (Budget object) => [],
+      toManyRelations: (Budget object) => {},
+      getId: (Budget object) => object.id,
+      setId: (Budget object, int id) {
+        object.id = id;
+      },
+      objectToFB: (Budget object, fb.Builder fbb) {
+        final dbCategoryOffset = fbb.writeString(object.dbCategory);
+        fbb.startTable(7);
+        fbb.addInt64(0, object.id);
+        fbb.addFloat64(1, object.limitAmount);
+        fbb.addOffset(2, dbCategoryOffset);
+        fbb.addInt64(3, object.targetMonth.millisecondsSinceEpoch);
+        fbb.addBool(4, object.notified80);
+        fbb.addBool(5, object.notified100);
+        fbb.finish(fbb.endTable());
+        return object.id;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final idParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          4,
+          0,
+        );
+        final limitAmountParam = const fb.Float64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          6,
+          0,
+        );
+        final dbCategoryParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 8, '');
+        final targetMonthParam = DateTime.fromMillisecondsSinceEpoch(
+          const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0),
+        );
+        final notified80Param = const fb.BoolReader().vTableGet(
+          buffer,
+          rootOffset,
+          12,
+          false,
+        );
+        final notified100Param = const fb.BoolReader().vTableGet(
+          buffer,
+          rootOffset,
+          14,
+          false,
+        );
+        final object = Budget(
+          id: idParam,
+          limitAmount: limitAmountParam,
+          dbCategory: dbCategoryParam,
+          targetMonth: targetMonthParam,
+          notified80: notified80Param,
+          notified100: notified100Param,
+        );
+
+        return object;
+      },
+    ),
   };
 
   return obx_int.ModelDefinition(model, bindings);
@@ -1022,5 +1134,38 @@ class Payment_ {
   /// See [Payment.debt].
   static final debt = obx.QueryRelationToOne<Payment, Debt>(
     _entities[4].properties[4],
+  );
+}
+
+/// [Budget] entity fields to define ObjectBox queries.
+class Budget_ {
+  /// See [Budget.id].
+  static final id = obx.QueryIntegerProperty<Budget>(
+    _entities[5].properties[0],
+  );
+
+  /// See [Budget.limitAmount].
+  static final limitAmount = obx.QueryDoubleProperty<Budget>(
+    _entities[5].properties[1],
+  );
+
+  /// See [Budget.dbCategory].
+  static final dbCategory = obx.QueryStringProperty<Budget>(
+    _entities[5].properties[2],
+  );
+
+  /// See [Budget.targetMonth].
+  static final targetMonth = obx.QueryDateProperty<Budget>(
+    _entities[5].properties[3],
+  );
+
+  /// See [Budget.notified80].
+  static final notified80 = obx.QueryBooleanProperty<Budget>(
+    _entities[5].properties[4],
+  );
+
+  /// See [Budget.notified100].
+  static final notified100 = obx.QueryBooleanProperty<Budget>(
+    _entities[5].properties[5],
   );
 }

@@ -255,9 +255,48 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "6:9049747817326412775",
+      "lastPropertyId": "6:2574199423382725367",
+      "name": "Budget",
+      "properties": [
+        {
+          "id": "1:7231066404197682071",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3577178831266225775",
+          "name": "limitAmount",
+          "type": 8
+        },
+        {
+          "id": "3:3743437277280066327",
+          "name": "dbCategory",
+          "type": 9
+        },
+        {
+          "id": "4:9030009940380572787",
+          "name": "targetMonth",
+          "type": 10
+        },
+        {
+          "id": "5:8942974915669833457",
+          "name": "notified80",
+          "type": 1
+        },
+        {
+          "id": "6:2574199423382725367",
+          "name": "notified100",
+          "type": 1
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "5:4425572893543727994",
+  "lastEntityId": "6:9049747817326412775",
   "lastIndexId": "1:1801596210573471784",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
