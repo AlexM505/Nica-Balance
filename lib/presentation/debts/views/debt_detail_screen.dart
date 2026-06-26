@@ -28,6 +28,9 @@ class _DebtDetailScreenState extends State<DebtDetailScreen> {
       borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
     ),
     builder: (bottomSheetContext) {
+      // Obtenemos el símbolo correcto para el mensaje de error inline
+      final currencySymbol = widget.debt.currency == Currency.usd ? '\$' : 'C\$';
+      
       return Padding(
         // Ajusta el padding inferior dinámicamente cuando emerge el teclado virtual
         padding: EdgeInsets.only(
@@ -150,11 +153,16 @@ class _DebtDetailScreenState extends State<DebtDetailScreen> {
                             final amount = double.parse(_payController.text);
                             
                             // Ejecutar la amortización en la base de datos
-                            context.read<DebtViewModel>().payAmount(widget.debt.id, amount);
+                            // context.read<DebtViewModel>().payAmount(widget.debt.id, amount);
+                            context.read<DebtViewModel>().registerDebtPayment(
+                              debtId: widget.debt.id,
+                              amount: amount,
+                              date: DateTime.now(),
+                            );
                             _payController.clear();
                             
                             Navigator.pop(bottomSheetContext); // Cierra el Bottom Sheet
-                            Navigator.pop(context); // Regresa a la vista de listado anterior
+                            //Navigator.pop(context); // Regresa a la vista de listado anterior
 
                             // Disparar la confirmación visual premium
                             _showSuccessSnackBar(context, amount, widget.debt.title);
@@ -263,6 +271,11 @@ class _DebtDetailScreenState extends State<DebtDetailScreen> {
     final color = Color(type.colorHex);
     final daysLeft = widget.debt.dueDate.difference(DateTime.now()).inDays;
 
+    final currencySymbol = widget.debt.currency == Currency.usd ? '\$' : 'C\$';
+
+    // Obtenemos los abonos históricos ordenados dinámicamente del ViewModel
+    final sortedPayments = debtVM.getSortedPaymentsForDebt(widget.debt);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Control del Pasivo'),
@@ -280,6 +293,7 @@ class _DebtDetailScreenState extends State<DebtDetailScreen> {
           children: [
             // Tarjeta Principal de Información Retenida
             Container(
+              width: double.infinity,
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
                 gradient: LinearGradient(colors: [color, color.withValues(alpha: 0.6)]),
@@ -293,7 +307,7 @@ class _DebtDetailScreenState extends State<DebtDetailScreen> {
                   Text('Acreedor: ${widget.debt.creditor}', style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 13)),
                   const SizedBox(height: 24),
                   const Text('SALDO PENDIENTE', style: TextStyle(color: Colors.white60, fontSize: 11, fontWeight: FontWeight.bold)),
-                  Text( '${widget.debt.currency == Currency.usd ? '\$' : 'C\$'}${widget.debt.remainingAmount.toStringAsFixed(2)}',
+                  Text( '$currencySymbol${widget.debt.remainingAmount.toStringAsFixed(2)}',
                     style: const TextStyle(color: Colors.white, fontSize: 34, fontWeight: FontWeight.w700)
                   ),
                   if (widget.debt.currency == Currency.nio)
@@ -312,7 +326,83 @@ class _DebtDetailScreenState extends State<DebtDetailScreen> {
             _buildDetailRow('Tasa de Interés Ajustada', '${widget.debt.interestRate}% Anual'),
             _buildDetailRow('Próximo Vencimiento', '${widget.debt.dueDate.day}/${widget.debt.dueDate.month}/${widget.debt.dueDate.year} (${daysLeft < 0 ? 'Vencida' : 'en $daysLeft días'})'),
             
-            const SizedBox(height: 40),
+            const SizedBox(height: 24),
+            // ─── NUEVA SECCIÓN: HISTORIAL CRONOLÓGICO DE ABONOS ───
+            Text(
+              'Historial de Abonos (${sortedPayments.length})',
+              style: TextStyle(color: AppTheme.getTextPrimary(context), fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+
+            if (sortedPayments.isEmpty)
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: AppTheme.getSurfaceColor(context).withValues(alpha: 0.3),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppTheme.getBorderColor(context).withValues(alpha: 0.3)),
+                ),
+                child: const Center(
+                  child: Text(
+                    'No hay abonos registrados para esta deuda.',
+                    style: TextStyle(color: Colors.grey, fontSize: 13, fontStyle: FontStyle.italic),
+                  ),
+                ),
+              )
+            else
+              // ListView estructurado sin encogerse gracias a physics e intrinsic properties
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: sortedPayments.length,
+                itemBuilder: (context, index) {
+                  final payment = sortedPayments[index];
+                  final dateLabel = "${payment.paymentDate.day}/${payment.paymentDate.month}/${payment.paymentDate.year}";
+
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color: AppTheme.getSurfaceColor(context),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: AppTheme.getBorderColor(context)),
+                    ),
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          backgroundColor: AppTheme.accentColor.withValues(alpha: 0.1),
+                          radius: 18,
+                          child: const Icon(Icons.check, color: AppTheme.accentColor, size: 16),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Abono Aplicado',
+                                style: TextStyle(color: AppTheme.getTextPrimary(context), fontWeight: FontWeight.bold, fontSize: 13),
+                              ),
+                              const SizedBox(height: 1),
+                              Text(
+                                dateLabel,
+                                style: const TextStyle(color: Colors.grey, fontSize: 11),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Text(
+                          '+$currencySymbol${payment.amountPaid.toStringAsFixed(2)}',
+                          style: const TextStyle(color: AppTheme.accentColor, fontWeight: FontWeight.bold, fontSize: 14),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+
+            const SizedBox(height: 8),
 
             // Botón para desplegar el Abono
             if (!widget.debt.isPaidOff)

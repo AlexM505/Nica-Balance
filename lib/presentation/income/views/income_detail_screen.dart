@@ -63,6 +63,7 @@ class IncomeDetailScreen extends StatelessWidget {
           children: [
             // CABECERA GRADIENTE PREMIUM
             Container(
+              width: double.infinity,
               padding: const EdgeInsets.all(28),
               decoration: BoxDecoration(
                 gradient: LinearGradient(

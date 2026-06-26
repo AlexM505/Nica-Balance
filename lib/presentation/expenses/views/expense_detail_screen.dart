@@ -67,6 +67,7 @@ class ExpenseDetailScreen extends StatelessWidget {
           children: [
             // CABECERA DESTACADA: Tarjeta con Identidad Visual de Categoría
             Container(
+              width: double.infinity,
               padding: const EdgeInsets.all(28),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
