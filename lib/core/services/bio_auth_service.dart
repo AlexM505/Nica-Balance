@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:local_auth_android/local_auth_android.dart';
 
 class BioAuthService {
   static final LocalAuthentication _auth = LocalAuthentication();
@@ -25,12 +26,35 @@ class BioAuthService {
       return await _auth.authenticate(
         localizedReason: 'Autentícate para acceder a tus finanzas',
         biometricOnly: true,
+        authMessages: const <AuthMessages>[
+          AndroidAuthMessages(
+            signInTitle: 'Seguridad Biométrica',
+            signInHint: 'Usa tu huella digital o reconocimiento facial',
+            cancelButton: 'Cancelar',
+          ),
+        ],
       );
     } on PlatformException catch (e) {
       debugPrint("Error de autenticación biométrica: ${e.code} - ${e.message}");
       return false;
     } catch (_) {
       return false;
+    }
+  }
+
+  /// Método utilitario por si tu UI necesita saber qué tipo de sensor se está usando
+  static Future<String> getBiometricTypeLabel() async {
+    try {
+      final List<BiometricType> availableBiometrics = await _auth.getAvailableBiometrics();
+      
+      if (availableBiometrics.contains(BiometricType.face)) {
+        return "Face ID";
+      } else if (availableBiometrics.contains(BiometricType.fingerprint)) {
+        return "Huella Digital";
+      }
+      return "Biometría";
+    } catch (_) {
+      return "Biometría";
     }
   }
 }
